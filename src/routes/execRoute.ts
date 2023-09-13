@@ -26,11 +26,10 @@ router.get('/', (req: Request, res: Response) => {
     }
 
     execCommand(value.cmd, value.resourceType.toLowerCase(), value.resourceAttribute.toLowerCase())
-        .then((result: any) => res.json(result))
-        .catch((err: unknown) => {
-            const error = err as Error;
-            console.error(error);
-            res.status(400).send(`${error.name}: ${error.message}`);
+        .then(result => res.json(result))
+        .catch(err => {
+            console.error(err);
+            res.status(400).send(`${err.name}: ${err.message}`);
         });
 })
 
