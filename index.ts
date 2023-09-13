@@ -8,7 +8,6 @@ import createError from 'http-errors';
 
 import indexRoute from './src/routes/indexRoute';
 import resourceRoute from './src/routes/resourceRoute';
-import execRoute from './src/routes/execRoute';
 import statsRoute from "./src/routes/statsRoute";
 import version from "./src/utils/version";
 import genericErrorResponseHandler from './src/utils/genericErrorReponseHandler';
@@ -28,7 +27,6 @@ app.use(express.urlencoded({ extended: false }));
 // All routes
 app.use('/', indexRoute);
 app.use('/resources', resourceRoute);
-app.use('/exec', execRoute);
 app.use('/stats', statsRoute);
 
 // Catch 404 and forward to error handler
