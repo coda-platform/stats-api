@@ -119,7 +119,7 @@ describe('whereFieldFilterBuilder tests', () => {
         const query = whereFieldFilterBuilder.build(selector, filterFields, ageField);
 
         // ASSERT
-        expect(query).toEqual("(resource->>'name')::string = 'John' AND resource->>'birthDate' != 'null'");
+        expect(query).toEqual("resource->>'birthDate' != 'null' AND (resource->>'name')::string = 'John'");
     })
 
     function getFieldsMap(fields: Filter[], fieldInfo: FieldInfo[]) {

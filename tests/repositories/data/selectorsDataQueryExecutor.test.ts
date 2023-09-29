@@ -16,6 +16,7 @@ import selectorObjectMother from "../../utils/objectMothers/models/selectorObjec
 import aidboxFieldResponseObjectMother from "../../utils/objectMothers/models/fieldInfoObjectMother";
 import fieldsMeasureDataQueryExecutor from "../../../src/repositories/data/fieldsMeasureDataQueryExecutor";
 import { ConditionOperator } from "../../../src/models/request/conditionOperator";
+import conditionObjectMother from "../../utils/objectMothers/models/conditionObjectMother";
 
 describe('selectorsDataQueryExecutor tests', () => {
     const measures = measuresObjectMother.getAllOptionMeasures();
@@ -128,7 +129,9 @@ describe('selectorsDataQueryExecutor tests', () => {
         const fieldA = fieldObjectMother.get('fieldA', 'labelA', 'string');
         const fieldB = fieldObjectMother.get('fieldB', 'labelB', 'string');
 
-        const selector = selectorObjectMother.get('Patient', 'patient', [fieldA, fieldB], []);
+        const emptyCondition = conditionObjectMother.get(ConditionOperator.and);
+
+        const selector = selectorObjectMother.get('Patient', 'patient', [fieldA, fieldB], emptyCondition);
         fieldMaps = getFieldsMap([fieldA, fieldB], [textFieldType, textFieldType])
 
         when(countResourceQuery.getQuery as any)
@@ -145,8 +148,8 @@ describe('selectorsDataQueryExecutor tests', () => {
         await selectorsDataQueryExecutor.executeQueries(queryDataResults, selector, measures, fieldMaps, filterMaps);
 
         // ASSERT
-        expect(fieldsMeasureDataQueryExecutor.executeQuery).toBeCalledWith(queryDataResults, selector, fieldA, measures, fieldMaps, filterMaps);
-        expect(fieldsMeasureDataQueryExecutor.executeQuery).toBeCalledWith(queryDataResults, selector, fieldB, measures, fieldMaps, filterMaps);
+        expect(fieldsMeasureDataQueryExecutor.executeQuery).toBeCalledWith(queryDataResults, fieldA,  measures, fieldMaps, filterMaps, selector);
+        expect(fieldsMeasureDataQueryExecutor.executeQuery).toBeCalledWith(queryDataResults, fieldB, measures, fieldMaps, filterMaps, selector);
     })
 
     function getFieldsMap(fields: Field[], aidboxFields: FieldInfo[]) {

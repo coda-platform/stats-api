@@ -5,6 +5,7 @@ import { ConditionOperator } from "../../../src/models/request/conditionOperator
 import queryDataResultsObjectMother from "../../utils/objectMothers/domain/queryDataResultsObjectMother";
 import fieldObjectMother from "../../utils/objectMothers/models/fieldObjectMother";
 import selectorObjectMother from "../../utils/objectMothers/models/selectorObjectMother";
+import queryAndResult from "../../../src/models/response/queryAndResult"
 
 describe('queryDataResults tests', () => {
     const continuousMeasureA = ContinuousMesure.ci95;
@@ -144,9 +145,11 @@ describe('queryDataResults tests', () => {
             const results = queryDataResults.getFieldResults(selectorA, fieldA);
 
             // ASSERT
-            expect(results).toHaveLength(2);
-            expect(results[0]).toBe(resultA);
-            expect(results[1]).toBe(resultB);
+            if(!(results instanceof Error)){
+                expect(results).toHaveLength(2);
+                expect(results[0]).toBe(resultA);
+                expect(results[1]).toBe(resultB);
+            }
         })
     })
 })

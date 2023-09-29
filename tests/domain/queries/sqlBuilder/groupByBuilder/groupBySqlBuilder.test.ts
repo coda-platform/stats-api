@@ -1,6 +1,8 @@
 import FieldInfo from "../../../../../src/models/fieldInfo";
+import { ConditionOperator } from "../../../../../src/models/request/conditionOperator";
 import Filter from "../../../../../src/models/request/filter";
 import groupBySqlBuilderObjectMother from "../../../../utils/objectMothers/domain/queries/sqlBuilder/groupByBuilder/groupBySqlBuilderObjectMother";
+import conditionObjectMother from "../../../../utils/objectMothers/models/conditionObjectMother";
 import fieldObjectMother from "../../../../utils/objectMothers/models/fieldObjectMother";
 import filterObjectMother from "../../../../utils/objectMothers/models/filterObjectMother";
 import selectorObjectMother from "../../../../utils/objectMothers/models/selectorObjectMother";
@@ -10,9 +12,10 @@ describe('groupBySqlBuilder tests', () => {
     const addressCityField = fieldObjectMother.get('address.city', 'city', 'string');
 
     const femaleGenderFilter = filterObjectMother.get('gender', 'is', 'female', 'string');
+    const condition = conditionObjectMother.get(ConditionOperator.and, [femaleGenderFilter])
     const filterTypes = new Map<Filter, FieldInfo>();
 
-    const patientSelector = selectorObjectMother.get('Patient', 'patient', [genderField, addressCityField], [femaleGenderFilter]);
+    const patientSelector = selectorObjectMother.get('Patient', 'patient', [genderField, addressCityField], condition);
 
     it('initialy has WHERE command', () => {
         // ARRANGE

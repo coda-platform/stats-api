@@ -10,16 +10,17 @@ import QueryDataResults from "../../queries/queryDataResults";
 function calculate(selector: Selector,
     queryDataResults: QueryDataResults,
     field: Field,
-    measure: ContinuousMesure | CategoricalMesure): DiscreteVariableCountReponse[] | String {
+    measure: ContinuousMesure | CategoricalMesure): DiscreteVariableCountReponse[] {
 
     const countResults = queryDataResults.getResult(selector, field, measure);
+    const fieldLabelNormalized = fieldLabelFormatter.formatLabel(field.label);
+
     if(countResults instanceof Error){
-        return countResults.message
+        return [{ label: fieldLabelNormalized, value: countResults.message }]
     }
     else if(countResults.result instanceof Error){
-        return countResults.result.message
+        return [{ label: fieldLabelNormalized, value: countResults.result.message }]
     }
-    const fieldLabelNormalized = fieldLabelFormatter.formatLabel(field.label);
 
     const discreteVariableCounts = new Array<DiscreteVariableCountReponse>();
 
