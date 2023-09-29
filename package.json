@@ -7,7 +7,7 @@
   "author": "Louis Mullie",
   "scripts": {
     "start": "cross-env NODE_ENV=development nodemon index.ts",
-    "test": "jest --watch",
+    "test": "jest",
     "build": "tsc --project ./",
     "clear-jest": "jest --clearCache",
     "caprover:setup": "node ./caprover/setup.js",
