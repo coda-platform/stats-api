@@ -10,7 +10,7 @@ export default class CrossJoinForLevelBuilder {
         const uniqueFieldPaths = new Map<string, string>();
 
         if (field) {
-            uniqueFieldPaths.set(field.path, field.label)
+            uniqueFieldPaths.set(field.path, field.path)
         }
 
         flattenConditionToFilters(selector.condition).forEach(filter =>

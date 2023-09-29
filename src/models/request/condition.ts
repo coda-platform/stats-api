@@ -11,6 +11,7 @@ function instanceOfCondition(object:any): object is Condition {
 }
 
 function flattenConditionToFilters(condition:Condition): Filter[] {
+    if(!condition.conditions) return [];
     return condition.conditions.reduce((result:Filter[], next) => {
         if(instanceOfFilter(next)){
             result.push(next);
