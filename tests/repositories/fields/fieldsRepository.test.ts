@@ -9,17 +9,14 @@ import fieldsRepository from "../../../src/repositories/fields/fieldsRepository"
 import fieldObjectMother from "../../utils/objectMothers/models/fieldObjectMother";
 import summarizeRequestBodyObjectMother from "../../utils/objectMothers/models/request/summarizeRequestBodyObjectMother";
 import selectorObjectMother from "../../utils/objectMothers/models/selectorObjectMother";
-import conditionObjectMother from "../../utils/objectMothers/models/conditionObjectMother";
-import { ConditionOperator } from "../../../src/models/request/conditionOperator";
 
 describe('fieldsRepository tests', () => {
     const fieldA = fieldObjectMother.get('fieldA', 'fieldA');
     const fieldB = fieldObjectMother.get('fieldB', 'fieldB');
     const fieldC = fieldObjectMother.get('field.path.subPathC', 'fieldC');
-    const emptyCondition = conditionObjectMother.get(ConditionOperator.and);
 
-    const patientSelector = selectorObjectMother.get('Patient', 'patient', [fieldA, fieldB], emptyCondition);
-    const observationSelector = selectorObjectMother.get('Observation', 'observation', [fieldC], emptyCondition);
+    const patientSelector = selectorObjectMother.get('Patient', 'patient', [fieldA, fieldB], []);
+    const observationSelector = selectorObjectMother.get('Observation', 'observation', [fieldC], []);
 
     const patientFieldsQuery = 'SELECT * FROM Patient';
     const observationFieldsQuery = 'SELECT * FROM Observation';
@@ -121,7 +118,7 @@ describe('fieldsRepository tests', () => {
     it('with age field, predetermined from computed fields number response returned.', async () => {
         // ARRANGE
         const ageField = fieldObjectMother.get('age', 'age', 'integer');
-        const selector = selectorObjectMother.get('Patient', 'patient', [ageField], emptyCondition);
+        const selector = selectorObjectMother.get('Patient', 'patient', [ageField], []);
         const summarizeRequest = summarizeRequestBodyObjectMother.get([selector]);
         const filterFields = new Map<filter, FieldInfo>();
 
@@ -144,7 +141,7 @@ describe('fieldsRepository tests', () => {
     it('with age field and another conventional field, responses are returned by field.', async () => {
         // ARRANGE
         const ageField = fieldObjectMother.get('age', 'age');
-        const selector = selectorObjectMother.get('Patient', 'patient', [ageField, fieldA, fieldB], emptyCondition);
+        const selector = selectorObjectMother.get('Patient', 'patient', [ageField, fieldA, fieldB], []);
         const summarizeRequest = summarizeRequestBodyObjectMother.get([selector]);
         const filterFields = new Map<filter, FieldInfo>();
 

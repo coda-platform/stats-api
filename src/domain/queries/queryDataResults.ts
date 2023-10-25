@@ -2,8 +2,8 @@ import CategoricalMesure from "../../models/categoricalMeasure";
 import ContinuousMesure from "../../models/continuousMeasure";
 import Field from "../../models/request/field";
 import Selector from "../../models/request/selector";
-import queryAndResult from "../../models/response/queryAndResult";
 
+type queryAndResult = { query: string, result: any };
 export default class QueryDataResults {
     selectorResults: Map<Selector, queryAndResult>;
     breakdownResults: Map<Selector, queryAndResult>;
@@ -32,7 +32,7 @@ export default class QueryDataResults {
 
     getSelectorBreakdownResult(selector: Selector) {
         const result = this.breakdownResults.get(selector);
-        if (!result) throw new Error('No result for this selector');
+        if (!result) return new Error('No result for this selector');
 
         return result;
     }
@@ -49,23 +49,23 @@ export default class QueryDataResults {
 
     getResult(selector: Selector, field: Field, mesure: ContinuousMesure | CategoricalMesure) {
         const selectorResults = this.results.get(selector);
-        if (!selectorResults) throw new Error('No results for this selector');
+        if (!selectorResults) return new Error('No results for this selector');
 
         const fieldResults = selectorResults.get(field);
-        if (!fieldResults) throw new Error('No results for this field');
+        if (!fieldResults) return new Error('No results for this field');
 
         const result = fieldResults.get(mesure);
-        if (!result) throw new Error('No result for this measure');
+        if (!result) return new Error('No result for this measure');
 
         return result;
     }
 
     getFieldResults(selector: Selector, field: Field) {
         const selectorResults = this.results.get(selector);
-        if (!selectorResults) throw new Error('No results for this selector');
+        if (!selectorResults) return new Error('No results for this selector');
 
         const fieldResults = selectorResults.get(field);
-        if (!fieldResults) throw new Error('No results for this field');
+        if (!fieldResults) return new Error('No results for this field');
 
         const fieldQueryAndResults = new Array<queryAndResult>();
         fieldResults.forEach((value) => {

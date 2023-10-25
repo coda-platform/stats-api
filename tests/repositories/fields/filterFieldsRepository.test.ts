@@ -9,17 +9,14 @@ import filterFieldsRepository from "../../../src/repositories/fields/filterField
 import filterObjectMother from "../../utils/objectMothers/models/filterObjectMother";
 import summarizeRequestBodyObjectMother from "../../utils/objectMothers/models/request/summarizeRequestBodyObjectMother";
 import selectorObjectMother from "../../utils/objectMothers/models/selectorObjectMother";
-import conditionObjectMother from "../../utils/objectMothers/models/conditionObjectMother";
 
 describe('filterFieldsRepository tests', () => {
     const filterA = filterObjectMother.get('fieldA', 'is', 'value');
     const filterB = filterObjectMother.get('fieldB', 'is', 'value');
     const filterC = filterObjectMother.get('field.path.subPathC', 'is', 'value');
-    const conditionAB = conditionObjectMother.get(ConditionOperator.and, [filterA, filterB]);
-    const conditionC = conditionObjectMother.get(ConditionOperator.and, [filterC]);
 
     const patientSelector = selectorObjectMother.get('Patient', 'patient', [], {conditionOperator:ConditionOperator.and, conditions:[filterA, filterB]});
-    const observationSelector = selectorObjectMother.get('Observation', 'observation', [], conditionC);
+    const observationSelector = selectorObjectMother.get('Observation', 'observation', [], [filterC]);
 
     const patientFieldsQuery = 'SELECT * FROM Patient';
     const observationFieldsQuery = 'SELECT * FROM Observation';
