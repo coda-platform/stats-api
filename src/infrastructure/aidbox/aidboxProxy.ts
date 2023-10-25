@@ -35,24 +35,6 @@ async function executeQuery(query: string): Promise<any> {
     }
 }
 
-async function executeAidbox(query: string): Promise<any> {
-    try {
-        console.log(query)
-        const response = await instance.get(query, axiosConfig)
-        return response.data
-    }
-    catch (error: any) {
-        if (axios.isAxiosError(error)){
-            if(error.response){
-                error.message = error.response.data
-            }
-            else
-                error.message = "Could not receive or parse response from database"
-        }
-        return error
-    }
-}
-
 export default {
-    executeQuery, executeAidbox
+    executeQuery
 }

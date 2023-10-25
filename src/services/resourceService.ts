@@ -16,9 +16,3 @@ export async function getResourcesInfo() {
     }
     return results
 }
-
-export async function getAidboxInfo() {
-    const query = 'health'
-    const result = await aidboxProxy.executeAidbox(query);
-    return result;
-}
