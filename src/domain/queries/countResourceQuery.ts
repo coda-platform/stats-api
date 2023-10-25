@@ -16,7 +16,9 @@ function getQuery(selector: Selector,
         .from()
         .resourceTable();
 
-    if (selector.condition.conditions.length === 0) return sqlBuilder.possibleJoin(fieldTypes).build(selector, filterTypes);
+    if (!selector.condition || !selector.condition.conditions ||
+        selector.condition.conditions.length === 0)
+        return sqlBuilder.possibleJoin(fieldTypes).build(selector, filterTypes);
 
     const hasArrayFilters = arrayFieldDetector.hasArrayFilters(selector.condition);
 
