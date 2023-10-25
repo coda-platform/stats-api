@@ -9,7 +9,7 @@ function getQuery(selector: Selector, field: Field, filterFieldTypes: Map<Filter
         .select()
         .field(field)
         .comma()
-        .countAll()
+        .countField(field, selector)
         .from()
         .resourceTable()
         .crossJoinForArrayFilters(field)

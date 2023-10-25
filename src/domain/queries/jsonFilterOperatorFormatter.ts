@@ -39,10 +39,6 @@ function formatOperatorForSql(filter: Filter) {
         return 'LIKE';
     }
 
-    if (['within', 'interval'].some(op => op === filterOperator)) {
-        return '>';
-    }
-
     throw new Error(`${filterOperator} is not supported`);
 }
 
