@@ -19,7 +19,7 @@ describe('timeBreakdownQuery tests', () => {
     const stringFieldInfo = fieldInfoObjectMother.get('string');
     const dateTimeFieldInfo = fieldInfoObjectMother.get('dateTime');
     const deceasedDateField = fieldObjectMother.get('deceased.dateTime', 'deceasedDate', 'dateTime')
-    const deceasedDateBreakdown = breakdownObjectMother.get('Patient', 'deceasedDate', 60, 'dateTime');
+    const deceasedDateBreakdown = breakdownObjectMother.get('Patient', 'deceased.dateTime', 60, 'dateTime');
 
     const filterMaps = getFiltersMap([femaleGenderFilter], [stringFieldInfo]);
     
