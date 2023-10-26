@@ -29,7 +29,7 @@ function build(selector: Selector, filterFields: Map<Filter, FieldInfo>, subquer
         }
     })
     if (filtersNormalized.length === 0) return ''
-    return filtersNormalized.join(` ${selector.condition.conditionOperator} `)
+    return filtersNormalized.join(` ${selector.condition?.conditionOperator ?? 'AND'} `)
 }
 
 export default {
