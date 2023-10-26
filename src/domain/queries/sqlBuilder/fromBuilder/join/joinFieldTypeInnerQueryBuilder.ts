@@ -8,13 +8,15 @@ function build(joinSelector: Selector, filterTypes: Map<Filter, FieldInfo>) {
     const sqlBuilder = new SqlBuilder()
         .select()
 
-    if(hasFields(joinSelector)){
+    if (hasFields(joinSelector)) {
         sqlBuilder.fieldsJson().comma();
     }
 
-    if (joinSelector.condition.conditions.length === 0) return sqlBuilder.joinId().from().resourceTable().possibleFieldTypeJoin().build(joinSelector, filterTypes);
+    if (!joinSelector.condition || joinSelector.condition.conditions.length === 0) {
+        return sqlBuilder.joinId().from().resourceTable().possibleFieldTypeJoin().build(joinSelector, filterTypes);
+    }
 
-    const hasArrayFilters = arrayFieldDetector.hasArrayFilters(joinSelector.condition);
+    const hasArrayFilters = joinSelector.condition && arrayFieldDetector.hasArrayFilters(joinSelector.condition);
 
     const builderWithFilter = hasArrayFilters
         ? sqlBuilder.joinId().from().resourceTable().crossJoinForArrayFilters().possibleFieldTypeJoin().where().fieldFilter()
@@ -24,9 +26,9 @@ function build(joinSelector: Selector, filterTypes: Map<Filter, FieldInfo>) {
 }
 
 function hasFields(selector: Selector): boolean {
-    if(selector.fields.length > 0)
+    if (selector.fields.length > 0)
         return true
-    else if(selector.joins)
+    else if (selector.joins)
         return hasFields(selector.joins)
     return false
 }

@@ -22,35 +22,35 @@ function getFilterNormalized(filter: Filter, filterFields: Map<Filter, FieldInfo
         : jsonFieldValuePathCompiler.getPathCompiled(filter.path);
 
     const filterValue = isIndexArrayField
-        ?  jsonQueryValueFormatter.formatIndexValueForSql(filter.value, filter.path)
+        ? jsonQueryValueFormatter.formatIndexValueForSql(filter.value, filter.path)
         : jsonQueryValueFormatter.formatValueForSql(filter, fieldInfo);
     const sqlOperand = isIndexArrayField
-        ?  "@>"
-        :jsonFilterOperatorFormatter.formatOperatorForSql(filter);
+        ? "@>"
+        : jsonFilterOperatorFormatter.formatOperatorForSql(filter);
     const cast = fieldInfo.type
-    return isIndexArrayField 
-        ? `${jsonFieldValuePathCompiled} ${sqlOperand} ${filterValue}` 
-        :`(${jsonFieldValuePathCompiled})::${cast} ${sqlOperand} ${filterValue}`;
+    return isIndexArrayField
+        ? `${jsonFieldValuePathCompiled} ${sqlOperand} ${filterValue}`
+        : `(${jsonFieldValuePathCompiled})::${cast} ${sqlOperand} ${filterValue}`;
 }
 
-function build(selector: Selector, filterFieldTypes: Map<Filter, FieldInfo>, possibleComputedField?: Field): string{
-    const filtersNormalized:string[] = []
-    
+function build(selector: Selector, filterFieldTypes: Map<Filter, FieldInfo>, possibleComputedField?: Field): string {
+    const filtersNormalized: string[] = []
+
     if (possibleComputedField) {
         const addedFieldFilter = possibleComputedFilters.possibleComputedFilters.get(possibleComputedField.path);
         if (addedFieldFilter)
             filtersNormalized.push(addedFieldFilter);
     }
-
-    selector.condition.conditions.forEach(f => {
-        if(instanceOfCondition(f)){
+    const conditions = selector.condition ? selector.condition.conditions : []
+    conditions.forEach(f => {
+        if (instanceOfCondition(f)) {
             filtersNormalized.push(`(${build(selector, filterFieldTypes)})`)
         }
         else {
             filtersNormalized.push(getFilterNormalized(f, filterFieldTypes, selector))
         }
     })
-
+    if (filtersNormalized.length === 0) return ''
     return filtersNormalized.join(` ${selector.condition.conditionOperator} `)
 }
 
