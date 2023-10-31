@@ -51,7 +51,8 @@ function build(selector: Selector, filterFieldTypes: Map<Filter, FieldInfo>, pos
         }
     })
     if (filtersNormalized.length === 0) return ''
-    return filtersNormalized.join(` ${selector.condition?.conditionOperator ?? 'AND'} `)
+    const conditionOperator = condition?.conditionOperator ?? selector.condition?.conditionOperator ?? 'AND';
+    return filtersNormalized.join(conditionOperator)
 }
 
 export default {
