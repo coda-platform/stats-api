@@ -33,7 +33,7 @@ function getFilterNormalized(filter: Filter, filterFields: Map<Filter, FieldInfo
         : `(${jsonFieldValuePathCompiled})::${cast} ${sqlOperand} ${filterValue}`;
 }
 
-function build(selector: Selector, filterFieldTypes: Map<Filter, FieldInfo>, possibleComputedField?: Field): string {
+function build(selector: Selector, filterFieldTypes: Map<Filter, FieldInfo>, possibleComputedField?: Field, condition?: Condition): string {
     const filtersNormalized: string[] = []
 
     if (possibleComputedField) {
@@ -41,13 +41,13 @@ function build(selector: Selector, filterFieldTypes: Map<Filter, FieldInfo>, pos
         if (addedFieldFilter)
             filtersNormalized.push(addedFieldFilter);
     }
-    const conditions = selector.condition ? selector.condition.conditions : []
-    conditions.forEach(f => {
-        if (instanceOfCondition(f)) {
-            filtersNormalized.push(`(${build(selector, filterFieldTypes)})`)
+    const conditions = condition ? condition.conditions : selector.condition ? selector.condition.conditions : []
+    conditions.forEach(filter => {
+        if (instanceOfCondition(filter)) {
+            filtersNormalized.push(`(${build(selector, filterFieldTypes, undefined ,filter)})`)
         }
         else {
-            filtersNormalized.push(getFilterNormalized(f, filterFieldTypes, selector))
+            filtersNormalized.push(getFilterNormalized(filter, filterFieldTypes, selector))
         }
     })
     if (filtersNormalized.length === 0) return ''
