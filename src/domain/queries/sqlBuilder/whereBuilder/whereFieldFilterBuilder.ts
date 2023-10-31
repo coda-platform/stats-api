@@ -52,7 +52,7 @@ function build(selector: Selector, filterFieldTypes: Map<Filter, FieldInfo>, pos
     })
     if (filtersNormalized.length === 0) return ''
     const conditionOperator = condition?.conditionOperator ?? selector.condition?.conditionOperator ?? 'AND';
-    return filtersNormalized.join(conditionOperator)
+    return filtersNormalized.join(` ${conditionOperator} `)
 }
 
 export default {
