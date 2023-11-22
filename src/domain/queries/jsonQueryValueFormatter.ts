@@ -5,10 +5,15 @@ import arrayFieldDetector from "./fields/arrayFieldDetector";
 import queryStringEscaper from "./queryStringEscaper";
 
 function formatValueForSql(filter: Filter, fieldInfo: FieldInfo) {
-    const value = String(filter.value);
+    const value = queryStringEscaper.escape(String(filter.value));
 
     const filterOperator = filter.operator.replace(/_/g, '').toLowerCase();
     if(String(value).toLowerCase() === 'null' && ['is', 'equals', 'on', 'equal'].some(op => op === filterOperator)) return value;
+
+    if (['within', 'interval'].some(op => op === filterOperator)) {
+        return `now() - interval '${value} hours'`;
+    }
+
     const fieldType = fieldInfo.type.toLowerCase();
 
     switch (fieldType) {
