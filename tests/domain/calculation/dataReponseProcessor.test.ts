@@ -42,5 +42,5 @@ describe('aidboxReponseProcessor tests', () => {
         expect(summarizeReponses.length).toEqual(2);
         expect(summarizeReponses[0]).toBe(summarizeReponseA);
         expect(summarizeReponses[1]).toBe(summarizeReponseB);
-    })
-})
+    });
+});

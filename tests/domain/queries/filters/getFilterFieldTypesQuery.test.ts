@@ -26,8 +26,8 @@ describe('getFilterFieldTypesQuery tests', () => {
             .filterTypes()
             .from()
             .resourceTable()
-            .build(selector, filterTypes))
-    })
+            .build(selector, filterTypes));
+    });
 
     it('escapes resource to avoid sql injections', () => {
         // ARRANGE
@@ -37,6 +37,6 @@ describe('getFilterFieldTypesQuery tests', () => {
         const query = getFilterFieldTypesQuery.getQuery(selector);
 
         // ASSERT
-        expect(query).toEqual("SELECT DISTINCT jsonb_typeof(resource->'fieldA') AS fielda, jsonb_typeof(resource->'fieldB') AS fieldb FROM Patient patient_table")
-    })
-})
+        expect(query).toEqual("SELECT DISTINCT jsonb_typeof(resource->'fieldA') AS fielda, jsonb_typeof(resource->'fieldB') AS fieldb FROM Patient patient_table");
+    });
+});

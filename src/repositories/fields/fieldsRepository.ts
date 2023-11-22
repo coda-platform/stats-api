@@ -19,19 +19,19 @@ computedFields.set('dateTime', 'DATE');
 async function getFieldInfo(selector: Selector, fieldsAndFieldReponses: Map<Field, FieldInfo | Error>, filterFieldsNoErrors: Map<Filter, FieldInfo>) {
     try {
         if (selector.fields.length > 0) {
-            var fieldTypesInSelector:boolean = true;
+            let fieldTypesInSelector:boolean = true;
             selector.fields.filter(field => {
                 if(!field.type)
-                    fieldTypesInSelector = false
-            })
+                    fieldTypesInSelector = false;
+            });
 
             if(fieldTypesInSelector){
-                var selectorFieldTypes:any[] = [];
+                const selectorFieldTypes:any[] = [];
                 selector.fields.forEach(field => {
-                    
+
                     const fieldLabelNormalized = fieldLabelFormatter.formatLabel(field.label);
-                    selectorFieldTypes.push({[fieldLabelNormalized] : field.type})
-                })
+                    selectorFieldTypes.push({[fieldLabelNormalized] : field.type});
+                });
 
                 getFieldReponsesFromData(selector, selectorFieldTypes, fieldsAndFieldReponses);
             }
@@ -48,7 +48,7 @@ async function getFieldInfo(selector: Selector, fieldsAndFieldReponses: Map<Fiel
         await getFieldInfo(joinSelector, fieldsAndFieldReponses, filterFieldsNoErrors);
     }
     catch (error) {
-        for (let field of selector.fields) {
+        for (const field of selector.fields) {
             fieldsAndFieldReponses.set(field, error as any);
         }
     }
@@ -63,8 +63,8 @@ function getFieldReponsesFromData(selector: Selector, data: any[], fieldsAndFiel
         }
 
         const fieldLabelNormalized = fieldLabelFormatter.formatLabel(field.label);
-        let fieldType = data.map(r => r[fieldLabelNormalized]).filter(v => v != null)[0] as string;
-        let compiledFieldType = computedFields.get(fieldType)
+        const fieldType = data.map(r => r[fieldLabelNormalized]).filter(v => v !== null && v)[0] as string;
+        let compiledFieldType = computedFields.get(fieldType);
         if (!compiledFieldType) {
             compiledFieldType = fieldType;
         }
@@ -78,7 +78,7 @@ function getFieldReponsesFromData(selector: Selector, data: any[], fieldsAndFiel
 }
 
 async function getFieldsDataFromRequest(summarizeRequest: SummarizeRequestBody, filterFieldsNoErrors: Map<Filter, FieldInfo>) {
-    let fieldsAndFieldReponses = new Map<Field, FieldInfo | Error>();
+    const fieldsAndFieldReponses = new Map<Field, FieldInfo | Error>();
 
     for (let selectorIndex = 0; selectorIndex < summarizeRequest.selectors.length; selectorIndex++) {
         const selector = summarizeRequest.selectors[selectorIndex];
@@ -90,4 +90,4 @@ async function getFieldsDataFromRequest(summarizeRequest: SummarizeRequestBody, 
 
 export default {
     getFieldsDataFromRequest
-}
+};

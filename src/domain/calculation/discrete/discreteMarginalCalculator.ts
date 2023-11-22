@@ -15,4 +15,4 @@ function calculate(selector: Selector,
 
 export default {
     calculate
-}
+};

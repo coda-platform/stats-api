@@ -12,24 +12,24 @@ import fieldObjectMother from "../../../utils/objectMothers/models/fieldObjectMo
 import filterObjectMother from "../../../utils/objectMothers/models/filterObjectMother";
 import breakdownObjectMother from "../../../utils/objectMothers/models/request/breakdownObjectMother";
 import selectorObjectMother from "../../../utils/objectMothers/models/selectorObjectMother";
-import { describe, expect, it, beforeEach } from "@jest/globals"
+import { describe, expect, it, beforeEach } from "@jest/globals";
 
 describe('timeBreakdownQuery tests', () => {
 
     const femaleGenderFilter = filterObjectMother.get('gender', 'is', 'female', 'string');
     const stringFieldInfo = fieldInfoObjectMother.get('string');
     const dateTimeFieldInfo = fieldInfoObjectMother.get('dateTime');
-    const deceasedDateField = fieldObjectMother.get('deceased.dateTime', 'deceasedDate', 'dateTime')
+    const deceasedDateField = fieldObjectMother.get('deceased.dateTime', 'deceasedDate', 'dateTime');
     const deceasedDateBreakdown = breakdownObjectMother.get('Patient', 'deceased.dateTime', 60, 'dateTime');
 
     const filterMaps = getFiltersMap([femaleGenderFilter], [stringFieldInfo]);
 
-    const fieldMap = getFieldsMap([deceasedDateField], [dateTimeFieldInfo])
+    const fieldMap = getFieldsMap([deceasedDateField], [dateTimeFieldInfo]);
 
     beforeEach(() => {
         resourceArrayFields.values = [];
 
-    })
+    });
 
 
     it('gets query with resource from', () => {
@@ -50,7 +50,7 @@ describe('timeBreakdownQuery tests', () => {
             .groupBy()
             .compiledField('period_start')
             .build(selector, filterMaps));
-    })
+    });
 
     it('gets query with filters applied', () => {
         // ARRANGE
@@ -70,7 +70,7 @@ describe('timeBreakdownQuery tests', () => {
             .groupBy()
             .compiledField('period_start')
             .build(selector, filterMaps));
-    })
+    });
 
     it('gets query with cross join and filters applied when one field is array type', () => {
         // ARRANGE
@@ -92,12 +92,12 @@ describe('timeBreakdownQuery tests', () => {
             .groupBy()
             .compiledField('period_start')
             .build(selector, filterMaps));
-    })
+    });
 
     function getFiltersMap(filters: Filter[], fieldInfo: FieldInfo[]) {
         const fieldsMap = new Map<Filter, FieldInfo>();
 
-        for (var fieldIndex = 0; fieldIndex < filters.length; fieldIndex++) {
+        for (let fieldIndex = 0; fieldIndex < filters.length; fieldIndex++) {
             fieldsMap.set(filters[fieldIndex], fieldInfo[fieldIndex]);
         }
 
@@ -107,10 +107,10 @@ describe('timeBreakdownQuery tests', () => {
     function getFieldsMap(fields: Field[], fieldInfo: FieldInfo[]) {
         const fieldsMap = new Map<Field, FieldInfo>();
 
-        for (var fieldIndex = 0; fieldIndex < fields.length; fieldIndex++) {
+        for (let fieldIndex = 0; fieldIndex < fields.length; fieldIndex++) {
             fieldsMap.set(fields[fieldIndex], fieldInfo[fieldIndex]);
         }
 
         return fieldsMap;
     }
-})
+});

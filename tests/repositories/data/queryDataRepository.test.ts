@@ -15,7 +15,7 @@ describe('summarizeDataQueryExecutor tests', () => {
 
     beforeEach(() => {
         selectorsDataQueryExecutor.executeQueries = jest.fn();
-    })
+    });
 
     it('Processes each requests for selectors', async () => {
         // ARRANGE
@@ -30,5 +30,5 @@ describe('summarizeDataQueryExecutor tests', () => {
         // ASSERT
         expect(selectorsDataQueryExecutor.executeQueries).toHaveBeenCalledWith(queryDataResults, selectorA, measures, fieldMaps, filterMaps);
         expect(selectorsDataQueryExecutor.executeQueries).toHaveBeenCalledWith(queryDataResults, selectorB, measures, fieldMaps, filterMaps);
-    })
-})
+    });
+});

@@ -1,5 +1,5 @@
 import arrayFieldDetector from "../../../../src/domain/queries/fields/arrayFieldDetector";
-import resourceArrayFields from "../../../../src/domain/resourceArrayFields"
+import resourceArrayFields from "../../../../src/domain/resourceArrayFields";
 
 describe('arrayFieldDetector tests', () => {
     it('With all elements in path not an array elements, field is not array type', () => {
@@ -11,7 +11,7 @@ describe('arrayFieldDetector tests', () => {
 
         // ASSERT
         expect(isArray).toBeFalsy();
-    })
+    });
 
     it('With first element in path as array element, field is array type', () => {
         // ARRANGE
@@ -22,7 +22,7 @@ describe('arrayFieldDetector tests', () => {
 
         // ASSERT
         expect(isArray).toBeTruthy();
-    })
+    });
 
     it('With second element in path as array element, field is array type', () => {
         // ARRANGE
@@ -33,7 +33,7 @@ describe('arrayFieldDetector tests', () => {
 
         // ASSERT
         expect(isArray).toBeTruthy();
-    })
+    });
 
     it('With multiple elements in path as array element, field is array type', () => {
         // ARRANGE
@@ -44,5 +44,5 @@ describe('arrayFieldDetector tests', () => {
 
         // ASSERT
         expect(isArray).toBeTruthy();
-    })
-})
+    });
+});

@@ -9,14 +9,18 @@ import fieldsRepository from "../../../src/repositories/fields/fieldsRepository"
 import fieldObjectMother from "../../utils/objectMothers/models/fieldObjectMother";
 import summarizeRequestBodyObjectMother from "../../utils/objectMothers/models/request/summarizeRequestBodyObjectMother";
 import selectorObjectMother from "../../utils/objectMothers/models/selectorObjectMother";
+import { ConditionOperator } from "../../../src/models/request/conditionOperator";
+import ConditionObjectMother from "../../utils/objectMothers/models/ConditionObjectMother";
 
 describe('fieldsRepository tests', () => {
     const fieldA = fieldObjectMother.get('fieldA', 'fieldA');
     const fieldB = fieldObjectMother.get('fieldB', 'fieldB');
     const fieldC = fieldObjectMother.get('field.path.subPathC', 'fieldC');
 
-    const patientSelector = selectorObjectMother.get('Patient', 'patient', [fieldA, fieldB], []);
-    const observationSelector = selectorObjectMother.get('Observation', 'observation', [fieldC], []);
+    const emptyCondition = ConditionObjectMother.get(ConditionOperator.and, []);
+
+    const patientSelector = selectorObjectMother.get('Patient', 'patient', [fieldA, fieldB], emptyCondition);
+    const observationSelector = selectorObjectMother.get('Observation', 'observation', [fieldC], emptyCondition);
 
     const patientFieldsQuery = 'SELECT * FROM Patient';
     const observationFieldsQuery = 'SELECT * FROM Observation';
@@ -35,7 +39,7 @@ describe('fieldsRepository tests', () => {
             .mockReturnValue(patientFieldsQuery)
             .calledWith(observationSelector, filterFields)
             .mockReturnValue(observationFieldsQuery);
-    })
+    });
 
     it('aidboxProxy returns error, error is gotten for fields', async () => {
         // ARRANGE
@@ -44,8 +48,8 @@ describe('fieldsRepository tests', () => {
 
         aidboxProxy.executeQuery = jest.fn();
         when(aidboxProxy.executeQuery as any)
-            .calledWith(patientFieldsQuery).mockReturnValue(Promise.reject(new Error('errorA')).catch((error)=> {return error}))
-            .calledWith(observationFieldsQuery).mockReturnValue(Promise.reject(new Error('errorB')).catch((error)=> {return error}))
+            .calledWith(patientFieldsQuery).mockReturnValue(Promise.reject(new Error('errorA')).catch((error)=> {return error;}))
+            .calledWith(observationFieldsQuery).mockReturnValue(Promise.reject(new Error('errorB')).catch((error)=> {return error;}));
 
         // ACT
         const result = await fieldsRepository.getFieldsDataFromRequest(summarizeRequest, filterFields);
@@ -102,7 +106,7 @@ describe('fieldsRepository tests', () => {
 
         when(getFieldTypesQuery.getQuery as any)
             .calledWith(observationSelector, filterFields)
-            .mockReturnValue(observationFieldsQuery)
+            .mockReturnValue(observationFieldsQuery);
         aidboxProxy.executeQuery = jest.fn();
         when(aidboxProxy.executeQuery as any)
             .calledWith(observationFieldsQuery).mockReturnValue([observationFieldsNullTypeReponse, observationFieldsReponse]);
@@ -118,13 +122,13 @@ describe('fieldsRepository tests', () => {
     it('with age field, predetermined from computed fields number response returned.', async () => {
         // ARRANGE
         const ageField = fieldObjectMother.get('age', 'age', 'integer');
-        const selector = selectorObjectMother.get('Patient', 'patient', [ageField], []);
+        const selector = selectorObjectMother.get('Patient', 'patient', [ageField], emptyCondition);
         const summarizeRequest = summarizeRequestBodyObjectMother.get([selector]);
         const filterFields = new Map<filter, FieldInfo>();
 
         when(getFieldTypesQuery.getQuery as any)
             .calledWith(selector, filterFields)
-            .mockReturnValue(patientFieldsQuery)
+            .mockReturnValue(patientFieldsQuery);
 
         aidboxProxy.executeQuery = jest.fn();
         when(aidboxProxy.executeQuery as any)
@@ -141,13 +145,13 @@ describe('fieldsRepository tests', () => {
     it('with age field and another conventional field, responses are returned by field.', async () => {
         // ARRANGE
         const ageField = fieldObjectMother.get('age', 'age');
-        const selector = selectorObjectMother.get('Patient', 'patient', [ageField, fieldA, fieldB], []);
+        const selector = selectorObjectMother.get('Patient', 'patient', [ageField, fieldA, fieldB], emptyCondition);
         const summarizeRequest = summarizeRequestBodyObjectMother.get([selector]);
         const filterFields = new Map<filter, FieldInfo>();
 
         when(getFieldTypesQuery.getQuery as any)
             .calledWith(selector, filterFields)
-            .mockReturnValue(patientFieldsQuery)
+            .mockReturnValue(patientFieldsQuery);
 
         aidboxProxy.executeQuery = jest.fn();
         when(aidboxProxy.executeQuery as any)
@@ -163,7 +167,7 @@ describe('fieldsRepository tests', () => {
         expect(result.get(fieldA)).toEqual(getFieldTypeReponse(patientSelector, fieldA, patientFieldsReponse.fielda));
         expect(result.get(fieldB)).toEqual(getFieldTypeReponse(patientSelector, fieldB, patientFieldsReponse.fieldb));
     });
-})
+});
 
 function getFieldTypeReponse(selector: Selector,
     fieldA: Field,
@@ -171,5 +175,5 @@ function getFieldTypeReponse(selector: Selector,
     return {
         name: fieldA.label.toLocaleLowerCase(),
         type
-    }
+    };
 }

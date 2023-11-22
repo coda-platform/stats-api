@@ -9,4 +9,4 @@ function get(sqlBuilder?: SqlBuilder) {
 
 export default {
     get
-}
+};

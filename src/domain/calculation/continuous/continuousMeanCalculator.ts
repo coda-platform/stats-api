@@ -8,14 +8,14 @@ import QueryDataResults from "../../queries/queryDataResults";
 function calculate(selector: Selector,
     queryDataResults: QueryDataResults,
     field: Field,
-    measure: ContinuousMesure | CategoricalMesure): ContinuousMeanResponse | String {
+    measure: ContinuousMesure | CategoricalMesure): ContinuousMeanResponse | string {
 
     const countResults = queryDataResults.getResult(selector, field, measure);
     if(countResults instanceof Error){
-        return countResults.message
+        return countResults.message;
     }
     else if(countResults.result instanceof Error){
-        return countResults.result.message
+        return countResults.result.message;
     }
     return {
         mean: countResults.result[0].mean,
@@ -25,4 +25,4 @@ function calculate(selector: Selector,
 
 export default {
     calculate
-}
+};

@@ -26,8 +26,8 @@ function formatValueForSql(filter: Filter, fieldInfo: FieldInfo) {
 function formatIndexValueForSql(value: string | boolean | number, path: string): string{
     const fieldPathEscaped = queryStringEscaper.escape(path);
     const pathDecomposed = new FieldPathDecomposed(fieldPathEscaped);
-    
-    
+
+
     while (pathDecomposed.length > 1) {
         const currentPathElement = pathDecomposed.next().value;
         if(arrayFieldDetector.isArrayField(currentPathElement.path)){
@@ -37,34 +37,33 @@ function formatIndexValueForSql(value: string | boolean | number, path: string):
 
     const valuePath = recursiveBuildIndexValueForSql(value, pathDecomposed);
 
-    return `'[{${valuePath}}]'`
+    return `'[{${valuePath}}]'`;
 }
 
 function recursiveBuildIndexValueForSql(value: string | boolean | number, path: FieldPathDecomposed): string{
 
     const decomposedPath = path.next();
-    console.log(decomposedPath, arrayFieldDetector.isArrayPathElement(decomposedPath.value.path))
     const currentPath = decomposedPath.value;
     const isPathDone = path.length < 1;
 
     if(arrayFieldDetector.isArrayPathElement(currentPath.path)){
         if(isPathDone)
-            return `"${currentPath.pathElement}":[${value}]`
+            return `"${currentPath.pathElement}":[${value}]`;
         else{
-            const nextPath = recursiveBuildIndexValueForSql(value, path)
-            return  `"${currentPath.pathElement}":[{${nextPath}}]`
+            const nextPath = recursiveBuildIndexValueForSql(value, path);
+            return  `"${currentPath.pathElement}":[{${nextPath}}]`;
         }
     }
     else {
         if(isPathDone)
-            return `"${currentPath.pathElement}":"${value}"`
+            return `"${currentPath.pathElement}":"${value}"`;
         else{
-            const nextPath = recursiveBuildIndexValueForSql(value, path) 
-            return  `"${currentPath.pathElement}":{${nextPath}}`
+            const nextPath = recursiveBuildIndexValueForSql(value, path);
+            return  `"${currentPath.pathElement}":{${nextPath}}`;
         }
     }
 }
 
 export default {
     formatValueForSql, formatIndexValueForSql
-}
+};

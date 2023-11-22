@@ -52,7 +52,7 @@ export default class SelectSqlBuilder {
         this.sqlBuilder.requestBuilders.push(selectFieldTypesBuilder.build);
         return this;
     }
-    
+
     fieldsJson() {
         this.sqlBuilder.requestBuilders.push(selectFieldsJsonBuilder.build);
         return this;

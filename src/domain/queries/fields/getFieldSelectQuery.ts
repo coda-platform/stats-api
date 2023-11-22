@@ -48,4 +48,4 @@ function getCastedQuery(field: Field, cast:string): string {
 
 export default {
     getQuery, getJsonQuery, getCastedQuery
-}
+};

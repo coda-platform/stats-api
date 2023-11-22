@@ -7,7 +7,7 @@ import FieldInfo from "../../../src/models/fieldInfo";
 import { ConditionOperator } from "../../../src/models/request/conditionOperator";
 import Field from "../../../src/models/request/field";
 import queryDataResultsObjectMother from "../../utils/objectMothers/domain/queryDataResultsObjectMother";
-import fieldObjectMother from "../../utils/objectMothers/models/fieldObjectMother"
+import fieldObjectMother from "../../utils/objectMothers/models/fieldObjectMother";
 import breakdownResponseObjectMother from "../../utils/objectMothers/models/reponse/breakdownResponseObjectMother";
 import fieldResponseObjectMother from "../../utils/objectMothers/models/reponse/fieldResponseObjectMother";
 import breakdownObjectMother from "../../utils/objectMothers/models/request/breakdownObjectMother";
@@ -36,7 +36,7 @@ describe('summarizeReponseProcessor tests', () => {
 
         // ASSERT
         expect(summarizeReponse.error).toEqual("error");
-    })
+    });
 
     it('gets aidbox total and queryUri for summarize response', () => {
         // ARRANGE
@@ -51,7 +51,7 @@ describe('summarizeReponseProcessor tests', () => {
         // ASSERT
         expect(summarizeReponse.total).toEqual(999);
         expect(summarizeReponse.query).toBe('SELECT * FROM Patient');
-    })
+    });
 
     it('gets field responses from selector fields', () => {
         // ARRANGE
@@ -75,7 +75,7 @@ describe('summarizeReponseProcessor tests', () => {
 
         expect(summarizeReponse.fieldResponses[0]).toBe(fieldAReponse);
         expect(summarizeReponse.fieldResponses[1]).toBe(fieldBReponse);
-    })
+    });
 
     it('gets aidbox breakdown and queryUri for summarize response', () => {
         // ARRANGE
@@ -96,5 +96,5 @@ describe('summarizeReponseProcessor tests', () => {
 
         // ASSERT
         expect(summarizeReponse).toBe(breakdownResult);
-    })
-})
+    });
+});

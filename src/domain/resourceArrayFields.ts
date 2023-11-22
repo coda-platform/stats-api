@@ -29,8 +29,8 @@ const values = [
     "medication.CodeableConcept.coding",
     "contained.code.coding",
 
-]
+];
 
 export default {
     values
-}
+};

@@ -6,7 +6,7 @@ import Filter from "../../../models/request/filter";
 import Selector from "../../../models/request/selector";
 import fieldLabelFormatter from "../fieldLabelFormatter";
 import SqlBuilder from "../sqlBuilder/sqlBuilder";
-import { ConditionOperator } from "../../../models/request/conditionOperator"
+import { ConditionOperator } from "../../../models/request/conditionOperator";
 
 function getQuery(selector: Selector,
     filterTypes: Map<Filter, FieldInfo>,
@@ -14,7 +14,7 @@ function getQuery(selector: Selector,
     breakdown: Breakdown): string {
 
     const breakdownField = breakdown.resource;
-    const breakdownFieldLabel = fieldLabelFormatter.formatLabel(findField(breakdownField, selector).label)
+    const breakdownFieldLabel = fieldLabelFormatter.formatLabel(findField(breakdownField, selector).label);
 
     const step = breakdown?.slices.step;
     const max = parseFloat(breakdown?.slices.max);
@@ -28,28 +28,28 @@ function getQuery(selector: Selector,
         .from()
         .subquery(fieldTypes)
         .groupBy()
-        .compiledField('breakdown')
+        .compiledField('breakdown');
 
-    return sqlBuilder.build(selector, filterTypes)
+    return sqlBuilder.build(selector, filterTypes);
 }
 
 function findField(breakdown: BreakdownResource, selector: Selector): Field {
-    var field = selector.fields.find(field => {
-        return field.path == breakdown.field;
-    })
+    let field = selector.fields.find(field => {
+        return field.path === breakdown.field;
+    });
 
     if (field) {
-        return field
+        return field;
     }
     else if (selector.joins) {
-        return findField(breakdown, selector.joins)
+        return findField(breakdown, selector.joins);
     }
     else {
         field = {
             path: breakdown.field,
             label: `${breakdown.field}Breakdown`,
             type: breakdown.fieldType
-        }
+        };
         selector.joins = {
             resource: breakdown.type,
             label: `${breakdown.type}Breakdown`,
@@ -58,11 +58,11 @@ function findField(breakdown: BreakdownResource, selector: Selector): Field {
                 conditions: []
             },
             fields: [field]
-        }
-        return field
+        };
+        return field;
     }
 }
 
 export default {
     getQuery
-}
+};

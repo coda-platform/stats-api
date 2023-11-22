@@ -17,7 +17,7 @@ function getQuery(selector: Selector,
     if (!selector?.condition || !selector.condition?.conditions ||
         selector.condition?.conditions?.length === 0)
         return sqlBuilder.possibleJoin(fieldTypes).build(selector, filterTypes);
-        
+
     const builderWithFilter = sqlBuilder.possibleJoin(fieldTypes).where().fieldFilter();
 
     return builderWithFilter.build(selector, filterTypes);
@@ -25,4 +25,4 @@ function getQuery(selector: Selector,
 
 export default {
     getQuery
-}
+};

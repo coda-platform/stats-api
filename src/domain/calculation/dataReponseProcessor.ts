@@ -36,4 +36,4 @@ function getBreakdownReponses(summarizeRequest: SummarizeRequestBody, queryDataR
 
 export default {
     getSummarizeReponses, getBreakdownReponses
-}
+};

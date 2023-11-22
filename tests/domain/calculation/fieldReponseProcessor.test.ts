@@ -8,7 +8,7 @@ import Field from "../../../src/models/request/field";
 import fieldMetricCalculatorObjectMother from "../../utils/objectMothers/domain/calculation/fieldMetricCalculatorObjectMother";
 import queryDataResultsObjectMother from "../../utils/objectMothers/domain/queryDataResultsObjectMother";
 import fieldInfoObjectMother from "../../utils/objectMothers/models/fieldInfoObjectMother";
-import fieldObjectMother from "../../utils/objectMothers/models/fieldObjectMother"
+import fieldObjectMother from "../../utils/objectMothers/models/fieldObjectMother";
 import measuresObjectMother from "../../utils/objectMothers/models/request/measuresObjectMother";
 import selectorObjectMother from "../../utils/objectMothers/models/selectorObjectMother";
 
@@ -31,7 +31,7 @@ describe('fieldReponseProcessor tests', () => {
         fieldMetricCalculatorsFactory.get = jest.fn();
         when(fieldMetricCalculatorsFactory.get as any)
             .calledWith(field, measures, fieldsMap)
-            .mockReturnValue([countMetricCalculator])
+            .mockReturnValue([countMetricCalculator]);
 
         // ACT
         const fieldReponse = fieldReponseProcessor.getFieldReponse(selector, field, measures, queryDataResults, fieldsMap);
@@ -39,15 +39,15 @@ describe('fieldReponseProcessor tests', () => {
         // ASSERT
         expect(fieldReponse.field).toEqual(field.path);
         expect(fieldReponse.count).toEqual(72);
-    })
+    });
 
     function getFieldsMap(fields: Field[], aidboxFields: FieldInfo[]) {
         const fieldsMap = new Map<Field, FieldInfo>();
 
-        for (var fieldIndex = 0; fieldIndex < fields.length; fieldIndex++) {
+        for (let fieldIndex = 0; fieldIndex < fields.length; fieldIndex++) {
             fieldsMap.set(fields[fieldIndex], aidboxFields[fieldIndex]);
         }
 
         return fieldsMap;
     }
-})
+});

@@ -10,21 +10,21 @@ import SqlBuilder from "../../sqlBuilder/sqlBuilder";
 
 function getQuery(selector: Selector, field: Field, filterFieldTypes: Map<Filter, FieldInfo>, fieldTypes: Map<Field, FieldInfo>, measures: Measures): string {
 
-    let selectQuery = new SqlBuilder()
-        .select()
+    const selectQuery = new SqlBuilder()
+        .select();
 
-    let measureIndex = 0
+    let measureIndex = 0;
 
     selectFromMeasure(selectQuery, selector, field, fieldTypes, measures.continuous[measureIndex]);
     measureIndex++;
 
     while (measureIndex < measures.continuous.length) {
-        selectQuery.comma()
+        selectQuery.comma();
         selectFromMeasure(selectQuery, selector, field, fieldTypes, measures.continuous[measureIndex]);
         measureIndex++;
     }
 
-    let queryToFromPart = selectQuery
+    const queryToFromPart = selectQuery
         .from()
         .resourceTable()
         .possibleJoin(fieldTypes);
@@ -44,21 +44,21 @@ function selectFromMeasure(query: SelectSqlBuilder, selector: Selector, field: F
 
     switch (measure) {
         case 'count':
-            query.fieldSum(field, fieldTypes, selector)
-            break
+            query.fieldSum(field, fieldTypes, selector);
+            break;
         case 'mean':
-            query.countAll().comma().fieldMean(field, fieldTypes, selector)
-            break
+            query.countAll().comma().fieldMean(field, fieldTypes, selector);
+            break;
         case 'stdev':
-            query.fieldStdDev(field, fieldTypes, selector)
-            break
+            query.fieldStdDev(field, fieldTypes, selector);
+            break;
         case 'ci95':
             query.fieldCiLow(field, fieldTypes, selector)
                 .comma()
-                .fieldCiHigh(field, fieldTypes, selector)
+                .fieldCiHigh(field, fieldTypes, selector);
     }
 }
 
 export default {
     getQuery
-}
+};

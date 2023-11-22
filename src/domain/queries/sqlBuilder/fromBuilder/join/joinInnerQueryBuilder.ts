@@ -6,7 +6,7 @@ import SqlBuilder from "../../sqlBuilder";
 
 function build(joinSelector: Selector, filterTypes: Map<Filter, FieldInfo>, fieldTypes: Map<Field, FieldInfo>) {
     const sqlBuilder = new SqlBuilder()
-        .select()
+        .select();
 
     if (hasFields(joinSelector)) {
         sqlBuilder.fields().comma();
@@ -23,12 +23,12 @@ function build(joinSelector: Selector, filterTypes: Map<Filter, FieldInfo>, fiel
 
 function hasFields(selector: Selector): boolean {
     if (selector.fields.length > 0)
-        return true
+        return true;
     else if (selector.joins)
-        return hasFields(selector.joins)
-    return false
+        return hasFields(selector.joins);
+    return false;
 }
 
 export default {
     build
-}
+};

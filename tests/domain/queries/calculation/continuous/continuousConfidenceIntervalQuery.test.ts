@@ -26,16 +26,16 @@ describe('continuousConfidenceIntervalQuery tests', () => {
     const measures:Measures = {
         "continuous":[ContinuousMesure.ci95],
         "categorical":[]
-    }
+    };
 
     beforeEach(() => {
         resourceArrayFields.values = []; // Simplify tests by not unwrapping json arrays.
-    })
+    });
 
     it('With field and no filter, groups by field', () => {
         // ARRANGE
         const selector = selectorObjectMother.get('Patient', 'patient', [genderField], {conditionOperator:ConditionOperator.and, conditions:[]});
-        const fieldTypes = getFieldsMap([ageField], [integerFieldInfo])
+        const fieldTypes = getFieldsMap([ageField], [integerFieldInfo]);
 
         // ACT
         const query = continuousQuery.getQuery(selector, genderField, filterMaps, fieldTypes, measures);
@@ -49,13 +49,13 @@ describe('continuousConfidenceIntervalQuery tests', () => {
             .from()
             .resourceTable()
             .possibleJoin(fieldTypes)
-            .build(selector, filterMaps))
-    })
+            .build(selector, filterMaps));
+    });
 
     it('With age computed field and no filter, groups by field with WHERE filter', () => {
         // ARRANGE
         const selector = selectorObjectMother.get('Patient', 'patient', [ageField], {conditionOperator:ConditionOperator.and, conditions:[]});
-        const fieldTypes = getFieldsMap([ageField], [integerFieldInfo])
+        const fieldTypes = getFieldsMap([ageField], [integerFieldInfo]);
 
         // ACT
         const query = continuousQuery.getQuery(selector, ageField, filterMaps, fieldTypes, measures);
@@ -71,13 +71,13 @@ describe('continuousConfidenceIntervalQuery tests', () => {
             .possibleJoin(fieldTypes)
             .where()
             .fieldFilter(ageField)
-            .build(selector, filterMaps))
-    })
+            .build(selector, filterMaps));
+    });
 
     it('With field and filter, groups by field with WHERE filter', () => {
         // ARRANGE
         const selector = selectorObjectMother.get('Patient', 'patient', [genderField], {conditionOperator:ConditionOperator.and, conditions:[femaleGenderFilter]});
-        const fieldTypes = getFieldsMap([genderField], [stringFieldInfo])
+        const fieldTypes = getFieldsMap([genderField], [stringFieldInfo]);
 
         // ACT
         const query = continuousQuery.getQuery(selector, genderField, filterMaps, fieldTypes, measures);
@@ -93,13 +93,13 @@ describe('continuousConfidenceIntervalQuery tests', () => {
             .possibleJoin(fieldTypes)
             .where()
             .fieldFilter()
-            .build(selector, filterMaps))
-    })
+            .build(selector, filterMaps));
+    });
 
     function getFiltersMap(filters: Filter[], fieldInfo: FieldInfo[]) {
         const fieldsMap = new Map<Filter, FieldInfo>();
 
-        for (var fieldIndex = 0; fieldIndex < filters.length; fieldIndex++) {
+        for (let fieldIndex = 0; fieldIndex < filters.length; fieldIndex++) {
             fieldsMap.set(filters[fieldIndex], fieldInfo[fieldIndex]);
         }
 
@@ -109,10 +109,10 @@ describe('continuousConfidenceIntervalQuery tests', () => {
     function getFieldsMap(fields: Field[], fieldInfo: FieldInfo[]) {
         const fieldsMap = new Map<Field, FieldInfo>();
 
-        for (var fieldIndex = 0; fieldIndex < fields.length; fieldIndex++) {
+        for (let fieldIndex = 0; fieldIndex < fields.length; fieldIndex++) {
             fieldsMap.set(fields[fieldIndex], fieldInfo[fieldIndex]);
         }
 
         return fieldsMap;
     }
-})
+});

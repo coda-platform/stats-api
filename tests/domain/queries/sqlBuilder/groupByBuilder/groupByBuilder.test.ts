@@ -3,5 +3,5 @@ import groupByBuilder from "../../../../../src/domain/queries/sqlBuilder/groupBy
 describe('groupByBuilder tests', () => {
     it('return GROUP BY', () => {
         expect(groupByBuilder.build()).toEqual("GROUP BY");
-    })
-})
+    });
+});

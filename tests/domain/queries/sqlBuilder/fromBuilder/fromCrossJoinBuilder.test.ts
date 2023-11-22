@@ -11,7 +11,7 @@ describe('fromCrossJoinBuilder tests', () => {
 
     beforeEach(() => {
         resourceArrayFields.values = [];
-    })
+    });
 
     it('with one field array type, array element is last path element, field is added in CROSS JOIN LATERAL', () => {
         // ARRANGE
@@ -23,8 +23,8 @@ describe('fromCrossJoinBuilder tests', () => {
         const query = fromCrossJoinBuilder.build(selector);
 
         // ASSERT
-        expect(query).toEqual("CROSS JOIN LATERAL jsonb_array_elements(resource->'address'->'city') AS address_city")
-    })
+        expect(query).toEqual("CROSS JOIN LATERAL jsonb_array_elements(resource->'address'->'city') AS address_city");
+    });
 
     it('with one field array type, with field and no filter, array element is last path element, field is added in CROSS JOIN LATERAL', () => {
         // ARRANGE
@@ -37,8 +37,8 @@ describe('fromCrossJoinBuilder tests', () => {
         const query = fromCrossJoinBuilder.build(selector, addressCityField);
 
         // ASSERT
-        expect(query).toEqual("CROSS JOIN LATERAL jsonb_array_elements(resource->'address'->'city') AS address_city")
-    })
+        expect(query).toEqual("CROSS JOIN LATERAL jsonb_array_elements(resource->'address'->'city') AS address_city");
+    });
 
     it('with one field array type, array element is first path element, only array portion is in CROSS JOIN', () => {
         // ARRANGE
@@ -50,8 +50,8 @@ describe('fromCrossJoinBuilder tests', () => {
         const query = fromCrossJoinBuilder.build(selector);
 
         // ASSERT
-        expect(query).toEqual("CROSS JOIN LATERAL jsonb_array_elements(resource->'address') AS address")
-    })
+        expect(query).toEqual("CROSS JOIN LATERAL jsonb_array_elements(resource->'address') AS address");
+    });
 
     it('with two fields array types, field are added in CROSS JOIN LATERAL', () => {
         // ARRANGE
@@ -63,8 +63,8 @@ describe('fromCrossJoinBuilder tests', () => {
         const query = fromCrossJoinBuilder.build(selector);
 
         // ASSERT
-        expect(query).toEqual("CROSS JOIN LATERAL jsonb_array_elements(resource->'gender') AS gender, jsonb_array_elements(resource->'address'->'city') AS address_city")
-    })
+        expect(query).toEqual("CROSS JOIN LATERAL jsonb_array_elements(resource->'gender') AS gender, jsonb_array_elements(resource->'address'->'city') AS address_city");
+    });
 
     it('with two arrays in field, two cross joins are generated', () => {
         // ARRANGE
@@ -76,6 +76,6 @@ describe('fromCrossJoinBuilder tests', () => {
         const query = fromCrossJoinBuilder.build(selector);
 
         // ASSERT
-        expect(query).toEqual("CROSS JOIN LATERAL jsonb_array_elements(resource->'address') AS address CROSS JOIN LATERAL jsonb_array_elements(address->'city') AS address_city")
-    })
-})
+        expect(query).toEqual("CROSS JOIN LATERAL jsonb_array_elements(resource->'address') AS address CROSS JOIN LATERAL jsonb_array_elements(address->'city') AS address_city");
+    });
+});

@@ -8,4 +8,4 @@ function get(selector: Selector, field?: Field) {
 
 export default {
     get
-}
+};

@@ -8,18 +8,18 @@ import QueryDataResults from "../../queries/queryDataResults";
 function calculate(selector: Selector,
     queryDataResults: QueryDataResults,
     field: Field,
-    measure: ContinuousMesure | CategoricalMesure): number | String {
-    
+    measure: ContinuousMesure | CategoricalMesure): number | string {
+
     const countResults = queryDataResults.getResult(selector, field, measure);
     if(countResults instanceof Error){//no result
-        return countResults.message
+        return countResults.message;
     }
     else if(countResults.result instanceof Error){//db error
-        return countResults.result.message
+        return countResults.result.message;
     }
     return countResults.result[0].sum;
 }
 
 export default {
     calculate
-}
+};

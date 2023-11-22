@@ -6,4 +6,4 @@ function get(fieldPath: string, selectorLabel:string): WhereJsonArrayFormatterBu
 
 export default {
     get
-}
+};

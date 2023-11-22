@@ -1,5 +1,5 @@
 import selectSubqueryFieldBuilder from "../../../../../src/domain/queries/sqlBuilder/selectBuilder/selectSubqueryFieldBuilder";
-import fieldObjectMother from "../../../../utils/objectMothers/models/fieldObjectMother"
+import fieldObjectMother from "../../../../utils/objectMothers/models/fieldObjectMother";
 
 describe('selectSubqueryFieldBuilder tests', () => {
     it('get fields path . replaced with _ and subquery name', () => {
@@ -10,6 +10,6 @@ describe('selectSubqueryFieldBuilder tests', () => {
         const result = selectSubqueryFieldBuilder.build(field, 'SQ');
 
         // ASSERT
-        expect(result).toEqual('SQ.address_country_name')
-    })
-})
+        expect(result).toEqual('SQ.address_country_name');
+    });
+});

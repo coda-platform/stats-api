@@ -30,9 +30,9 @@ function getFieldPathCompiled(fieldPathEscaped: string): string {
 function getPathCompiled(path: string, selectorLabel?: string, filterPath?: boolean): string {
     const fieldPathEscaped = queryStringEscaper.escape(path);
     const isArrayField = arrayFieldDetector.isArrayField(path);
-    
+
     if(isArrayField && selectorLabel && filterPath){
-        return getArrayPathCompiled(path, selectorLabel)
+        return getArrayPathCompiled(path, selectorLabel);
     }
 
     const calculatedField = calculatedFields.calculatedFields.get(path);
@@ -54,7 +54,7 @@ function getJsonPathCompiled(path: string): string {
         const isArrayPathElement = arrayFieldDetector.isArrayPathElement(currentPathElement.path);
 
         pathCompiled += `->'${currentPathElement.pathElement}'`;
-        
+
         if (isArrayPathElement) {
             pathCompiled = `jsonb_array_elements(${pathCompiled})`;
         }
@@ -72,7 +72,7 @@ function getArrayPathCompiled(path: string, selectorLabel:string): string {
 
     while (pathDecomposed.length > 1) {
         const currentPathElement = pathDecomposed.next().value;
-        
+
         pathCompiled += `->'${currentPathElement.pathElement}'`;
         if(arrayFieldDetector.isArrayField(currentPathElement.path)){
             break; //stop at first array field
@@ -83,4 +83,4 @@ function getArrayPathCompiled(path: string, selectorLabel:string): string {
 }
 export default {
     getPathCompiled, getJsonPathCompiled, getArrayPathCompiled
-}
+};

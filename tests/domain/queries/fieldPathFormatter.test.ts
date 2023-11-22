@@ -5,7 +5,7 @@ import resourceArrayFields from "../../../src/domain/resourceArrayFields";
 describe('fieldPathFormatter tests', () => {
     beforeEach(() => {
         resourceArrayFields.values = [];
-    })
+    });
 
     it('with no sub path, returns field path', () => {
         // ARRANGE
@@ -15,8 +15,8 @@ describe('fieldPathFormatter tests', () => {
         const pathCompiled = fieldPathFormatter.formatPath(field.path);
 
         // ASSERT
-        expect(pathCompiled).toEqual("gender")
-    })
+        expect(pathCompiled).toEqual("gender");
+    });
 
     it('with sub path replaces . with _', () => {
         // ARRANGE
@@ -26,8 +26,8 @@ describe('fieldPathFormatter tests', () => {
         const pathCompiled = fieldPathFormatter.formatPath(field.path);
 
         // ASSERT
-        expect(pathCompiled).toEqual("address_country")
-    })
+        expect(pathCompiled).toEqual("address_country");
+    });
 
     it('with two level sub path replaces . with _', () => {
         // ARRANGE
@@ -37,8 +37,8 @@ describe('fieldPathFormatter tests', () => {
         const pathCompiled = fieldPathFormatter.formatPath(field.path);
 
         // ASSERT
-        expect(pathCompiled).toEqual("address_country_name")
-    })
+        expect(pathCompiled).toEqual("address_country_name");
+    });
 
     it('with sub path replaces . with _ and lower characters', () => {
         // ARRANGE
@@ -48,8 +48,8 @@ describe('fieldPathFormatter tests', () => {
         const pathCompiled = fieldPathFormatter.formatPath(field.path);
 
         // ASSERT
-        expect(pathCompiled).toEqual("address_country")
-    })
+        expect(pathCompiled).toEqual("address_country");
+    });
 
     it('escapes field path to avoid sql injections', () => {
         // ARRANGE
@@ -59,6 +59,6 @@ describe('fieldPathFormatter tests', () => {
         const pathCompiled = fieldPathFormatter.formatPath(field.path);
 
         // ASSERT
-        expect(pathCompiled).toEqual("gender")
-    })
-})
+        expect(pathCompiled).toEqual("gender");
+    });
+});

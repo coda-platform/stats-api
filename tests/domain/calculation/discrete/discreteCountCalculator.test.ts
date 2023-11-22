@@ -2,7 +2,7 @@ import discreteCountCalculator from "../../../../src/domain/calculation/discrete
 import CategoricalMesure from "../../../../src/models/categoricalMeasure";
 import { ConditionOperator } from "../../../../src/models/request/conditionOperator";
 import queryDataResultsObjectMother from "../../../utils/objectMothers/domain/queryDataResultsObjectMother";
-import fieldObjectMother from "../../../utils/objectMothers/models/fieldObjectMother"
+import fieldObjectMother from "../../../utils/objectMothers/models/fieldObjectMother";
 import selectorObjectMother from "../../../utils/objectMothers/models/selectorObjectMother";
 
 describe('discreteCountCalculator tests', () => {
@@ -22,9 +22,9 @@ describe('discreteCountCalculator tests', () => {
 
         // ASSERT
         expect(discreteCounts.length).toEqual(1);
-        expect(discreteCounts[0].label).toEqual('male')
+        expect(discreteCounts[0].label).toEqual('male');
         expect(discreteCounts[0].value).toEqual(1);
-    })
+    });
 
     it('with three females, value is counted three times', () => {
         // ARRANGE
@@ -38,9 +38,9 @@ describe('discreteCountCalculator tests', () => {
 
         // ASSERT
         expect(discreteCounts.length).toEqual(1);
-        expect(discreteCounts[0].label).toEqual('female')
+        expect(discreteCounts[0].label).toEqual('female');
         expect(discreteCounts[0].value).toEqual(3);
-    })
+    });
 
     it('with mixed males and females, each label is counted for total gender counts', () => {
         // ARRANGE
@@ -55,12 +55,12 @@ describe('discreteCountCalculator tests', () => {
         // ASSERT
         expect(discreteCounts.length).toEqual(2);
 
-        expect(discreteCounts[0].label).toEqual('female')
+        expect(discreteCounts[0].label).toEqual('female');
         expect(discreteCounts[0].value).toEqual(3);
 
-        expect(discreteCounts[1].label).toEqual('male')
+        expect(discreteCounts[1].label).toEqual('male');
         expect(discreteCounts[1].value).toEqual(2);
-    })
+    });
 
     it('with complex field path, field path matches query field path with . replaced by _', () => {
         // ARRANGE
@@ -76,12 +76,12 @@ describe('discreteCountCalculator tests', () => {
         // ASSERT
         expect(discreteCounts.length).toEqual(2);
 
-        expect(discreteCounts[0].label).toEqual('female')
+        expect(discreteCounts[0].label).toEqual('female');
         expect(discreteCounts[0].value).toEqual(3);
 
-        expect(discreteCounts[1].label).toEqual('male')
+        expect(discreteCounts[1].label).toEqual('male');
         expect(discreteCounts[1].value).toEqual(2);
-    })
+    });
 
     it('with field with caps, field path matches query field path with caps removed', () => {
         // ARRANGE
@@ -96,17 +96,17 @@ describe('discreteCountCalculator tests', () => {
 
         // ASSERT
         expect(discreteCounts.length).toEqual(2);
-        expect(discreteCounts[0].label).toEqual('female')
+        expect(discreteCounts[0].label).toEqual('female');
         expect(discreteCounts[0].value).toEqual(3);
 
-        expect(discreteCounts[1].label).toEqual('male')
+        expect(discreteCounts[1].label).toEqual('male');
         expect(discreteCounts[1].value).toEqual(2);
-    })
+    });
 
     function getQueryAndResult(result: any) {
         return {
             query: "SELECT * FROM Patient",
             result
-        }
+        };
     }
-})
+});

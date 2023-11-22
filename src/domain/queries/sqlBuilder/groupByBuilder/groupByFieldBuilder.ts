@@ -11,10 +11,10 @@ function build(field: Field) {
     }
 
     const jsonFieldPathCompiled = jsonFieldValuePathCompiler.getPathCompiled(fieldPath);
-    
+
     return jsonFieldPathCompiled;
 }
 
 export default {
     build
-}
+};

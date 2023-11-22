@@ -21,9 +21,9 @@ function build(selector: Selector,
     const builderWithFilter = sqlBuilder.possibleJoin(fieldTypes).where().fieldFilter();
 
     const subquery = builderWithFilter.build(selector, filterTypes);
-    return `(${subquery}) as subQuery`
+    return `(${subquery}) as subQuery`;
 }
 
 export default {
     build
-}
+};

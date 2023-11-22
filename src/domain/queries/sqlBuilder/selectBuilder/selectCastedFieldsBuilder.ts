@@ -6,9 +6,9 @@ import FieldInfo from "../../../../models/fieldInfo";
 
 function build(selector: Selector, fieldTypes: Map<Field, FieldInfo>) {
     let selectorFields = selector.fields
-        .map(field => getCastedField(field, fieldTypes))
-    selectorFields = selectorFields.concat(getAllJoinFields(selector, fieldTypes) as string[])
-    return selectorFields.join(", ")
+        .map(field => getCastedField(field, fieldTypes));
+    selectorFields = selectorFields.concat(getAllJoinFields(selector, fieldTypes) as string[]);
+    return selectorFields.join(", ");
 }
 
 function getAllJoinFields(selector: Selector, fieldTypes: Map<Field, FieldInfo>) : string[]{//get all fields from nested joins
@@ -18,7 +18,7 @@ function getAllJoinFields(selector: Selector, fieldTypes: Map<Field, FieldInfo>)
     else{//recursive step
        return selector.joins.fields
         .map(f => getCastedJoinField(f, fieldTypes))
-        .concat(getAllJoinFields(selector.joins, fieldTypes) as string[])
+        .concat(getAllJoinFields(selector.joins, fieldTypes) as string[]);
     }
 }
 
@@ -36,4 +36,4 @@ function getCastedJoinField(field: Field, fieldTypes: Map<Field, FieldInfo>): st
 
 export default {
     build
-}
+};

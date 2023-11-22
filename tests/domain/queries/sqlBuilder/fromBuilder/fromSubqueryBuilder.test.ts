@@ -1,5 +1,5 @@
 import fromSubqueryBuilder from "../../../../../src/domain/queries/sqlBuilder/fromBuilder/fromSubqueryBuilder";
-import fieldObjectMother from "../../../../utils/objectMothers/models/fieldObjectMother"
+import fieldObjectMother from "../../../../utils/objectMothers/models/fieldObjectMother";
 import filterObjectMother from "../../../../utils/objectMothers/models/filterObjectMother";
 import selectorObjectMother from "../../../../utils/objectMothers/models/selectorObjectMother";
 import resourceArrayFields from "../../../../../src/domain/resourceArrayFields";
@@ -27,7 +27,7 @@ describe('fromSubqueryBuilder tests', () => {
 
     beforeEach(() => {
         resourceArrayFields.values = [];
-    })
+    });
 
     it('with field, no filter, no array field is selected with good nomenclature', () => {
         // ARRANGE
@@ -40,7 +40,7 @@ describe('fromSubqueryBuilder tests', () => {
 
         // ASSERT
         expect(result).toEqual("(SELECT (resource->>'gender')::string AS gender FROM Patient patient_table ) as subQuery");
-    })
+    });
 
     it('with array field, no filter, field is unrolled and selected with good nomenclature', () => {
         // ARRANGE
@@ -54,7 +54,7 @@ describe('fromSubqueryBuilder tests', () => {
 
         // ASSERT
         expect(result).toEqual("(SELECT (jsonb_array_elements(resource->'address')->>'city')::string AS city FROM Patient patient_table ) as subQuery");
-    })
+    });
 
     it('with array field and filter, field and filter are unrolled and selected with good nomenclature', () => {
         // ARRANGE
@@ -68,7 +68,7 @@ describe('fromSubqueryBuilder tests', () => {
 
         // ASSERT
         expect(result).toEqual("(SELECT (resource->>'gender')::string AS gender FROM Patient patient_table  WHERE patient_table.resource->'address' @> '[{\"city\":\"Quebec\"}]') as subQuery");
-    })
+    });
 
     it('with field and two filters, field and filters are selected with good nomenclature', () => {
         // ARRANGE
@@ -81,7 +81,7 @@ describe('fromSubqueryBuilder tests', () => {
 
         // ASSERT
         expect(result).toEqual("(SELECT (resource->>'gender')::string AS gender FROM Patient patient_table  WHERE (resource->>'fieldA')::string = 'valueA' AND (resource->>'fieldB')::string = 'valueB') as subQuery");
-    })
+    });
 
     it('with field and filter, both same field, field is only once in subquery', () => {
         // ARRANGE
@@ -94,7 +94,7 @@ describe('fromSubqueryBuilder tests', () => {
 
         // ASSERT
         expect(result).toEqual("(SELECT (resource->>'gender')::string AS gender FROM Patient patient_table  WHERE (resource->>'gender')::string = 'male') as subQuery");
-    })
+    });
 
     it('with city field, two filters same field, filter field is only included once', () => {
         // ARRANGE
@@ -107,12 +107,12 @@ describe('fromSubqueryBuilder tests', () => {
 
         // ASSERT
         expect(result).toEqual("(SELECT (resource->'address'->>'city')::string AS city FROM Patient patient_table  WHERE (resource->>'gender')::string = 'male' AND (resource->>'gender')::string = 'female') as subQuery");
-    })
+    });
 
     function getFieldsMap(fields: Field[], fieldInfo: FieldInfo[]) {
         const fieldsMap = new Map<Field, FieldInfo>();
 
-        for (var fieldIndex = 0; fieldIndex < fields.length; fieldIndex++) {
+        for (let fieldIndex = 0; fieldIndex < fields.length; fieldIndex++) {
             fieldsMap.set(fields[fieldIndex], fieldInfo[fieldIndex]);
         }
 
@@ -122,10 +122,10 @@ describe('fromSubqueryBuilder tests', () => {
     function getFiltersMap(filters: Filter[], fieldInfo: FieldInfo[]) {
         const fieldsMap = new Map<Filter, FieldInfo>();
 
-        for (var fieldIndex = 0; fieldIndex < filters.length; fieldIndex++) {
+        for (let fieldIndex = 0; fieldIndex < filters.length; fieldIndex++) {
             fieldsMap.set(filters[fieldIndex], fieldInfo[fieldIndex]);
         }
 
         return fieldsMap;
     }
-})
+});

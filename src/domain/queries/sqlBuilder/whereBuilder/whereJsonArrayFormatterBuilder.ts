@@ -14,7 +14,7 @@ export default class WhereJsonArrayFormatterBuilder {
     constructor(fieldPath: string, selectorLabel:string) {
         this.pathEscaped = queryStringEscaper.escape(fieldPath);
         this.pathDecomposed = new FieldPathDecomposed(this.pathEscaped);
-        this.selectorLabel = queryStringEscaper.escape(selectorLabel)
+        this.selectorLabel = queryStringEscaper.escape(selectorLabel);
     }
 
     getElementsToLastArray() {
@@ -38,7 +38,7 @@ export default class WhereJsonArrayFormatterBuilder {
     getPathFromElements() {
         let pathFromElements = '';
 
-        for (let pathElement of this.pathDecomposed) {
+        for (const pathElement of this.pathDecomposed) {
 
             if (this.pathDecomposed.length === 0) {
                 pathFromElements += `->>'${pathElement.pathElement}'`;

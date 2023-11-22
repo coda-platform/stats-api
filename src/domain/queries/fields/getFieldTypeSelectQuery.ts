@@ -15,17 +15,17 @@ function getQuery(field: Field): string {
 
 function getQueryfromLabel(field: Field): string {
     const fieldLabelFormatted = fieldLabelFormatter.formatLabel(field.label);
-    
+
     const calculatedField = calculatedFields.calculatedFields.get(field.path);
     if (calculatedField) {
         return `pg_typeof(${fieldLabelFormatted}) as ${fieldLabelFormatted}`;
     }
-    
-    return `jsonb_typeof(${fieldLabelFormatted}) AS ${fieldLabelFormatted}`
+
+    return `jsonb_typeof(${fieldLabelFormatted}) AS ${fieldLabelFormatted}`;
 }
 
 export default {
     getQuery, getQueryfromLabel
-}
+};
 
 

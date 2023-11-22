@@ -32,7 +32,7 @@ export default class QueryDataResults {
 
     getSelectorBreakdownResult(selector: Selector) {
         const result = this.breakdownResults.get(selector);
-        if (!result) return new Error('No result for this selector');
+        if (!result) throw new Error('No result for this selector');
 
         return result;
     }
@@ -49,28 +49,28 @@ export default class QueryDataResults {
 
     getResult(selector: Selector, field: Field, mesure: ContinuousMesure | CategoricalMesure) {
         const selectorResults = this.results.get(selector);
-        if (!selectorResults) return new Error('No results for this selector');
+        if (!selectorResults) throw new Error('No results for this selector');
 
         const fieldResults = selectorResults.get(field);
-        if (!fieldResults) return new Error('No results for this field');
+        if (!fieldResults) throw new Error('No results for this field');
 
         const result = fieldResults.get(mesure);
-        if (!result) return new Error('No result for this measure');
+        if (!result) throw new Error('No result for this measure');
 
         return result;
     }
 
     getFieldResults(selector: Selector, field: Field) {
         const selectorResults = this.results.get(selector);
-        if (!selectorResults) return new Error('No results for this selector');
+        if (!selectorResults) throw new Error('No results for this selector');
 
         const fieldResults = selectorResults.get(field);
-        if (!fieldResults) return new Error('No results for this field');
+        if (!fieldResults) throw new Error('No results for this field');
 
         const fieldQueryAndResults = new Array<queryAndResult>();
         fieldResults.forEach((value) => {
             fieldQueryAndResults.push(value);
-        })
+        });
 
         return fieldQueryAndResults;
     }

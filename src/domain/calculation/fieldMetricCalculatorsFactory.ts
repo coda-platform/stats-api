@@ -46,7 +46,7 @@ function get(field: Field,
     return measureOptions.map((mo) => {
         const metricCalculation = typesAndCalculations.has(mo)
             ? typesAndCalculations.get(mo)
-            : () => { throw new Error('Metric type not supported') };
+            : () => { throw new Error('Metric type not supported'); };
 
         const measureOptionCasted = isContinuous ? mo as ContinuousMesure : mo as CategoricalMesure;
         return { metric: measureOptionCasted, metricCalculation } as FieldMetricCalculator;
@@ -55,4 +55,4 @@ function get(field: Field,
 
 export default {
     get
-}
+};

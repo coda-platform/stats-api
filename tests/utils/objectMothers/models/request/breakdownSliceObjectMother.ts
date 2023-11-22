@@ -1,4 +1,4 @@
-import BreakdownSlices from "../../../../../src/models/request/breadkdownSlices"
+import BreakdownSlices from "../../../../../src/models/request/breadkdownSlices";
 
 function get(step: number, min?: string, max?: string): BreakdownSlices {
     min = min ?? '2014-1-1';
@@ -8,9 +8,9 @@ function get(step: number, min?: string, max?: string): BreakdownSlices {
         step,
         min,
         max
-    }
+    };
 }
 
 export default {
     get
-}
+};

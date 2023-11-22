@@ -18,4 +18,4 @@ function getQuery(selector: Selector): string {
 
 export default {
     getQuery
-}
+};

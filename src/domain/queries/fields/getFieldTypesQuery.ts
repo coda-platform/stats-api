@@ -16,7 +16,7 @@ function getQuery(selector: Selector, filterTypes: Map<Filter, FieldInfo>): stri
         return sqlBuilder.possibleFieldTypeJoin().build(selector, filterTypes);
     }
 
-    const builderWithFilter = sqlBuilder.possibleFieldTypeJoin().where().fieldFilter()
+    const builderWithFilter = sqlBuilder.possibleFieldTypeJoin().where().fieldFilter();
 
     return builderWithFilter.build(selector, filterTypes);
 
@@ -24,4 +24,4 @@ function getQuery(selector: Selector, filterTypes: Map<Filter, FieldInfo>): stri
 
 export default {
     getQuery
-}
+};

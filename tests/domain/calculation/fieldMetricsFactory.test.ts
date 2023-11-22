@@ -15,7 +15,7 @@ import Field from "../../../src/models/request/field";
 import Selector from "../../../src/models/request/selector";
 import fieldInfoObjectMother from "../../utils/objectMothers/models/fieldInfoObjectMother";
 import fieldObjectMother from "../../utils/objectMothers/models/fieldObjectMother";
-import measuresObjectMother from "../../utils/objectMothers/models/request/measuresObjectMother"
+import measuresObjectMother from "../../utils/objectMothers/models/request/measuresObjectMother";
 import constants from "../../../src/constants";
 
 describe('fieldMetricsFactory tests', () => {
@@ -40,11 +40,11 @@ describe('fieldMetricsFactory tests', () => {
             expectCalculatorIs(fieldCalculators[1], ContinuousMesure.mean, continuousMeanCalculator.calculate);
             expectCalculatorIs(fieldCalculators[2], ContinuousMesure.stdev, continuousStandardDeviationCalculator.calculate);
             expectCalculatorIs(fieldCalculators[3], ContinuousMesure.ci95, continuousConfidenceIntervalCalculator.calculate);
-        })
+        });
 
         it(`${fieldType} field, two measures chosen, both continuous metrics gotten`, () => {
             // ARRANGE
-            const measures = measuresObjectMother.get([], [ContinuousMesure.count, ContinuousMesure.stdev])
+            const measures = measuresObjectMother.get([], [ContinuousMesure.count, ContinuousMesure.stdev]);
             const field = fieldObjectMother.get('field', 'field', 'string');
             const aidboxField = fieldInfoObjectMother.get(fieldType);
 
@@ -58,8 +58,8 @@ describe('fieldMetricsFactory tests', () => {
 
             expectCalculatorIs(fieldCalculators[0], ContinuousMesure.count, continuousTotalCalculator.calculate);
             expectCalculatorIs(fieldCalculators[1], ContinuousMesure.stdev, continuousStandardDeviationCalculator.calculate);
-        })
-    })
+        });
+    });
 
     it(`string field, all metrics chosen, all categorical metrics gotten`, () => {
         // ARRANGE
@@ -77,11 +77,11 @@ describe('fieldMetricsFactory tests', () => {
         expectCalculatorIs(fieldCalculators[0], CategoricalMesure.count, discreteCountCalculator.calculate);
         expectCalculatorIs(fieldCalculators[1], CategoricalMesure.mode, discreteModeCalculator.calculate);
         expectCalculatorIs(fieldCalculators[2], CategoricalMesure.marginals, discreteMarginalCalculator.calculate);
-    })
+    });
 
     it(`string field, two measures chosen, both categorical metrics gotten`, () => {
         // ARRANGE
-        const measures = measuresObjectMother.get([CategoricalMesure.count, CategoricalMesure.marginals], [])
+        const measures = measuresObjectMother.get([CategoricalMesure.count, CategoricalMesure.marginals], []);
         const field = fieldObjectMother.get('field', 'field', 'string');
         const aidboxField = fieldInfoObjectMother.get('string');
 
@@ -95,12 +95,12 @@ describe('fieldMetricsFactory tests', () => {
 
         expectCalculatorIs(fieldCalculators[0], CategoricalMesure.count, discreteCountCalculator.calculate);
         expectCalculatorIs(fieldCalculators[1], CategoricalMesure.marginals, discreteMarginalCalculator.calculate);
-    })
+    });
 
     function getFieldsMap(fields: Field[], aidboxFields: FieldInfo[]) {
         const fieldsMap = new Map<Field, FieldInfo>();
 
-        for (var fieldIndex = 0; fieldIndex < fields.length; fieldIndex++) {
+        for (let fieldIndex = 0; fieldIndex < fields.length; fieldIndex++) {
             fieldsMap.set(fields[fieldIndex], aidboxFields[fieldIndex]);
         }
 
@@ -116,4 +116,4 @@ describe('fieldMetricsFactory tests', () => {
         expect(fieldCalculator.metric).toEqual(type);
         expect(fieldCalculator.metricCalculation).toBe(calculationFunction);
     }
-})
+});

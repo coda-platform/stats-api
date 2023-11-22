@@ -21,4 +21,4 @@ function getFieldReponse(selector: Selector,
 
 export default {
     getFieldReponse
-}
+};

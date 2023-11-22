@@ -6,4 +6,4 @@ function get(): QueryDataResults {
 
 export default {
     get
-}
+};

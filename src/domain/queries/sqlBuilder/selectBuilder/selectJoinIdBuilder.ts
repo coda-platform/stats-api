@@ -8,4 +8,4 @@ function build(joinSelector: Selector) {
 
 export default {
     build
-}
+};

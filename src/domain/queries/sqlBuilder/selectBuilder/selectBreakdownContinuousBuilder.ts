@@ -1,15 +1,15 @@
 function build(step: number, min: number, max: number, label: string) {
 
-    var caseWhen = ""
+    let caseWhen = "";
 
     if((max-min) / step > 100){ //limit amount of breakdown steps
-        step = (max-min) / 100
+        step = (max-min) / 100;
     }
-    for(var i = min; i+step <= max; i+=step){
+    for(let i = min; i+step <= max; i+=step){
         const iMin = i;
         const iMax = i + step;
-        const when = `WHEN ${label} >= ${iMin} AND ${label} < ${iMax} THEN '${iMin}' `
-        caseWhen += when
+        const when = `WHEN ${label} >= ${iMin} AND ${label} < ${iMax} THEN '${iMin}' `;
+        caseWhen += when;
     }
 
     return `CASE ${caseWhen} END as breakdown`;
@@ -17,4 +17,4 @@ function build(step: number, min: number, max: number, label: string) {
 
 export default {
     build
-}
+};

@@ -1,4 +1,4 @@
-import FieldPathForLevelBuilder from "../../../../../../../../src/domain/queries/sqlBuilder/fromBuilder/crossJoin/fieldPathForLevelBuilder"
+import FieldPathForLevelBuilder from "../../../../../../../../src/domain/queries/sqlBuilder/fromBuilder/crossJoin/fieldPathForLevelBuilder";
 
 function get(fieldPath: string) {
     return new FieldPathForLevelBuilder(fieldPath);
@@ -6,4 +6,4 @@ function get(fieldPath: string) {
 
 export default {
     get
-}
+};

@@ -32,4 +32,4 @@ function getPathCompiled(fieldPath: string): string {
 
 export default {
     getPathCompiled
-}
+};

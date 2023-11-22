@@ -2,7 +2,7 @@ import { Router, Request, Response } from 'express';
 
 import { getResourcesInfo } from '../services/resourceService';
 
-const router = Router()
+const router = Router();
 
 // Metadata on resources
 router.get('/', (req: Request, res: Response) => {
@@ -11,8 +11,8 @@ router.get('/', (req: Request, res: Response) => {
         .then(resourcesMetadata => {
             res.json({
                 "resources": resourcesMetadata
-            })
-        })
-})
+            });
+        });
+});
 
 export default router;

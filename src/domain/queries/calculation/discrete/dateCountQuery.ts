@@ -27,4 +27,4 @@ function getQuery(selector: Selector, field: Field, filterFieldTypes: Map<Filter
 
 export default {
     getQuery
-}
+};

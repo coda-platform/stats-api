@@ -8,18 +8,18 @@ function getConfigFormatted(err: any) {
 
 function errorHandler(err: any, req: any, res: any, next: any) {
     if (res.headersSent) {
-        return next(err)
+        return next(err);
     }
 
-    const errorFormatted = { 
+    const errorFormatted = {
         statsApiVersion: version.getBuildVersion(),
         stackTrace: (err).stack,
         //config: getConfigFormatted(err)
-    }
+    };
 
     res.status(500).send(errorFormatted);
 }
 
 export default {
     errorHandler
-}
+};

@@ -22,13 +22,13 @@ export default class FieldReponseBuilder {
             const value = mc.metricCalculation(selector, queryDataResults, this.field, mc.metric);
 
             return { [mc.metric]: value };
-        })
+        });
 
-        const results = queryDataResults.getFieldResults(selector, this.field)
+        const results = queryDataResults.getFieldResults(selector, this.field);
         if(results instanceof Error){
             return Object.assign({ field: this.field.path, measure}, ...metrics);
         }
         const queries = results.map(qr => qr.query);
         return Object.assign({ field: this.field.path, queries, measure}, ...metrics);
-    };
+    }
 }

@@ -27,26 +27,26 @@ function getQuery(selector: Selector,
         .groupBy()
         .compiledField('period_start');
 
-    
+
         return sqlBuilder.build(selector, filterTypes);
 }
 
 function findLabel(breakdownField: string, selector: Selector): string{
     const label = selector.fields.find(field => {
-        return field.path == breakdownField;
-    })?.label
+        return field.path === breakdownField;
+    })?.label;
 
-    if(label){ 
-        return fieldLabelFormatter.formatLabel(label)
+    if(label){
+        return fieldLabelFormatter.formatLabel(label);
     }
     else if(selector.joins){
-        return findLabel(breakdownField, selector.joins)
+        return findLabel(breakdownField, selector.joins);
     }
     else{
-        return ''
+        return '';
     }
 }
 
 export default {
     getQuery
-}
+};

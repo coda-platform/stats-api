@@ -11,5 +11,5 @@ function getQuery(filterPath: string): string {
 
 export default {
     getQuery
-}
+};
 

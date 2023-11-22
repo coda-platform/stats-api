@@ -4,4 +4,4 @@ possibleComputedFilters.set("age", "resource->>'birthDate' != 'null'");
 
 export default {
     possibleComputedFilters
-}
+};

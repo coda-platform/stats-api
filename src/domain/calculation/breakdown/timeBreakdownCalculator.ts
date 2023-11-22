@@ -29,7 +29,7 @@ function calculate(selector: Selector,
 
     const breakdownQueryAndResults = queryDataResults.getSelectorBreakdownResult(selector);
     if(breakdownQueryAndResults instanceof Error){
-        return {query: '', result: [], field: '', fieldType: '', error : breakdownQueryAndResults.message}
+        return {query: '', result: [], field: '', fieldType: '', error : breakdownQueryAndResults.message};
     }
     const breakdownResults = breakdownQueryAndResults.result as any[];
     const breakdownResultsDateFormatted = getBreakdownResultDateFormatted(breakdownResults);
@@ -59,4 +59,4 @@ function calculate(selector: Selector,
 
 export default {
     calculate
-}
+};

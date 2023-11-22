@@ -4,12 +4,11 @@ import FieldInfo from "../../../../../../src/models/fieldInfo";
 import { ConditionOperator } from "../../../../../../src/models/request/conditionOperator";
 import Field from "../../../../../../src/models/request/field";
 import Filter from "../../../../../../src/models/request/filter";
-import selectorObjectMother from "../../../../../utils/objectMothers/models/selectorObjectMother"
+import selectorObjectMother from "../../../../../utils/objectMothers/models/selectorObjectMother";
 
 describe('fromPossibleJoinBuilder tests', () => {
     const patientJoinSelector = selectorObjectMother.get('Patient', 'patient', [], {conditionOperator:ConditionOperator.and, conditions:[]});
     const observationJoinSelector = selectorObjectMother.get('Observation', 'observation', [], {conditionOperator:ConditionOperator.and, conditions:[]});
-
 
 
     it('with no join selector, returns empty query', () => {
@@ -23,14 +22,14 @@ describe('fromPossibleJoinBuilder tests', () => {
 
         // ASSERT
         expect(query).toEqual('');
-    })
+    });
 
     const patientInnerJoinQuery = "SELECT id FROM Patient patient_table";
     const observationInnerJoinQuery = "SELECT resource->'subject'->>'id' AS subject_id FROM Observation observation_table";
 
     beforeEach(() => {
         environnementProvider.isLocal = jest.fn().mockReturnValue(false);
-    })
+    });
 
     it('add join statement from joinSelector to selector, join patient to observation', () => {
         // ARRANGE
@@ -44,7 +43,7 @@ describe('fromPossibleJoinBuilder tests', () => {
         // ASSERT
         const expectedQuery = `JOIN (${patientInnerJoinQuery} ) patient_table ON observation_table.resource->'subject'->>'id' = patient_table.id`;
         expect(query).toEqual(expectedQuery);
-    })
+    });
 
     it('add join statement from joinSelector to selector, join observation to patient', () => {
         // ARRANGE
@@ -58,6 +57,6 @@ describe('fromPossibleJoinBuilder tests', () => {
         // ASSERT
         const expectedQuery = `JOIN (${observationInnerJoinQuery} ) observation_table ON patient_table.id = observation_table.subject_id`;
         expect(query).toEqual(expectedQuery);
-    })
+    });
 
-})
+});

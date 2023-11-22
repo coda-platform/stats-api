@@ -17,7 +17,7 @@ describe('countResourceQuery tests', () => {
     const joinSelector = selectorObjectMother.get('Patient', 'patient', [], {conditionOperator:ConditionOperator.and, conditions:[]});
 
     const filterMaps = getFieldsMap([femaleGenderFilter], [stringFieldInfo]);
-    
+
     const fieldMap = new Map<Field, FieldInfo>();
 
 
@@ -35,8 +35,8 @@ describe('countResourceQuery tests', () => {
             .from()
             .resourceTable()
             .possibleJoin(fieldMap)
-            .build(selector, filterMaps))
-    })
+            .build(selector, filterMaps));
+    });
 
     it('gets query with filters applied', () => {
         // ARRANGE
@@ -54,8 +54,8 @@ describe('countResourceQuery tests', () => {
             .possibleJoin(fieldMap)
             .where()
             .fieldFilter()
-            .build(selector, filterMaps))
-    })
+            .build(selector, filterMaps));
+    });
 
     it('escapes resource to avoid sql injections', () => {
         // ARRANGE
@@ -66,7 +66,7 @@ describe('countResourceQuery tests', () => {
 
         // ASSERT
         expect(query).toEqual("SELECT count(*) FROM Patient patient_table "); // Space is added by possible join which has no impact
-    })
+    });
 
     it('gets query with cross join and filters applied when one field is array type', () => {
         // ARRANGE
@@ -86,16 +86,16 @@ describe('countResourceQuery tests', () => {
             .possibleJoin(fieldMap)
             .where()
             .fieldFilter()
-            .build(selector, filterMaps))
-    })
+            .build(selector, filterMaps));
+    });
 
     function getFieldsMap(filters: Filter[], fieldInfo: FieldInfo[]) {
         const fieldsMap = new Map<Filter, FieldInfo>();
 
-        for (var fieldIndex = 0; fieldIndex < filters.length; fieldIndex++) {
+        for (let fieldIndex = 0; fieldIndex < filters.length; fieldIndex++) {
             fieldsMap.set(filters[fieldIndex], fieldInfo[fieldIndex]);
         }
 
         return fieldsMap;
     }
-})
+});

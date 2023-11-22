@@ -19,4 +19,4 @@ function build(field: Field) {
 
 export default {
     build
-}
+};

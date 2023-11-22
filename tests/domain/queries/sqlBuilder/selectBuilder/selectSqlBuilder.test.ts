@@ -27,7 +27,7 @@ describe('SelectSqlBuilder tests', () => {
 
         // ASSERT
         expect(sqlQuery).toEqual("SELECT");
-    })
+    });
 
     it('can add distinct to SELECT', () => {
         // ARRANGE
@@ -41,7 +41,7 @@ describe('SelectSqlBuilder tests', () => {
 
         // ASSERT
         expect(sqlQuery).toEqual("SELECT DISTINCT");
-    })
+    });
 
     it('can add join id to SELECT', () => {
         // ARRANGE
@@ -55,7 +55,7 @@ describe('SelectSqlBuilder tests', () => {
 
         // ASSERT
         expect(sqlQuery).toEqual("SELECT id");
-    })
+    });
 
     it('can add fieldTypes to SELECT', () => {
         // ARRANGE
@@ -72,7 +72,7 @@ describe('SelectSqlBuilder tests', () => {
 
         // ASSERT
         expect(sqlQuery).toEqual("SELECT jsonb_typeof(resource->'gender') AS gender");
-    })
+    });
 
     it('can add filterTypes to SELECT', () => {
         // ARRANGE
@@ -89,7 +89,7 @@ describe('SelectSqlBuilder tests', () => {
 
         // ASSERT
         expect(sqlQuery).toEqual("SELECT jsonb_typeof(resource->'gender') AS gender");
-    })
+    });
 
     it('can add countAll to SELECT', () => {
         // ARRANGE
@@ -103,7 +103,7 @@ describe('SelectSqlBuilder tests', () => {
 
         // ASSERT
         expect(sqlQuery).toEqual("SELECT count(*)");
-    })
+    });
 
     it('can add field to SELECT', () => {
         // ARRANGE
@@ -118,7 +118,7 @@ describe('SelectSqlBuilder tests', () => {
 
         // ASSERT
         expect(sqlQuery).toEqual("SELECT resource->>'gender' AS gender");
-    })
+    });
 
     it('can add subqueryField to SELECT', () => {
         // ARRANGE
@@ -133,7 +133,7 @@ describe('SelectSqlBuilder tests', () => {
 
         // ASSERT
         expect(sqlQuery).toEqual("SELECT SQ.gender");
-    })
+    });
 
     it('can add countField to SELECT', () => {
         // ARRANGE
@@ -148,7 +148,7 @@ describe('SelectSqlBuilder tests', () => {
 
         // ASSERT
         expect(sqlQuery).toEqual("SELECT count(resource->>'gender')");
-    })
+    });
 
     it('can add countSubqueryField to SELECT', () => {
         // ARRANGE
@@ -163,7 +163,7 @@ describe('SelectSqlBuilder tests', () => {
 
         // ASSERT
         expect(sqlQuery).toEqual("SELECT count(SQ.gender)");
-    })
+    });
 
     it('can add fieldSum to SELECT', () => {
         // ARRANGE
@@ -179,7 +179,7 @@ describe('SelectSqlBuilder tests', () => {
 
         // ASSERT
         expect(sqlQuery).toEqual("SELECT SUM(resource->>'gender') AS sum");
-    })
+    });
 
     it('can add fieldMean to SELECT', () => {
         // ARRANGE
@@ -195,7 +195,7 @@ describe('SelectSqlBuilder tests', () => {
 
         // ASSERT
         expect(sqlQuery).toEqual("SELECT AVG(resource->>'gender') AS mean");
-    })
+    });
 
     it('can add fieldStdDev to SELECT', () => {
         // ARRANGE
@@ -211,7 +211,7 @@ describe('SelectSqlBuilder tests', () => {
 
         // ASSERT
         expect(sqlQuery).toEqual("SELECT STDDEV(resource->>'gender') AS stddev");
-    })
+    });
 
     it('can add fieldCiLow to SELECT', () => {
         // ARRANGE
@@ -228,7 +228,7 @@ describe('SelectSqlBuilder tests', () => {
 
         // ASSERT
         expect(sqlQuery).toEqual("SELECT percentile_disc(0.05) within group (order by resource->>'gender') AS ci_low");
-    })
+    });
 
     it('can add fieldCiHigh to SELECT', () => {
         // ARRANGE
@@ -244,7 +244,7 @@ describe('SelectSqlBuilder tests', () => {
 
         // ASSERT
         expect(sqlQuery).toEqual("SELECT percentile_disc(0.95) within group (order by resource->>'gender') AS ci_high");
-    })
+    });
 
     it('can add namedCountAll to SELECT', () => {
         // ARRANGE
@@ -258,7 +258,7 @@ describe('SelectSqlBuilder tests', () => {
 
         // ASSERT
         expect(sqlQuery).toEqual("SELECT count(*) AS count_in_period");
-    })
+    });
 
     it('can add comma to SELECT', () => {
         // ARRANGE
@@ -275,7 +275,7 @@ describe('SelectSqlBuilder tests', () => {
 
         // ASSERT
         expect(sqlQuery).toEqual("SELECT count(*) , count(SQ.gender)");
-    })
+    });
 
     it('can add breakdownPeriodStart to SELECT', () => {
         // ARRANGE
@@ -286,8 +286,8 @@ describe('SelectSqlBuilder tests', () => {
         const selector = selectorObjectMother.get('Observation', 'observation', [], {conditionOperator:ConditionOperator.and, conditions:[]}, undefined);
 
         const queryPattern = (fieldCompiled: string, step: number) => {
-            return `SELECT to_timestamp(floor((extract('epoch' from (${fieldCompiled})::timestamp) / ${step} )) * ${step}) AS period_start`
-        }
+            return `SELECT to_timestamp(floor((extract('epoch' from (${fieldCompiled})::timestamp) / ${step} )) * ${step}) AS period_start`;
+        };
 
         // ACT
         const sqlQuery = selectSqlBuilder
@@ -296,7 +296,7 @@ describe('SelectSqlBuilder tests', () => {
 
         // ASSERT
         expect(sqlQuery).toEqual(queryPattern("fieldLabel", 1209600));
-    })
+    });
 
     it('can add FROM statement builder', () => {
         // ARRANGE
@@ -311,5 +311,5 @@ describe('SelectSqlBuilder tests', () => {
 
         // ASSERT
         expect(sqlQuery).toEqual("SELECT count(*) FROM");
-    })
-})
+    });
+});

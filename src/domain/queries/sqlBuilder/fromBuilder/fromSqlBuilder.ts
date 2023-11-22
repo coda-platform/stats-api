@@ -44,7 +44,7 @@ export default class FromSqlBuilder {
         this.sqlBuilder.requestBuilders.push(builderFunction);
         return this;
     }
-    
+
     possibleFieldTypeJoin() {
         this.sqlBuilder.requestBuilders.push(fromPossibleFieldTypeJoinBuilder.build);
         return this;

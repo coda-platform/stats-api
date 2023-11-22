@@ -9,7 +9,7 @@ import selectorObjectMother from "../../../../utils/objectMothers/models/selecto
 describe('selectFieldSumBuilder tests', () => {
     beforeEach(() => {
         resourceArrayFields.values = []; // Ignore convention array fields to simplify tests.
-    })
+    });
 
     it('gets sum of json field as field with fields path . replaced with _ and subquery name', () => {
         // ARRANGE
@@ -22,7 +22,7 @@ describe('selectFieldSumBuilder tests', () => {
 
         // ASSERT
         expect(result).toEqual("SUM(resource->'address'->'country'->>'name') AS sum");
-    })
+    });
 
     it('with array field, gets json field array formatted as field with fields path . replaced with _ and subquery name', () => {
         // ARRANGE
@@ -37,7 +37,7 @@ describe('selectFieldSumBuilder tests', () => {
 
         // ASSERT
         expect(result).toEqual("SUM(jsonb_array_elements(resource->'address'->'country')->>'name') AS sum");
-    })
+    });
 
     it('gets age field from calculated fields', () => {
         // ARRANGE
@@ -50,5 +50,5 @@ describe('selectFieldSumBuilder tests', () => {
 
         // ASSERT
         expect(result).toEqual("SUM(CASE WHEN resource->'deceased'->>'dateTime' IS NULL OR resource->'deceased'->>'dateTime' = 'NaT' THEN CASE WHEN length(resource->>'birthDate') < 7 THEN null WHEN length(resource->>'birthDate') = 7 THEN extract(year from AGE(date(resource->>'birthDate' || '-01'))) ELSE extract(year from AGE(date(resource->>'birthDate')))END ELSE CASE WHEN length(resource->>'birthDate') < 7 THEN null WHEN length(resource->>'birthDate') = 7 THEN extract(year from AGE(date(resource->'deceased'->>'dateTime'), date(resource->>'birthDate' || '-01'))) ELSE extract(year from AGE(date(resource->'deceased'->>'dateTime'), date(resource->>'birthDate'))) END END) AS sum");
-    })
-})
+    });
+});
