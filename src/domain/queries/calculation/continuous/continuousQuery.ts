@@ -18,7 +18,7 @@ function getQuery(selector: Selector, field: Field, filterFieldTypes: Map<Filter
     selectFromMeasure(selectQuery, selector, field, fieldTypes, measures.continuous[measureIndex]);
     measureIndex++;
 
-    while(measureIndex<measures.continuous.length){
+    while (measureIndex < measures.continuous.length) {
         selectQuery.comma()
         selectFromMeasure(selectQuery, selector, field, fieldTypes, measures.continuous[measureIndex]);
         measureIndex++;
@@ -29,7 +29,7 @@ function getQuery(selector: Selector, field: Field, filterFieldTypes: Map<Filter
         .resourceTable()
         .possibleJoin(fieldTypes);
 
-    if (selector.condition.conditions.length === 0 && !calculatedFields.calculatedFields.has(field.path)) {
+    if ((!selector.condition || selector.condition.conditions.length === 0) && !calculatedFields.calculatedFields.has(field.path)) {
         return queryToFromPart
             .build(selector, filterFieldTypes);
     }
@@ -40,9 +40,9 @@ function getQuery(selector: Selector, field: Field, filterFieldTypes: Map<Filter
         .build(selector, filterFieldTypes);
 }
 
-function selectFromMeasure(query: SelectSqlBuilder, selector: Selector, field: Field, fieldTypes: Map<Field, FieldInfo>, measure: ContinuousMesure){
+function selectFromMeasure(query: SelectSqlBuilder, selector: Selector, field: Field, fieldTypes: Map<Field, FieldInfo>, measure: ContinuousMesure) {
 
-    switch(measure) {
+    switch (measure) {
         case 'count':
             query.fieldSum(field, fieldTypes, selector)
             break
@@ -54,8 +54,8 @@ function selectFromMeasure(query: SelectSqlBuilder, selector: Selector, field: F
             break
         case 'ci95':
             query.fieldCiLow(field, fieldTypes, selector)
-            .comma()
-            .fieldCiHigh(field, fieldTypes, selector)
+                .comma()
+                .fieldCiHigh(field, fieldTypes, selector)
     }
 }
 

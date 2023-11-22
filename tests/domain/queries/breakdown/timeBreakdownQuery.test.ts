@@ -12,6 +12,7 @@ import fieldObjectMother from "../../../utils/objectMothers/models/fieldObjectMo
 import filterObjectMother from "../../../utils/objectMothers/models/filterObjectMother";
 import breakdownObjectMother from "../../../utils/objectMothers/models/request/breakdownObjectMother";
 import selectorObjectMother from "../../../utils/objectMothers/models/selectorObjectMother";
+import { describe, expect, it, beforeEach } from "@jest/globals"
 
 describe('timeBreakdownQuery tests', () => {
 
@@ -19,10 +20,10 @@ describe('timeBreakdownQuery tests', () => {
     const stringFieldInfo = fieldInfoObjectMother.get('string');
     const dateTimeFieldInfo = fieldInfoObjectMother.get('dateTime');
     const deceasedDateField = fieldObjectMother.get('deceased.dateTime', 'deceasedDate', 'dateTime')
-    const deceasedDateBreakdown = breakdownObjectMother.get('Patient', 'deceasedDate', 60, 'dateTime');
+    const deceasedDateBreakdown = breakdownObjectMother.get('Patient', 'deceased.dateTime', 60, 'dateTime');
 
     const filterMaps = getFiltersMap([femaleGenderFilter], [stringFieldInfo]);
-    
+
     const fieldMap = getFieldsMap([deceasedDateField], [dateTimeFieldInfo])
 
     beforeEach(() => {
@@ -33,7 +34,7 @@ describe('timeBreakdownQuery tests', () => {
 
     it('gets query with resource from', () => {
         // ARRANGE
-        const selector = selectorObjectMother.get('Patient', 'patient', [deceasedDateField], {conditionOperator:ConditionOperator.and, conditions:[]}, undefined);
+        const selector = selectorObjectMother.get('Patient', 'patient', [deceasedDateField], { conditionOperator: ConditionOperator.and, conditions: [] }, undefined);
 
         // ACT
         const query = timeBreakdownQuery.getQuery(selector, filterMaps, fieldMap, deceasedDateBreakdown);
@@ -53,7 +54,7 @@ describe('timeBreakdownQuery tests', () => {
 
     it('gets query with filters applied', () => {
         // ARRANGE
-        const selector = selectorObjectMother.get('Patient', 'patient', [deceasedDateField], {conditionOperator:ConditionOperator.and, conditions:[femaleGenderFilter]}, undefined);
+        const selector = selectorObjectMother.get('Patient', 'patient', [deceasedDateField], { conditionOperator: ConditionOperator.and, conditions: [femaleGenderFilter] }, undefined);
 
         // ACT
         const query = timeBreakdownQuery.getQuery(selector, filterMaps, fieldMap, deceasedDateBreakdown);
@@ -73,7 +74,7 @@ describe('timeBreakdownQuery tests', () => {
 
     it('gets query with cross join and filters applied when one field is array type', () => {
         // ARRANGE
-        const selector = selectorObjectMother.get('Patient', 'patient', [deceasedDateField], {conditionOperator:ConditionOperator.and, conditions:[femaleGenderFilter]});
+        const selector = selectorObjectMother.get('Patient', 'patient', [deceasedDateField], { conditionOperator: ConditionOperator.and, conditions: [femaleGenderFilter] });
 
         resourceArrayFields.values = ['gender'];
 

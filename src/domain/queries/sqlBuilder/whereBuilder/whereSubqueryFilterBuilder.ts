@@ -18,17 +18,18 @@ function getFilterNormalized(filter: Filter, filterFields: Map<Filter, FieldInfo
 }
 
 function build(selector: Selector, filterFields: Map<Filter, FieldInfo>, subqueryName: string) {
-    const filtersNormalized:string[] = []
-    selector.condition.conditions.forEach(f => {
-        if(instanceOfCondition(f)){
+    const filtersNormalized: string[] = []
+    const conditions = selector.condition ? selector.condition.conditions : []
+    conditions.forEach(f => {
+        if (instanceOfCondition(f)) {
             filtersNormalized.push(`(${build(selector, filterFields, subqueryName)})`)
         }
         else {
             filtersNormalized.push(getFilterNormalized(f, filterFields, subqueryName))
         }
     })
-
-    return filtersNormalized.join(` ${selector.condition.conditionOperator} `)
+    if (filtersNormalized.length === 0) return ''
+    return filtersNormalized.join(` ${selector.condition?.conditionOperator ?? 'AND'} `)
 }
 
 export default {

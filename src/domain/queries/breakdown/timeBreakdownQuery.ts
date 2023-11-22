@@ -33,7 +33,7 @@ function getQuery(selector: Selector,
 
 function findLabel(breakdownField: string, selector: Selector): string{
     const label = selector.fields.find(field => {
-        return field.label == breakdownField;
+        return field.path == breakdownField;
     })?.label
 
     if(label){ 

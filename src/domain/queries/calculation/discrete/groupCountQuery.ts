@@ -14,7 +14,7 @@ function getQuery(selector: Selector, field: Field, filterFieldTypes: Map<Filter
         .resourceTable()
         .possibleJoin(fieldTypes);
 
-    if (selector.condition.conditions.length === 0) {
+    if (!selector.condition || selector.condition.conditions.length === 0) {
         return queryToFromPart
             .groupBy()
             .field(field)

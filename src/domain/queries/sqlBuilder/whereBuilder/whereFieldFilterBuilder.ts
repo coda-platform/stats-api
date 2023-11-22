@@ -31,25 +31,26 @@ function getFilterNormalized(filter: Filter, filterFields: Map<Filter, FieldInfo
         : `(${jsonFieldValuePathCompiled})::${cast} ${sqlOperand} ${filterValue}`;
 }
 
-function build(selector: Selector, filterFieldTypes: Map<Filter, FieldInfo>, possibleComputedField?: Field): string{
-    const filtersNormalized:string[] = []
-    
+function build(selector: Selector, filterFieldTypes: Map<Filter, FieldInfo>, possibleComputedField?: Field, condition?: Condition): string {
+    const filtersNormalized: string[] = []
+
     if (possibleComputedField) {
         const addedFieldFilter = possibleComputedFilters.possibleComputedFilters.get(possibleComputedField.path);
         if (addedFieldFilter)
             filtersNormalized.push(addedFieldFilter);
     }
-
-    selector.condition.conditions.forEach(f => {
-        if(instanceOfCondition(f)){
-            filtersNormalized.push(`(${build(selector, filterFieldTypes)})`)
+    const conditions = condition ? condition.conditions : selector.condition ? selector.condition.conditions : []
+    conditions.forEach(filter => {
+        if (instanceOfCondition(filter)) {
+            filtersNormalized.push(`(${build(selector, filterFieldTypes, undefined ,filter)})`)
         }
         else {
-            filtersNormalized.push(getFilterNormalized(f, filterFieldTypes, selector))
+            filtersNormalized.push(getFilterNormalized(filter, filterFieldTypes, selector))
         }
     })
-
-    return filtersNormalized.join(` ${selector.condition.conditionOperator} `)
+    if (filtersNormalized.length === 0) return ''
+    const conditionOperator = condition?.conditionOperator ?? selector.condition?.conditionOperator ?? 'AND';
+    return filtersNormalized.join(` ${conditionOperator} `)
 }
 
 export default {

@@ -12,7 +12,9 @@ function getQuery(selector: Selector, filterTypes: Map<Filter, FieldInfo>): stri
         .from()
         .resourceTable();
 
-    if (selector.condition.conditions.length === 0) return sqlBuilder.possibleFieldTypeJoin().build(selector, filterTypes);
+    if (!selector.condition || selector.condition.conditions.length === 0) {
+        return sqlBuilder.possibleFieldTypeJoin().build(selector, filterTypes);
+    }
 
     const builderWithFilter = sqlBuilder.possibleFieldTypeJoin().where().fieldFilter()
 

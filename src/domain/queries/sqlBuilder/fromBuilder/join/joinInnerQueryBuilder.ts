@@ -12,7 +12,9 @@ function build(joinSelector: Selector, filterTypes: Map<Filter, FieldInfo>, fiel
         sqlBuilder.fields().comma();
     }
 
-    if (joinSelector.condition.conditions.length === 0) return sqlBuilder.joinId().from().resourceTable().possibleJoin(fieldTypes).build(joinSelector, filterTypes);
+    if (!joinSelector.condition || joinSelector.condition.conditions.length === 0) {
+        return sqlBuilder.joinId().from().resourceTable().possibleJoin(fieldTypes).build(joinSelector, filterTypes);
+    }
 
     const builderWithFilter = sqlBuilder.joinId().from().resourceTable().possibleJoin(fieldTypes).where().fieldFilter();
 
@@ -20,9 +22,9 @@ function build(joinSelector: Selector, filterTypes: Map<Filter, FieldInfo>, fiel
 }
 
 function hasFields(selector: Selector): boolean {
-    if(selector.fields.length > 0)
+    if (selector.fields.length > 0)
         return true
-    else if(selector.joins)
+    else if (selector.joins)
         return hasFields(selector.joins)
     return false
 }
