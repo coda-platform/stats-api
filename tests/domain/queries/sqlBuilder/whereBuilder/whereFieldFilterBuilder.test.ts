@@ -74,7 +74,7 @@ describe('whereFieldFilterBuilder tests', () => {
         const query = whereFieldFilterBuilder.build(selector, filterFields);
 
         // ASSERT
-        expect(query).toEqual("(address->>'country')::string = 'Mexico'");
+        expect(query).toEqual("patient_table.resource->'address' @> '[{\"country\":\"Mexico\"}]'");
     })
 
     it('when array element in path, second path element of field, uses standard nomenclature combined with field element', () => {
@@ -89,7 +89,7 @@ describe('whereFieldFilterBuilder tests', () => {
         const query = whereFieldFilterBuilder.build(selector, filterFields);
 
         // ASSERT
-        expect(query).toEqual("(address_country->>'name')::string = 'Mexico'");
+        expect(query).toEqual("patient_table.resource->'address'->'country' @> '[{\"name\":\"Mexico\"}]'");
     })
 
     it('with two filters, and combined filter returned', () => {

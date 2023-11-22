@@ -12,6 +12,8 @@ const values = [
     "interpretation.coding",
     "bodySite.coding",
     "value.CodeableConcept.coding",
+    "category",
+    "category.coding",
 
     /* Encounter */
     "location",

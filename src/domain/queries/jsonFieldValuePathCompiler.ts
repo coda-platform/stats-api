@@ -1,7 +1,6 @@
 import calculatedFields from "../calculatedFields";
-import resourceArrayFields from "../resourceArrayFields";
 import FieldPathDecomposed from "./fieldPathDecomposed";
-import indexArrayFieldDetector from "./fields/indexArrayFieldDetector";
+import arrayFieldDetector from "./fields/arrayFieldDetector";
 import queryStringEscaper from "./queryStringEscaper";
 
 function getFieldPathCompiled(fieldPathEscaped: string): string {
@@ -12,7 +11,7 @@ function getFieldPathCompiled(fieldPathEscaped: string): string {
 
     while (pathDecomposed.length > 0) {
         const currentPathElement = pathDecomposed.next().value;
-        const isArrayPathElement = resourceArrayFields.values.some(v => v === currentPathElement.path);
+        const isArrayPathElement = arrayFieldDetector.isArrayPathElement(currentPathElement.path); //case when building path for FIELD (no selector)
 
         if (pathDecomposed.length === 0 && !isArrayPathElement) {
             pathCompiled += `->>'${currentPathElement.pathElement}'`;
@@ -28,11 +27,12 @@ function getFieldPathCompiled(fieldPathEscaped: string): string {
     return pathCompiled;
 }
 
-function getPathCompiled(path: string, selectorLabel?: string): string {
+function getPathCompiled(path: string, selectorLabel?: string, filterPath?: boolean): string {
     const fieldPathEscaped = queryStringEscaper.escape(path);
-    const isIndexArrayField = indexArrayFieldDetector.isIndexArrayField(fieldPathEscaped)
-    if(isIndexArrayField && selectorLabel){
-        return getIndexPathCompiled(path, selectorLabel)
+    const isArrayField = arrayFieldDetector.isArrayField(path);
+    
+    if(isArrayField && selectorLabel && filterPath){
+        return getArrayPathCompiled(path, selectorLabel)
     }
 
     const calculatedField = calculatedFields.calculatedFields.get(path);
@@ -51,7 +51,7 @@ function getJsonPathCompiled(path: string): string {
 
     while (pathDecomposed.length > 0) {
         const currentPathElement = pathDecomposed.next().value;
-        const isArrayPathElement = resourceArrayFields.values.some(v => v === currentPathElement.path);
+        const isArrayPathElement = arrayFieldDetector.isArrayPathElement(currentPathElement.path);
 
         pathCompiled += `->'${currentPathElement.pathElement}'`;
         
@@ -63,7 +63,7 @@ function getJsonPathCompiled(path: string): string {
     return pathCompiled;
 }
 
-function getIndexPathCompiled(path: string, selectorLabel:string): string {
+function getArrayPathCompiled(path: string, selectorLabel:string): string {
     const fieldPathEscaped = queryStringEscaper.escape(path);
     const pathDecomposed = new FieldPathDecomposed(fieldPathEscaped);
 
@@ -72,11 +72,15 @@ function getIndexPathCompiled(path: string, selectorLabel:string): string {
 
     while (pathDecomposed.length > 1) {
         const currentPathElement = pathDecomposed.next().value;
+        
         pathCompiled += `->'${currentPathElement.pathElement}'`;
+        if(arrayFieldDetector.isArrayField(currentPathElement.path)){
+            break; //stop at first array field
+        }
     }
 
     return pathCompiled;
 }
 export default {
-    getPathCompiled, getJsonPathCompiled, getIndexPathCompiled
+    getPathCompiled, getJsonPathCompiled, getArrayPathCompiled
 }

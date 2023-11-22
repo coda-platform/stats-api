@@ -27,7 +27,6 @@ function getQuery(selector: Selector, field: Field, filterFieldTypes: Map<Filter
     let queryToFromPart = selectQuery
         .from()
         .resourceTable()
-        .crossJoinForArrayFilters(field)
         .possibleJoin(fieldTypes);
 
     if (selector.condition.conditions.length === 0 && !calculatedFields.calculatedFields.has(field.path)) {

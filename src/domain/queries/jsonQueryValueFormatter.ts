@@ -1,5 +1,8 @@
 import FieldInfo from "../../models/fieldInfo";
 import Filter from "../../models/request/filter";
+import FieldPathDecomposed from "./fieldPathDecomposed";
+import arrayFieldDetector from "./fields/arrayFieldDetector";
+import queryStringEscaper from "./queryStringEscaper";
 
 function formatValueForSql(filter: Filter, fieldInfo: FieldInfo) {
     const value = String(filter.value);
@@ -20,11 +23,48 @@ function formatValueForSql(filter: Filter, fieldInfo: FieldInfo) {
     }
 }
 
-function formatIndexValueForSql(value: string | boolean | number, path: string){
-    const pathArray = path.split(".");
-    const lastPath = pathArray[pathArray.length -1]
-    return `'[{"${lastPath}":"${value}"}]'`
+function formatIndexValueForSql(value: string | boolean | number, path: string): string{
+    const fieldPathEscaped = queryStringEscaper.escape(path);
+    const pathDecomposed = new FieldPathDecomposed(fieldPathEscaped);
+    
+    
+    while (pathDecomposed.length > 1) {
+        const currentPathElement = pathDecomposed.next().value;
+        if(arrayFieldDetector.isArrayField(currentPathElement.path)){
+            break; //skip to first field after first array
+        }
+    }
+
+    const valuePath = recursiveBuildIndexValueForSql(value, pathDecomposed);
+
+    return `'[{${valuePath}}]'`
 }
+
+function recursiveBuildIndexValueForSql(value: string | boolean | number, path: FieldPathDecomposed): string{
+
+    const decomposedPath = path.next();
+    console.log(decomposedPath, arrayFieldDetector.isArrayPathElement(decomposedPath.value.path))
+    const currentPath = decomposedPath.value;
+    const isPathDone = path.length < 1;
+
+    if(arrayFieldDetector.isArrayPathElement(currentPath.path)){
+        if(isPathDone)
+            return `"${currentPath.pathElement}":[${value}]`
+        else{
+            const nextPath = recursiveBuildIndexValueForSql(value, path)
+            return  `"${currentPath.pathElement}":[{${nextPath}}]`
+        }
+    }
+    else {
+        if(isPathDone)
+            return `"${currentPath.pathElement}":"${value}"`
+        else{
+            const nextPath = recursiveBuildIndexValueForSql(value, path) 
+            return  `"${currentPath.pathElement}":{${nextPath}}`
+        }
+    }
+}
+
 export default {
     formatValueForSql, formatIndexValueForSql
 }

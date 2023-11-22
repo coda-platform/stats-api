@@ -67,7 +67,7 @@ describe('fromSubqueryBuilder tests', () => {
         const result = fromSubqueryBuilder.build(selector, filtersMap, genderFieldMap);
 
         // ASSERT
-        expect(result).toEqual("(SELECT (resource->>'gender')::string AS gender FROM Patient patient_table CROSS JOIN LATERAL jsonb_array_elements(resource->'address') AS address  WHERE (address->>'city')::string = 'Quebec') as subQuery");
+        expect(result).toEqual("(SELECT (resource->>'gender')::string AS gender FROM Patient patient_table  WHERE patient_table.resource->'address' @> '[{\"city\":\"Quebec\"}]') as subQuery");
     })
 
     it('with field and two filters, field and filters are selected with good nomenclature', () => {

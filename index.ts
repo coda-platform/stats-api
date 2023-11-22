@@ -14,7 +14,7 @@ import genericErrorResponseHandler from './src/utils/genericErrorReponseHandler'
 
 // rest of the code remains same
 const app = express();
-const PORT = process.env.CODA_STATS_API_PORT;
+const PORT = process.env.CODA_STATS_API_PORT? process.env.CODA_STATS_API_PORT : process.env.CODA19_STATS_API_PORT; //temp logic for ENV names while sites transition to new deployment
 
 // Better Logging
 app.use(morgan('dev'));

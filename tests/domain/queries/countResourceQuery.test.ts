@@ -83,7 +83,6 @@ describe('countResourceQuery tests', () => {
             .countAll()
             .from()
             .resourceTable()
-            .crossJoinForArrayFilters()
             .possibleJoin(fieldMap)
             .where()
             .fieldFilter()

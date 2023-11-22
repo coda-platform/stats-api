@@ -39,7 +39,7 @@ describe('whereJsonArrayFormatterBuilder tests', () => {
         expect(result).toEqual("resource->'address'->'country'->>'name'");
     })
 
-    it('with two level sub path, array at first field path, first is not in resource with other unrolled', () => {
+    it('with two level sub path, array at first field path, only first is unrolled', () => {
         // ARRANGE
         const builder = whereJsonArrayFormatterBuilderObjectMother.get('address.country.name', 'patient');
         resourceArrayFields.values = ['address'];
@@ -48,10 +48,10 @@ describe('whereJsonArrayFormatterBuilder tests', () => {
         const currentLevelFieldPath = builder.build();
 
         // ASSERT
-        expect(currentLevelFieldPath).toEqual("address->'country'->>'name'");
+        expect(currentLevelFieldPath).toEqual("patient_table.resource->'address'");
     })
 
-    it('with two level sub path, array at second field path, first two path joined and rest unrolled', () => {
+    it('with two level sub path, array at second field path, first two path unrolled', () => {
         // ARRANGE
         const builder = whereJsonArrayFormatterBuilderObjectMother.get('address.country.name', 'patient');
         resourceArrayFields.values = ['address.country'];
@@ -60,20 +60,20 @@ describe('whereJsonArrayFormatterBuilder tests', () => {
         const currentLevelFieldPath = builder.build();
 
         // ASSERT
-        expect(currentLevelFieldPath).toEqual("address_country->>'name'");
+        expect(currentLevelFieldPath).toEqual("patient_table.resource->'address'->'country'");
     })
 
-    it('when upper case characters, characters that are combined are lower cased', () => {
-        // ARRANGE
-        const builder = whereJsonArrayFormatterBuilderObjectMother.get('Address.Country.Name', 'patient');
-        resourceArrayFields.values = ['Address.Country'];
+    // it('when upper case characters, characters that are combined are lower cased', () => {
+    //     // ARRANGE
+    //     const builder = whereJsonArrayFormatterBuilderObjectMother.get('Address.Country.Name', 'patient');
+    //     resourceArrayFields.values = ['Address.Country'];
 
-        // ACT
-        const currentLevelFieldPath = builder.build();
+    //     // ACT
+    //     const currentLevelFieldPath = builder.build();
 
-        // ASSERT
-        expect(currentLevelFieldPath).toEqual("address_country->>'Name'");
-    })
+    //     // ASSERT
+    //     expect(currentLevelFieldPath).toEqual("address_country->>'Name'");
+    // })
 
     it('with two level sub path, stop at array portion, field type is array at element 2, all elements are combined with _', () => {
         // ARRANGE
@@ -84,19 +84,19 @@ describe('whereJsonArrayFormatterBuilder tests', () => {
         const currentLevelFieldPath = builder.build();
 
         // ASSERT
-        expect(currentLevelFieldPath).toEqual("address_country_name");
+        expect(currentLevelFieldPath).toEqual("patient_table.resource->'address'->'country'");
     })
 
     it('escapes field path to avoid sql injections', () => {
         // ARRANGE
-        const builder = whereJsonArrayFormatterBuilderObjectMother.get("gender'--drop", 'patient');
-        resourceArrayFields.values = ['gender'];
+        const builder = whereJsonArrayFormatterBuilderObjectMother.get("address.country.name'--drop", 'patient');
+        resourceArrayFields.values = ['address.country.name'];
 
         // ACT
         const currentLevelFieldPath = builder.build();
 
         // ASSERT
-        expect(currentLevelFieldPath).toEqual("gender");
+        expect(currentLevelFieldPath).toEqual("patient_table.resource->'address'->'country'");
     })
 
     it('real case query with two arrays', () => {
@@ -108,6 +108,6 @@ describe('whereJsonArrayFormatterBuilder tests', () => {
         const result = builder.build();
 
         // ASSERT
-        expect(result).toEqual("interpretation_coding->>'display'");
+        expect(result).toEqual("observation_table.resource->'interpretation'");
     })
 })
