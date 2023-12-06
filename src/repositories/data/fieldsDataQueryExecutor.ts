@@ -21,8 +21,6 @@ async function executeQueries(queryDataResults: QueryDataResults,
 
 export default {
     executeQueries
-}
-
-
+};
 
 

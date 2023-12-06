@@ -19,7 +19,7 @@ export default class WhereSqlBuilder {
     fieldFilter(possibleComputedField?: Field) {
         const builderFunction = (selector: Selector, filterFields: Map<Filter, FieldInfo>) => {
             return whereFieldFilterBuilder.build(selector, filterFields, possibleComputedField);
-        }
+        };
 
         this.sqlBuilder.requestBuilders.push(builderFunction);
         return this;
@@ -28,7 +28,7 @@ export default class WhereSqlBuilder {
     subqueryFilter(subqueryName: string) {
         const builderFunction = (selector: Selector, filterFields: Map<Filter, FieldInfo>) => {
             return whereSubqueryFilterBuilder.build(selector, filterFields, subqueryName);
-        }
+        };
 
         this.sqlBuilder.requestBuilders.push(builderFunction);
         return this;

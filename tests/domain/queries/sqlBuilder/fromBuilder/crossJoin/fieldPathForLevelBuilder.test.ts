@@ -4,7 +4,7 @@ import fieldPathForLevelBuilderObjectMother from "../../../../../utils/objectMot
 describe('fieldPathForLevelBuilder tests', () => {
     beforeEach(() => {
         resourceArrayFields.values = [];
-    })
+    });
 
     it('with with simple fieldPath elements, no level built, has no remaining path to build', () => {
         // ARRANGE
@@ -15,7 +15,7 @@ describe('fieldPathForLevelBuilder tests', () => {
 
         // ASSERT
         expect(hasRemaining).toBeFalsy();
-    })
+    });
 
     it('with with simple fieldPath elements, not array, has no remaining path to build', () => {
         // ARRANGE
@@ -26,7 +26,7 @@ describe('fieldPathForLevelBuilder tests', () => {
 
         // ASSERT
         expect(hasRemaining).toBeFalsy();
-    })
+    });
 
     it('with sub path, not array, has no remaining path to build', () => {
         // ARRANGE
@@ -37,7 +37,7 @@ describe('fieldPathForLevelBuilder tests', () => {
 
         // ASSERT
         expect(hasRemaining).toBeFalsy();
-    })
+    });
 
     it('with two level sub path, not array, has no remaining path to build', () => {
         // ARRANGE
@@ -48,7 +48,7 @@ describe('fieldPathForLevelBuilder tests', () => {
 
         // ASSERT
         expect(hasRemaining).toBeFalsy();
-    })
+    });
 
     it('with two level sub path, stop at array portion, field type is array at element 0, only first element of path included', () => {
         // ARRANGE
@@ -61,7 +61,7 @@ describe('fieldPathForLevelBuilder tests', () => {
         // ASSERT
         expect(currentLevelFieldPath).toEqual('address');
         expect(builder.hasRemainingPathToBuild()).toBeFalsy();
-    })
+    });
 
     it('with two level sub path, stop at array portion, field type is array at element 1, deepest path is not included', () => {
         // ARRANGE
@@ -74,7 +74,7 @@ describe('fieldPathForLevelBuilder tests', () => {
         // ASSERT
         expect(currentLevelFieldPath).toEqual('address_country');
         expect(builder.hasRemainingPathToBuild()).toBeFalsy();
-    })
+    });
 
     it('with two level sub path, stop at array portion, field type is array at element 2, all path included', () => {
         // ARRANGE
@@ -87,7 +87,7 @@ describe('fieldPathForLevelBuilder tests', () => {
         // ASSERT
         expect(currentLevelFieldPath).toEqual('address_country_name');
         expect(builder.hasRemainingPathToBuild()).toBeFalsy();
-    })
+    });
 
     it('when building path with two arrays, path is build in two steps.', () => {
         // ARRANGE
@@ -105,7 +105,7 @@ describe('fieldPathForLevelBuilder tests', () => {
         expect(levelBPath).toEqual('address_country');
 
         expect(builder.hasRemainingPathToBuild()).toBeFalsy();
-    })
+    });
 
     it('with sub path, not array, replaces . with _ and lower characters', () => {
         // ARRANGE
@@ -118,7 +118,7 @@ describe('fieldPathForLevelBuilder tests', () => {
         // ASSERT
         expect(currentLevelFieldPath).toEqual('address_country');
         expect(builder.hasRemainingPathToBuild()).toBeFalsy();
-    })
+    });
 
     it('escapes field path to avoid sql injections', () => {
         // ARRANGE
@@ -131,5 +131,5 @@ describe('fieldPathForLevelBuilder tests', () => {
         // ASSERT
         expect(currentLevelFieldPath).toEqual('gender');
         expect(builder.hasRemainingPathToBuild()).toBeFalsy();
-    })
-})
+    });
+});

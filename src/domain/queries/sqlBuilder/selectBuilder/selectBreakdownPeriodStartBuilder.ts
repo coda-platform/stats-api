@@ -5,4 +5,4 @@ function build(step: number, breakdownFieldLabel: string) {
 
 export default {
     build
-}
+};

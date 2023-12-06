@@ -13,7 +13,7 @@ describe('CrossJoinForLevelBuilder tests', () => {
 
     beforeEach(() => {
         resourceArrayFields.values = [];
-    })
+    });
 
     it('with no filter, has no remaining path to build', () => {
         // ARRANGE
@@ -25,7 +25,7 @@ describe('CrossJoinForLevelBuilder tests', () => {
 
         // ASSERT
         expect(hasRemaining).toBeFalsy();
-    })
+    });
 
     it('with filter, no array in filter, has no remaining path to build', () => {
         // ARRANGE
@@ -37,7 +37,7 @@ describe('CrossJoinForLevelBuilder tests', () => {
 
         // ASSERT
         expect(hasRemaining).toBeFalsy();
-    })
+    });
 
     it('with two filters, one array in each, builds in one level', () => {
         // ARRANGE
@@ -52,11 +52,11 @@ describe('CrossJoinForLevelBuilder tests', () => {
         // ASSERT
         expect(currentLevelFieldPath).toEqual("CROSS JOIN LATERAL jsonb_array_elements(resource->'gender') AS gender, jsonb_array_elements(resource->'address') AS address");
         expect(builder.hasRemainingPathToBuild()).toBeFalsy();
-    })
+    });
 
     it('with one filter and field, one array in each, builds in one level', () => {
         // ARRANGE
-        const genderField = fieldObjectMother.get('gender', 'gender', 'string')
+        const genderField = fieldObjectMother.get('gender', 'gender', 'string');
         const selector = selectorObjectMother.get('Patient', 'patient', [], {conditionOperator:ConditionOperator.and, conditions:[cityFilter]});
         const builder = crossJoinForLevelBuilderObjectMother.get(selector, genderField);
 
@@ -68,7 +68,7 @@ describe('CrossJoinForLevelBuilder tests', () => {
         // ASSERT
         expect(currentLevelFieldPath).toEqual("CROSS JOIN LATERAL jsonb_array_elements(resource->'gender') AS gender, jsonb_array_elements(resource->'address') AS address");
         expect(builder.hasRemainingPathToBuild()).toBeFalsy();
-    })
+    });
 
     it('with two filters, one array in each, array of each yield same field, field is only included once', () => {
         // ARRANGE
@@ -83,11 +83,11 @@ describe('CrossJoinForLevelBuilder tests', () => {
         // ASSERT
         expect(currentLevelFieldPath).toEqual("CROSS JOIN LATERAL jsonb_array_elements(resource->'address') AS address");
         expect(builder.hasRemainingPathToBuild()).toBeFalsy();
-    })
+    });
 
     it('with two filters and field, one array in each, array of each yield same field, field is only included once', () => {
         // ARRANGE
-        const cityField = fieldObjectMother.get('address.city', 'city', 'string')
+        const cityField = fieldObjectMother.get('address.city', 'city', 'string');
         const selector = selectorObjectMother.get('Patient', 'patient', [], {conditionOperator:ConditionOperator.and, conditions:[cityFilter, countryFilter]});
         const builder = crossJoinForLevelBuilderObjectMother.get(selector, cityField);
 
@@ -99,7 +99,7 @@ describe('CrossJoinForLevelBuilder tests', () => {
         // ASSERT
         expect(currentLevelFieldPath).toEqual("CROSS JOIN LATERAL jsonb_array_elements(resource->'address') AS address");
         expect(builder.hasRemainingPathToBuild()).toBeFalsy();
-    })
+    });
 
     it('with two filters, array in second, builds in one level with only filter that has array', () => {
         // ARRANGE
@@ -115,7 +115,7 @@ describe('CrossJoinForLevelBuilder tests', () => {
         // ASSERT
         expect(currentLevelFieldPath).toEqual("CROSS JOIN LATERAL jsonb_array_elements(resource->'address') AS address");
         expect(builder.hasRemainingPathToBuild()).toBeFalsy();
-    })
+    });
 
     it('with two filters, same field in filter, filter is only once in cross join', () => {
         // ARRANGE
@@ -131,7 +131,7 @@ describe('CrossJoinForLevelBuilder tests', () => {
         // ASSERT
         expect(currentLevelFieldPath).toEqual("CROSS JOIN LATERAL jsonb_array_elements(resource->'gender') AS gender");
         expect(builder.hasRemainingPathToBuild()).toBeFalsy();
-    })
+    });
 
     it('with two arrays in filter, builds in two level', () => {
         // ARRANGE
@@ -151,5 +151,5 @@ describe('CrossJoinForLevelBuilder tests', () => {
         expect(levelBPath).toEqual("CROSS JOIN LATERAL jsonb_array_elements(address->'city') AS address_city");
 
         expect(builder.hasRemainingPathToBuild()).toBeFalsy();
-    })
-})
+    });
+});

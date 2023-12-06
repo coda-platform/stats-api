@@ -2,7 +2,7 @@ import discreteModeCalculator from "../../../../src/domain/calculation/discrete/
 import CategoricalMesure from "../../../../src/models/categoricalMeasure";
 import { ConditionOperator } from "../../../../src/models/request/conditionOperator";
 import queryDataResultsObjectMother from "../../../utils/objectMothers/domain/queryDataResultsObjectMother";
-import fieldObjectMother from "../../../utils/objectMothers/models/fieldObjectMother"
+import fieldObjectMother from "../../../utils/objectMothers/models/fieldObjectMother";
 import selectorObjectMother from "../../../utils/objectMothers/models/selectorObjectMother";
 
 describe('discreteModeCalculator tests', () => {
@@ -25,7 +25,7 @@ describe('discreteModeCalculator tests', () => {
 
         // ASSERT
         expect(mode).toEqual('female');
-    })
+    });
 
     it('with complex field path, field path matches query field path with . replaced by _', () => {
         // ARRANGE
@@ -39,7 +39,7 @@ describe('discreteModeCalculator tests', () => {
 
         // ASSERT
         expect(mode).toEqual('female');
-    })
+    });
 
     it('with field with caps, field path matches query field path with caps removed', () => {
         // ARRANGE
@@ -53,12 +53,12 @@ describe('discreteModeCalculator tests', () => {
 
         // ASSERT
         expect(mode).toEqual('female');
-    })
+    });
 
     function getQueryAndResult(result: any) {
         return {
             query: "SELECT * FROM Patient",
             result
-        }
+        };
     }
-})
+});

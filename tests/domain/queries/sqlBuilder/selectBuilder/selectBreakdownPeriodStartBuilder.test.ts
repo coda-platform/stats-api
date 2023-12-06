@@ -4,8 +4,8 @@ import breakdownObjectMother from "../../../../utils/objectMothers/models/reques
 
 describe('selectBreakdownPeriodStartBuilder tests', () => {
     const queryPattern = (fieldCompiled: string, step: number) => {
-        return `to_timestamp(floor((extract('epoch' from (${fieldCompiled})::timestamp) / ${step} )) * ${step}) AS period_start`
-    }
+        return `to_timestamp(floor((extract('epoch' from (${fieldCompiled})::timestamp) / ${step} )) * ${step}) AS period_start`;
+    };
 
     it('with non array field, field is selected from resource', () => {
         // ARRANGE
@@ -15,8 +15,8 @@ describe('selectBreakdownPeriodStartBuilder tests', () => {
         const result = selectBreakdownPeriodStartBuilder.build(breakdown.slices.step, 'breakdownLabel');
 
         // ASSERT
-        expect(result).toEqual(queryPattern("breakdownLabel", 1209600))
-    })
+        expect(result).toEqual(queryPattern("breakdownLabel", 1209600));
+    });
 
     it('with array field, field is selected from name convention', () => {
         // ARRANGE
@@ -29,6 +29,6 @@ describe('selectBreakdownPeriodStartBuilder tests', () => {
         const result = selectBreakdownPeriodStartBuilder.build(breakdown.slices.step, 'breakdownLabel');
 
         // ASSERT
-        expect(result).toEqual(queryPattern("breakdownLabel", 1209600))
-    })
-})
+        expect(result).toEqual(queryPattern("breakdownLabel", 1209600));
+    });
+});

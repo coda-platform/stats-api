@@ -24,13 +24,13 @@ function getSummarizeReponse(selector: Selector,
 
     const fieldResponses: FieldReponse[] = [];
 
-    getJoinFieldResponse(selector, measures, queryDataResults, fieldTypes, fieldResponses, selector)
+    getJoinFieldResponse(selector, measures, queryDataResults, fieldTypes, fieldResponses, selector);
 
     const resultBeforeBreakdown = {
         total: countQueryAndResult.result.count,
         fieldResponses,
         query: countQueryAndResult.query
-    }
+    };
 
     return resultBeforeBreakdown;
 }
@@ -43,7 +43,7 @@ function getJoinFieldResponse(selector: Selector,
     topSelector: Selector) {
 
     if (selector.joins) {
-        getJoinFieldResponse(selector.joins, measures, queryDataResults, fieldTypes, fieldResponses, topSelector)
+        getJoinFieldResponse(selector.joins, measures, queryDataResults, fieldTypes, fieldResponses, topSelector);
     }
 
     selector.fields.map(f => {
@@ -53,7 +53,7 @@ function getJoinFieldResponse(selector: Selector,
 
 function getBreakdownReponse(selector: Selector, queryDataResults: QueryDataResults, breakdown: Breakdown) {
 
-    if (breakdown.resource.fieldType == "dateTime") {
+    if (breakdown.resource.fieldType==="dateTime") {
         const breakdownResult = timeBreakdownCalculator.calculate(selector, queryDataResults, breakdown);
         return breakdownResult;
     }
@@ -65,4 +65,4 @@ function getBreakdownReponse(selector: Selector, queryDataResults: QueryDataResu
 
 export default {
     getSummarizeReponse, getBreakdownReponse
-}
+};

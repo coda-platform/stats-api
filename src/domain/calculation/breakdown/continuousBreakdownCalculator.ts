@@ -12,21 +12,21 @@ function calculate(selector: Selector,
 
     const breakdownQueryAndResults = queryDataResults.getSelectorBreakdownResult(selector);
     if(breakdownQueryAndResults instanceof Error){
-        return {query: '', result: [], field: '', fieldType: '', error : breakdownQueryAndResults.message}
+        return {query: '', result: [], field: '', fieldType: '', error : breakdownQueryAndResults.message};
     }
     const breakdownResults = breakdownQueryAndResults.result as any[];
 
     const breakdownSteps = new Array<{ periodStart: string, periodCount: number | null }>();
 
-    var step = breakdown.slices.step;
+    let step = breakdown.slices.step;
     const min = parseFloat(breakdown.slices.min);
     const max = parseFloat(breakdown.slices.max);
     if((max-min) / step > 100){ //limit amount of breakdown steps
-        step = (max-min) / 100
+        step = (max-min) / 100;
     }
-    for(var i = min; i+step <= max; i+=step){//manually assign 0 to steps with no results from DB
+    for(let i = min; i+step <= max; i+=step){//manually assign 0 to steps with no results from DB
         const periodStart = i;
-        var bdResult = breakdownResults.find(el => {return parseFloat(el.breakdown) == periodStart})
+        let bdResult = breakdownResults.find(el => {return parseFloat(el.breakdown) === periodStart;});
         if(!bdResult){
             bdResult = {count: 0};
         }
@@ -44,4 +44,4 @@ function calculate(selector: Selector,
 
 export default {
     calculate
-}
+};

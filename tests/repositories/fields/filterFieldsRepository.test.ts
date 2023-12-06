@@ -9,17 +9,18 @@ import filterFieldsRepository from "../../../src/repositories/fields/filterField
 import filterObjectMother from "../../utils/objectMothers/models/filterObjectMother";
 import summarizeRequestBodyObjectMother from "../../utils/objectMothers/models/request/summarizeRequestBodyObjectMother";
 import selectorObjectMother from "../../utils/objectMothers/models/selectorObjectMother";
-import conditionObjectMother from "../../utils/objectMothers/models/conditionObjectMother";
+import ConditionObjectMother from "../../utils/objectMothers/models/ConditionObjectMother";
 
 describe('filterFieldsRepository tests', () => {
     const filterA = filterObjectMother.get('fieldA', 'is', 'value');
     const filterB = filterObjectMother.get('fieldB', 'is', 'value');
     const filterC = filterObjectMother.get('field.path.subPathC', 'is', 'value');
-    const conditionAB = conditionObjectMother.get(ConditionOperator.and, [filterA, filterB]);
-    const conditionC = conditionObjectMother.get(ConditionOperator.and, [filterC]);
 
-    const patientSelector = selectorObjectMother.get('Patient', 'patient', [], {conditionOperator:ConditionOperator.and, conditions:[filterA, filterB]});
-    const observationSelector = selectorObjectMother.get('Observation', 'observation', [], conditionC);
+    const abCondition = ConditionObjectMother.get(ConditionOperator.and, [filterA, filterB]);
+    const cCondition = ConditionObjectMother.get(ConditionOperator.and, [filterC]);
+
+    const patientSelector = selectorObjectMother.get('Patient', 'patient', [], abCondition);
+    const observationSelector = selectorObjectMother.get('Observation', 'observation', [], cCondition);
 
     const patientFieldsQuery = 'SELECT * FROM Patient';
     const observationFieldsQuery = 'SELECT * FROM Observation';
@@ -36,7 +37,7 @@ describe('filterFieldsRepository tests', () => {
             .mockReturnValue(patientFieldsQuery)
             .calledWith(observationSelector)
             .mockReturnValue(observationFieldsQuery);
-    })
+    });
 
     it('aidboxProxy returns error, error is gotten for fields', async () => {
         // ARRANGE
@@ -44,8 +45,8 @@ describe('filterFieldsRepository tests', () => {
 
         aidboxProxy.executeQuery = jest.fn();
         when(aidboxProxy.executeQuery as any)
-            .calledWith(patientFieldsQuery).mockReturnValue(Promise.reject(new Error('errorA')).catch((error)=> {return error}))
-            .calledWith(observationFieldsQuery).mockReturnValue(Promise.reject(new Error('errorB')).catch((error)=> {return error}))
+            .calledWith(patientFieldsQuery).mockReturnValue(Promise.reject(new Error('errorA')).catch((error)=> {return error;}))
+            .calledWith(observationFieldsQuery).mockReturnValue(Promise.reject(new Error('errorB')).catch((error)=> {return error;}));
 
         // ACT
         const result = await filterFieldsRepository.getFieldsDataFromRequest(summarizeRequest);
@@ -141,6 +142,6 @@ describe('filterFieldsRepository tests', () => {
         return {
             name: filter.path,
             type
-        }
+        };
     }
-})
+});

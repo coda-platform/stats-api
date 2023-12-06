@@ -13,7 +13,7 @@ describe('whereFieldFilterBuilder tests', () => {
 
     beforeEach(() => {
         resourceArrayFields.values = []; // Ignore convention array fields to simplify tests.
-    })
+    });
 
     it('with no field info for filter, an error is thrown', () => {
         const filter = filterObjectMother.get('name', 'is', 'John', 'string');
@@ -21,7 +21,7 @@ describe('whereFieldFilterBuilder tests', () => {
         const selector = selectorObjectMother.get('Patient', 'patient', [], {conditionOperator:ConditionOperator.and, conditions:[filter]});
 
         expect(() => whereFieldFilterBuilder.build(selector, filterFields)).toThrowError();
-    })
+    });
 
     it('uses field path for query', () => {
         // ARRANGE
@@ -34,7 +34,7 @@ describe('whereFieldFilterBuilder tests', () => {
 
         // ASSERT
         expect(query).toEqual("(resource->>'name')::string = 'John'");
-    })
+    });
 
     it('uses filter operator to figure out which sql operand to use', () => {
         // ARRANGE
@@ -47,11 +47,11 @@ describe('whereFieldFilterBuilder tests', () => {
 
         // ASSERT
         expect(query).toEqual("(resource->>'name')::string < 'John'");
-    })
+    });
 
     it('compiles level field path with appropriate sql connector', () => {
         // ARRANGE
-        const filter = filterObjectMother.get('address.country', 'is', 'Mexico', 'string')
+        const filter = filterObjectMother.get('address.country', 'is', 'Mexico', 'string');
         const filterFields = getFieldsMap([filter], [stringFieldInfo]);
         const selector = selectorObjectMother.get('Patient', 'patient', [], {conditionOperator:ConditionOperator.and, conditions:[filter]});
 
@@ -60,11 +60,11 @@ describe('whereFieldFilterBuilder tests', () => {
 
         // ASSERT
         expect(query).toEqual("(resource->'address'->>'country')::string = 'Mexico'");
-    })
+    });
 
     it('when array element in path, first path element of field, uses standard nomenclature combined with field element', () => {
         // ARRANGE
-        const filter = filterObjectMother.get('address.country', 'is', 'Mexico', 'string')
+        const filter = filterObjectMother.get('address.country', 'is', 'Mexico', 'string');
         const filterFields = getFieldsMap([filter], [stringFieldInfo]);
         const selector = selectorObjectMother.get('Patient', 'patient', [], {conditionOperator:ConditionOperator.and, conditions:[filter]});
 
@@ -74,23 +74,23 @@ describe('whereFieldFilterBuilder tests', () => {
         const query = whereFieldFilterBuilder.build(selector, filterFields);
 
         // ASSERT
-        expect(query).toEqual("(address->>'country')::string = 'Mexico'");
-    })
+        expect(query).toEqual("patient_table.resource->'address' @> '[{\"country\":\"Mexico\"}]'");
+    });
 
     it('when array element in path, second path element of field, uses standard nomenclature combined with field element', () => {
         // ARRANGE
-        const filter = filterObjectMother.get('address.country.name', 'is', 'Mexico', 'string')
+        const filter = filterObjectMother.get('address.country.name', 'is', 'Mexico', 'string');
         const filterFields = getFieldsMap([filter], [stringFieldInfo]);
         const selector = selectorObjectMother.get('Patient', 'patient', [], {conditionOperator:ConditionOperator.and, conditions:[filter]});
 
-        resourceArrayFields.values = ['address.country']
+        resourceArrayFields.values = ['address.country'];
 
         // ACT
         const query = whereFieldFilterBuilder.build(selector, filterFields);
 
         // ASSERT
-        expect(query).toEqual("(address_country->>'name')::string = 'Mexico'");
-    })
+        expect(query).toEqual("patient_table.resource->'address'->'country' @> '[{\"name\":\"Mexico\"}]'");
+    });
 
     it('with two filters, and combined filter returned', () => {
         // ARRANGE
@@ -105,7 +105,7 @@ describe('whereFieldFilterBuilder tests', () => {
 
         // ASSERT
         expect(query).toEqual("(resource->>'filterA')::string = 'valueA' AND (resource->>'filterB')::string = 'valueB'");
-    })
+    });
 
     it('with age possible computed field, has appropriate filter to avoir nulls', () => {
         // ARRANGE
@@ -120,15 +120,15 @@ describe('whereFieldFilterBuilder tests', () => {
 
         // ASSERT
         expect(query).toEqual("resource->>'birthDate' != 'null' AND (resource->>'name')::string = 'John'");
-    })
+    });
 
     function getFieldsMap(fields: Filter[], fieldInfo: FieldInfo[]) {
         const fieldsMap = new Map<Filter, FieldInfo>();
 
-        for (var fieldIndex = 0; fieldIndex < fields.length; fieldIndex++) {
+        for (let fieldIndex = 0; fieldIndex < fields.length; fieldIndex++) {
             fieldsMap.set(fields[fieldIndex], fieldInfo[fieldIndex]);
         }
 
         return fieldsMap;
     }
-})
+});

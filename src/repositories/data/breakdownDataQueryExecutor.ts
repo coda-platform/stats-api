@@ -14,17 +14,17 @@ async function executeBreakdownQuery(queryDataResults: QueryDataResults,
     filterTypes: Map<Filter, FieldInfo>,
     breakdown: Breakdown): Promise<void> {
 
-    await getBreakdownResult(queryDataResults, selector, filterTypes, fieldTypes, breakdown)
+    await getBreakdownResult(queryDataResults, selector, filterTypes, fieldTypes, breakdown);
 }
 
 async function getBreakdownResult(queryDataResults: QueryDataResults, selector: Selector, filterTypes: Map<Filter, FieldInfo>, fieldTypes: Map<Field, FieldInfo>, breakdown: Breakdown) {
-   
-    var breakdownQuery: string
+
+    let breakdownQuery: string;
     if (breakdown.query) {
-        breakdownQuery = breakdown.query
+        breakdownQuery = breakdown.query;
     }
     else {
-        breakdownQuery = breakdown.resource.fieldType == 'dateTime' ?
+        breakdownQuery = breakdown.resource.fieldType === 'dateTime' ?
             timeBreakdownQuery.getQuery(selector, filterTypes, fieldTypes, breakdown) : continuousBreakdownQuery.getQuery(selector, filterTypes, fieldTypes, breakdown);
     }
     console.warn(breakdownQuery);
@@ -36,4 +36,4 @@ async function getBreakdownResult(queryDataResults: QueryDataResults, selector: 
 
 export default {
     executeBreakdownQuery
-}
+};

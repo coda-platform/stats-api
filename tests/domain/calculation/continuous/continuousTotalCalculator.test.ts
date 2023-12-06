@@ -2,7 +2,7 @@ import continuousTotalCalculator from "../../../../src/domain/calculation/contin
 import CategoricalMesure from "../../../../src/models/categoricalMeasure";
 import { ConditionOperator } from "../../../../src/models/request/conditionOperator";
 import queryDataResultsObjectMother from "../../../utils/objectMothers/domain/queryDataResultsObjectMother";
-import fieldObjectMother from "../../../utils/objectMothers/models/fieldObjectMother"
+import fieldObjectMother from "../../../utils/objectMothers/models/fieldObjectMother";
 import selectorObjectMother from "../../../utils/objectMothers/models/selectorObjectMother";
 
 describe('continuousTotalCountCalculator tests', () => {
@@ -22,12 +22,12 @@ describe('continuousTotalCountCalculator tests', () => {
 
         // ASSERT
         expect(totalCount).toEqual(544);
-    })
+    });
 
     function getQueryAndResult(result: any) {
         return {
             query: "SELECT SUM(*) FROM Patient",
             result
-        }
+        };
     }
-})
+});

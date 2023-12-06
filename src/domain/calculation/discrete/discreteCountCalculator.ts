@@ -4,7 +4,6 @@ import Field from "../../../models/request/field";
 import Selector from "../../../models/request/selector";
 import DiscreteVariableCountReponse from "../../../models/response/discreteVariableCountReponse";
 import fieldLabelFormatter from "../../queries/fieldLabelFormatter";
-import fieldPathFormatter from "../../queries/fieldPathFormatter";
 import QueryDataResults from "../../queries/queryDataResults";
 
 function calculate(selector: Selector,
@@ -12,20 +11,23 @@ function calculate(selector: Selector,
     field: Field,
     measure: ContinuousMesure | CategoricalMesure): DiscreteVariableCountReponse[] {
 
-    const countResults = queryDataResults.getResult(selector, field, measure);
     const fieldLabelNormalized = fieldLabelFormatter.formatLabel(field.label);
+    const countResults = queryDataResults.getResult(selector, field, measure);
 
     if(countResults instanceof Error){
-        return [{ label: fieldLabelNormalized, value: countResults.message }]
+        const discreteVariableCounts: Array<DiscreteVariableCountReponse> = [{ label: fieldLabelNormalized, value: 0, error: countResults.message }];
+        return discreteVariableCounts;
     }
     else if(countResults.result instanceof Error){
-        return [{ label: fieldLabelNormalized, value: countResults.result.message }]
+        const discreteVariableCounts: Array<DiscreteVariableCountReponse> = [{ label: fieldLabelNormalized, value: 0, error: countResults.result.message }];
+        return discreteVariableCounts;
     }
+
 
     const discreteVariableCounts = new Array<DiscreteVariableCountReponse>();
 
-    if(countResults.result.length == 0){
-        const discreteVariableCounts  = [{ label: fieldLabelNormalized, value: 0 }];
+    if(countResults.result.length === 0){
+        const discreteVariableCounts: Array<DiscreteVariableCountReponse>  = [{ label: fieldLabelNormalized, value: 0 }];
         return discreteVariableCounts;
     }
 
@@ -33,7 +35,7 @@ function calculate(selector: Selector,
         const discreteVariableCount: DiscreteVariableCountReponse = {
             label: countResult[fieldLabelNormalized],
             value: countResult.count
-        }
+        };
 
         discreteVariableCounts.push(discreteVariableCount);
     });
@@ -43,4 +45,4 @@ function calculate(selector: Selector,
 
 export default {
     calculate
-}
+};

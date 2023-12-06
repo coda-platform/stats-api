@@ -2,7 +2,7 @@ import Filter from "../../models/request/filter";
 
 function formatOperatorForSql(filter: Filter) {
     const filterOperator = filter.operator.replace(/_/g, '').toLowerCase();
-    const value = String(filter.value)
+    const value = String(filter.value);
     if (['is', 'equals', 'on', 'equal'].some(op => op === filterOperator)) {
         if(value.toLowerCase() === 'null') {
             return 'is';
@@ -48,4 +48,4 @@ function formatOperatorForSql(filter: Filter) {
 
 export default {
     formatOperatorForSql
-}
+};

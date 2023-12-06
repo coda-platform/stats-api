@@ -17,7 +17,7 @@ async function executeQueries(queryDataResults: QueryDataResults,
 
     await getTotalCount(queryDataResults, selector, filterTypes, fieldTypes);
 
-    await getFieldsDataQueryExecutor(queryDataResults, selector, measures, fieldTypes, filterTypes, selector)
+    await getFieldsDataQueryExecutor(queryDataResults, selector, measures, fieldTypes, filterTypes, selector);
 }
 
 async function getTotalCount(queryDataResults: QueryDataResults, selector: Selector, filterTypes: Map<Filter, FieldInfo>, fieldTypes: Map<Field, FieldInfo>) {
@@ -31,7 +31,7 @@ async function getTotalCount(queryDataResults: QueryDataResults, selector: Selec
     else{
         queryDataResults.addSelectorResult(selector, { query: countQuery, result: countResult[0] });
     }
-    return queryDataResults
+    return queryDataResults;
 }
 
 async function getFieldsDataQueryExecutor(
@@ -43,7 +43,7 @@ async function getFieldsDataQueryExecutor(
     topSelector: Selector) {
 
     if (selector.joins) {
-        await getFieldsDataQueryExecutor(queryDataResults, selector.joins, measures, fieldTypes, filterTypes, topSelector)
+        await getFieldsDataQueryExecutor(queryDataResults, selector.joins, measures, fieldTypes, filterTypes, topSelector);
     }
 
     for (let fieldIndex = 0; fieldIndex < selector.fields.length; fieldIndex++) {
@@ -57,4 +57,4 @@ async function getFieldsDataQueryExecutor(
 
 export default {
     executeQueries
-}
+};

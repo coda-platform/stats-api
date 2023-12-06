@@ -1,4 +1,4 @@
-import { Queue } from "queue-typescript"
+import { Queue } from "queue-typescript";
 import { pathAndPathElement } from "./pathAndPathElement";
 
 export default class FieldPathDecomposed implements IterableIterator<pathAndPathElement> {
@@ -13,13 +13,13 @@ export default class FieldPathDecomposed implements IterableIterator<pathAndPath
 
         this.pathAndPathElements = new Queue<pathAndPathElement>();
 
-        for (let pathElement of fieldPathElements) {
+        for (const pathElement of fieldPathElements) {
             currentPathElements.push(pathElement);
 
             const pathAndPathElement = {
                 path: currentPathElements.join('.'),
                 pathElement
-            }
+            };
 
             this.pathAndPathElements.append(pathAndPathElement);
         }
@@ -28,7 +28,7 @@ export default class FieldPathDecomposed implements IterableIterator<pathAndPath
     next() {
         const currentItemCount = this.pathAndPathElements.length;
 
-        return { value: this.pathAndPathElements.dequeue(), done: currentItemCount === 0 }
+        return { value: this.pathAndPathElements.dequeue(), done: currentItemCount === 0 };
     }
 
     [Symbol.iterator]() {

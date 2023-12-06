@@ -6,9 +6,9 @@ function get(path: string, operator: string, value: string, type?:string): Filte
         operator,
         value,
         type
-    }
+    };
 }
 
 export default {
     get
-}
+};

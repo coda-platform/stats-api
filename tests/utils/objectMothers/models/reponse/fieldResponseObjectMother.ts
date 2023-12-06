@@ -5,9 +5,9 @@ function get(field: string): FieldReponse {
         field,
         queries: [],
         count: 99
-    }
+    };
 }
 
 export default {
     get
-}
+};

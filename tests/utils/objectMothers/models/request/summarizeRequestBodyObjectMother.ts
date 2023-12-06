@@ -4,13 +4,13 @@ import SummerizeRequestBody from "../../../../../src/models/request/summarizeReq
 import optionsObjectMother from "./optionsObjectMother";
 
 function get(selectors: Selector[], options?: Options): SummerizeRequestBody {
-    options = options ?? optionsObjectMother.get()
+    options = options ?? optionsObjectMother.get();
     return {
         selectors,
         options
-    }
+    };
 }
 
 export default {
     get
-}
+};

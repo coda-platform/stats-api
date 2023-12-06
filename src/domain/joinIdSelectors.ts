@@ -7,7 +7,7 @@ type idDataForResource = {
     joinCrossId?: string,
     fromSelectorTableId: string, //parent selector
     joinTableId: string //join selector
-}
+};
 
 // Key: Initial select table _ join table. Ex: patient_observation is a patient query where join is observation
 const joinIdData = new Map<string, idDataForResource>();
@@ -16,43 +16,43 @@ joinIdData.set("observation", {
     selectInJoinId: "resource->'subject'->>'id' AS subject_id",
     joinTableId: ".subject_id",
     fromSelectorTableId: ".resource->'subject'->>'id'",
-})
+});
 
 joinIdData.set("patient", {
     selectInJoinId: "id",
     joinTableId: ".id",
     fromSelectorTableId: ".id",
-})
+});
 
 joinIdData.set("encounter", {
     selectInJoinId: "resource->'subject'->>'id' AS subject_id",
     joinTableId: ".subject_id",
     fromSelectorTableId: ".resource->'subject'->>'id'",
-})
+});
 
 joinIdData.set("medicationadministration", {
     selectInJoinId: "resource->'subject'->>'id' AS subject_id",
     joinTableId: ".subject_id",
     fromSelectorTableId: ".resource->'subject'->>'id'",
-})
+});
 
 joinIdData.set("imagingstudy", {
     selectInJoinId: "resource->'subject'->>'id' AS subject_id",
     joinTableId: ".subject_id",
     fromSelectorTableId: ".resource->'subject'->>'id'",
-})
+});
 
 joinIdData.set("diagnosticreport", {
     selectInJoinId: "resource->'subject'->>'id' AS subject_id",
     joinTableId: ".subject_id",
     fromSelectorTableId: ".resource->'subject'->>'id'",
-})
+});
 
 joinIdData.set("location", {
     selectInJoinId: "id",
     joinTableId: ".id",
     fromSelectorTableId: ".id",
-})
+});
 
 joinIdData.set("encounter_location", {
     selectInJoinId: "id",
@@ -60,7 +60,7 @@ joinIdData.set("encounter_location", {
     joinCrossId: "location",
     fromSelectorTableId: "->'location'->>'id'",
     joinTableId: ".id"
-})
+});
 
 function get(selector: Selector, joinSelector?: Selector) {
     const selectorResource = queryStringEscaper.escape(selector.resource.toLowerCase());
@@ -75,4 +75,4 @@ function get(selector: Selector, joinSelector?: Selector) {
 
 export default {
     get
-}
+};

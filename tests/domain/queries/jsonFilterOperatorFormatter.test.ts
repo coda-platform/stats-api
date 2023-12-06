@@ -1,5 +1,5 @@
-import jsonFilterOperatorFormatter from "../../../src/domain/queries/jsonFilterOperatorFormatter"
-import filterObjectMother from "../../utils/objectMothers/models/filterObjectMother"
+import jsonFilterOperatorFormatter from "../../../src/domain/queries/jsonFilterOperatorFormatter";
+import filterObjectMother from "../../utils/objectMothers/models/filterObjectMother";
 
 describe('jsonFilterOperatorFormatter tests', () => {
     const standardTestParams = [
@@ -29,7 +29,7 @@ describe('jsonFilterOperatorFormatter tests', () => {
         { operator: 'not_On', sqlOperand: '!=' },
         { operator: 'matches', sqlOperand: 'LIKE' },
         { operator: 'like', sqlOperand: 'LIKE' }
-    ]
+    ];
 
     standardTestParams.forEach(tp => {
         it(`With ${tp.operator} the resulting sql operand is ${tp.sqlOperand}`, () => {
@@ -41,7 +41,7 @@ describe('jsonFilterOperatorFormatter tests', () => {
 
             // ASSERT
             expect(resultSqlOperand).toEqual(tp.sqlOperand);
-        })
+        });
 
         it(`With ${tp.operator.toLowerCase()} the resulting sql operand is ${tp.sqlOperand}`, () => {
             // ARRANGE
@@ -52,7 +52,7 @@ describe('jsonFilterOperatorFormatter tests', () => {
 
             // ASSERT
             expect(resultSqlOperand).toEqual(tp.sqlOperand);
-        })
+        });
 
         it(`With ${tp.operator.toUpperCase()} the resulting sql operand is ${tp.sqlOperand}`, () => {
             // ARRANGE
@@ -63,14 +63,14 @@ describe('jsonFilterOperatorFormatter tests', () => {
 
             // ASSERT
             expect(resultSqlOperand).toEqual(tp.sqlOperand);
-        })
-    })
+        });
+    });
 
     const nullAffectedTestParams = [
         { operator: 'is', sqlOperand: 'is' },
         { operator: 'equals', sqlOperand: 'is' },
         { operator: 'on', sqlOperand: 'is' },
-    ]
+    ];
 
     nullAffectedTestParams.forEach(tp => {
         it(`With ${tp.operator} and null filter the resulting sql operand is ${tp.sqlOperand}`, () => {
@@ -82,7 +82,7 @@ describe('jsonFilterOperatorFormatter tests', () => {
 
             // ASSERT
             expect(resultSqlOperand).toEqual(tp.sqlOperand);
-        })
+        });
 
         it(`With ${tp.operator.toLowerCase()} and null  the resulting sql operand is ${tp.sqlOperand}`, () => {
             // ARRANGE
@@ -93,7 +93,7 @@ describe('jsonFilterOperatorFormatter tests', () => {
 
             // ASSERT
             expect(resultSqlOperand).toEqual(tp.sqlOperand);
-        })
+        });
 
         it(`With ${tp.operator.toUpperCase()} and null  the resulting sql operand is ${tp.sqlOperand}`, () => {
             // ARRANGE
@@ -104,7 +104,7 @@ describe('jsonFilterOperatorFormatter tests', () => {
 
             // ASSERT
             expect(resultSqlOperand).toEqual(tp.sqlOperand);
-        })
+        });
 
         it(`With ${tp.operator} and NULL filter the resulting sql operand is ${tp.sqlOperand}`, () => {
             // ARRANGE
@@ -115,6 +115,6 @@ describe('jsonFilterOperatorFormatter tests', () => {
 
             // ASSERT
             expect(resultSqlOperand).toEqual(tp.sqlOperand);
-        })
-    })
-})
+        });
+    });
+});

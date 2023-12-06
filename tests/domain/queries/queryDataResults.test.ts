@@ -1,11 +1,10 @@
 import QueryDataResults from "../../../src/domain/queries/queryDataResults";
 import CategoricalMesure from "../../../src/models/categoricalMeasure";
-import ContinuousMesure from "../../../src/models/continuousMeasure"
+import ContinuousMesure from "../../../src/models/continuousMeasure";
 import { ConditionOperator } from "../../../src/models/request/conditionOperator";
 import queryDataResultsObjectMother from "../../utils/objectMothers/domain/queryDataResultsObjectMother";
 import fieldObjectMother from "../../utils/objectMothers/models/fieldObjectMother";
 import selectorObjectMother from "../../utils/objectMothers/models/selectorObjectMother";
-import queryAndResult from "../../../src/models/response/queryAndResult"
 
 describe('queryDataResults tests', () => {
     const continuousMeasureA = ContinuousMesure.ci95;
@@ -27,12 +26,12 @@ describe('queryDataResults tests', () => {
 
     beforeEach(() => {
         queryDataResults = queryDataResultsObjectMother.get();
-    })
+    });
 
     describe('selector results portion', () => {
         it('when result is not present for selector, an error is thrown', () => {
             expect(() => queryDataResults.getSelectorResult(selectorA)).toThrowError();
-        })
+        });
 
         it('gets the correct result for selector', () => {
             // ARRANGE
@@ -44,13 +43,13 @@ describe('queryDataResults tests', () => {
 
             // ASSERT
             expect(result).toBe(resultB);
-        })
-    })
+        });
+    });
 
     describe('breakdown selector results portion', () => {
         it('when result is not present for selector, an error is thrown', () => {
             expect(() => queryDataResults.getSelectorBreakdownResult(selectorA)).toThrowError();
-        })
+        });
 
         it('gets the correct result for selector breakdown', () => {
             // ARRANGE
@@ -62,13 +61,13 @@ describe('queryDataResults tests', () => {
 
             // ASSERT
             expect(result).toBe(resultB);
-        })
-    })
+        });
+    });
 
     describe('results portion', () => {
         it('when result is not present, an error is thrown', () => {
             expect(() => queryDataResults.getResult(selectorA, fieldA, categoricalMeasureB)).toThrowError();
-        })
+        });
 
         it('gets the correct result for metric from multiple continuous measures', () => {
             // ARRANGE
@@ -80,7 +79,7 @@ describe('queryDataResults tests', () => {
 
             // ASSERT
             expect(result).toBe(resultB);
-        })
+        });
 
         it('gets the correct result for metric from multiple categorical measures', () => {
             // ARRANGE
@@ -92,7 +91,7 @@ describe('queryDataResults tests', () => {
 
             // ASSERT
             expect(result).toBe(resultB);
-        })
+        });
 
         it('gets the correct result for metric from multiple measure types', () => {
             // ARRANGE
@@ -104,7 +103,7 @@ describe('queryDataResults tests', () => {
 
             // ASSERT
             expect(result).toBe(resultA);
-        })
+        });
 
         it('gets the correct result from multiple fields', () => {
             // ARRANGE
@@ -116,7 +115,7 @@ describe('queryDataResults tests', () => {
 
             // ASSERT
             expect(result).toBe(resultB);
-        })
+        });
 
         it('gets the correct result from multiple selectors', () => {
             // ARRANGE
@@ -128,13 +127,13 @@ describe('queryDataResults tests', () => {
 
             // ASSERT
             expect(result).toBe(resultB);
-        })
-    })
+        });
+    });
 
     describe('field results portion', () => {
         it('when result is not present for field, an error is thrown', () => {
             expect(() => queryDataResults.getFieldResults(selectorA, fieldA)).toThrowError();
-        })
+        });
 
         it('gets the correct result for metric from multiple continuous measures', () => {
             // ARRANGE
@@ -145,11 +144,9 @@ describe('queryDataResults tests', () => {
             const results = queryDataResults.getFieldResults(selectorA, fieldA);
 
             // ASSERT
-            if(!(results instanceof Error)){
-                expect(results).toHaveLength(2);
-                expect(results[0]).toBe(resultA);
-                expect(results[1]).toBe(resultB);
-            }
-        })
-    })
-})
+            expect(results).toHaveLength(2);
+            expect(results[0]).toBe(resultA);
+            expect(results[1]).toBe(resultB);
+        });
+    });
+});

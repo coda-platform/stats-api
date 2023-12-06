@@ -21,7 +21,7 @@ describe('groupCountQuery tests', () => {
 
     beforeEach(() => {
         resourceArrayFields.values = []; // Simplify tests by not unwrapping json arrays.
-    })
+    });
 
     it('With field and no filter, groups by field', () => {
         // ARRANGE
@@ -35,15 +35,14 @@ describe('groupCountQuery tests', () => {
             .select()
             .field(genderField)
             .comma()
-            .countAll()
+            .countField(genderField, selector)
             .from()
             .resourceTable()
-            .crossJoinForArrayFilters(genderField)
             .possibleJoin(fieldMaps)
             .groupBy()
             .field(genderField)
-            .build(selector, filterMaps))
-    })
+            .build(selector, filterMaps));
+    });
 
     it('With field and filter, groups by field with WHERE filter', () => {
         // ARRANGE
@@ -57,22 +56,21 @@ describe('groupCountQuery tests', () => {
             .select()
             .field(genderField)
             .comma()
-            .countAll()
+            .countField(genderField, selector)
             .from()
             .resourceTable()
-            .crossJoinForArrayFilters(genderField)
             .possibleJoin(fieldMaps)
             .where()
             .fieldFilter()
             .groupBy()
             .field(genderField)
-            .build(selector, filterMaps))
-    })
+            .build(selector, filterMaps));
+    });
 
     function getFieldsMap(fields: Field[], fieldInfo: FieldInfo[]) {
         const fieldsMap = new Map<Field, FieldInfo>();
 
-        for (var fieldIndex = 0; fieldIndex < fields.length; fieldIndex++) {
+        for (let fieldIndex = 0; fieldIndex < fields.length; fieldIndex++) {
             fieldsMap.set(fields[fieldIndex], fieldInfo[fieldIndex]);
         }
 
@@ -82,10 +80,10 @@ describe('groupCountQuery tests', () => {
     function getFiltersMap(filters: Filter[], fieldInfo: FieldInfo[]) {
         const fieldsMap = new Map<Filter, FieldInfo>();
 
-        for (var fieldIndex = 0; fieldIndex < filters.length; fieldIndex++) {
+        for (let fieldIndex = 0; fieldIndex < filters.length; fieldIndex++) {
             fieldsMap.set(filters[fieldIndex], fieldInfo[fieldIndex]);
         }
 
         return fieldsMap;
     }
-})
+});

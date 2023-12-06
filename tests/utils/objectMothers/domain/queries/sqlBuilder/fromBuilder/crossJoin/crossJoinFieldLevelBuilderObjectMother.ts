@@ -6,4 +6,4 @@ function get(fieldPath: string, fieldLabel: string) {
 
 export default {
     get
-}
+};

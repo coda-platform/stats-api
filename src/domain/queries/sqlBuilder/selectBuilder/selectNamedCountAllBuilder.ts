@@ -4,4 +4,4 @@ function build(countName: string) {
 
 export default {
     build
-}
+};

@@ -6,9 +6,9 @@ function get(): BreakdownResponse {
         result: [],
         field: 'Field',
         fieldType: ''
-    }
+    };
 }
 
 export default {
     get
-}
+};

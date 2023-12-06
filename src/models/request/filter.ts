@@ -11,4 +11,4 @@ function instanceOfFilter(object:any): object is Filter {
 
 export {
     instanceOfFilter
-}
+};

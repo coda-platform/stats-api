@@ -9,17 +9,17 @@ function get(categorical?: CategoricalMesure[], continuous?: ContinuousMesure[])
     return {
         categorical,
         continuous
-    }
+    };
 }
 
 function getAllOptionMeasures(): Measures {
     return {
         categorical: [CategoricalMesure.count, CategoricalMesure.mode, CategoricalMesure.marginals],
         continuous: [ContinuousMesure.count, ContinuousMesure.mean, ContinuousMesure.stdev, ContinuousMesure.ci95]
-    }
+    };
 }
 
 export default {
     get,
     getAllOptionMeasures
-}
+};

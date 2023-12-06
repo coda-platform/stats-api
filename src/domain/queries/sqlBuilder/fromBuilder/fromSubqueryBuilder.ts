@@ -3,7 +3,6 @@ import Selector from "../../../../models/request/selector";
 import SqlBuilder from "../sqlBuilder";
 import Filter from "../../../../models/request/filter";
 import FieldInfo from "../../../../models/fieldInfo";
-import arrayFieldDetector from "../../fields/arrayFieldDetector";
 
 function build(selector: Selector,
     filterTypes: Map<Filter, FieldInfo>,
@@ -19,16 +18,12 @@ function build(selector: Selector,
         return `(${sqlBuilder.possibleJoin(fieldTypes).build(selector, filterTypes)}) as subQuery`;
     }
 
-    const hasArrayFilters = arrayFieldDetector.hasArrayFilters(selector.condition);
-
-    const builderWithFilter = hasArrayFilters
-        ? sqlBuilder.crossJoinForArrayFilters().possibleJoin(fieldTypes).where().fieldFilter()
-        : sqlBuilder.possibleJoin(fieldTypes).where().fieldFilter();
+    const builderWithFilter = sqlBuilder.possibleJoin(fieldTypes).where().fieldFilter();
 
     const subquery = builderWithFilter.build(selector, filterTypes);
-    return `(${subquery}) as subQuery`
+    return `(${subquery}) as subQuery`;
 }
 
 export default {
     build
-}
+};

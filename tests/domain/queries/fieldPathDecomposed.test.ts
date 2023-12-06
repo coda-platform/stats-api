@@ -1,5 +1,5 @@
 import { pathAndPathElement } from "../../../src/domain/queries/pathAndPathElement";
-import fieldPathDecomposedObjectMother from "../../utils/objectMothers/domain/queries/fieldPathDecomposedObjectMother"
+import fieldPathDecomposedObjectMother from "../../utils/objectMothers/domain/queries/fieldPathDecomposedObjectMother";
 
 describe('fieldPathDecomposed tests', () => {
     it('field path one element, path and element returned the same', () => {
@@ -13,7 +13,7 @@ describe('fieldPathDecomposed tests', () => {
         // ASSERT
         expect(fieldPathDecomposed.length).toEqual(0);
         expectPathAndElementToEqual(pathAndElement.value, 'gender', 'gender');
-    })
+    });
 
     it('field path one element, path and element with some uppercase, casing remains the same', () => {
         // ARRANGE
@@ -26,7 +26,7 @@ describe('fieldPathDecomposed tests', () => {
         // ASSERT
         expect(fieldPathDecomposed.length).toEqual(0);
         expectPathAndElementToEqual(pathAndElement.value, 'Gender', 'Gender');
-    })
+    });
 
     it('field path two elements, path is composed and elements are decomposed', () => {
         // ARRANGE
@@ -43,7 +43,7 @@ describe('fieldPathDecomposed tests', () => {
         expect(fieldPathDecomposed.length).toEqual(0);
         expectPathAndElementToEqual(pathAndElementA.value, 'address', 'address');
         expectPathAndElementToEqual(pathAndElementB.value, 'address.city', 'city');
-    })
+    });
 
     it('field path two elements, path and element with some uppercase, casing remains the same', () => {
         // ARRANGE
@@ -56,7 +56,7 @@ describe('fieldPathDecomposed tests', () => {
         // ASSERT
         expectPathAndElementToEqual(pathAndElementA.value, 'Address', 'Address');
         expectPathAndElementToEqual(pathAndElementB.value, 'Address.City', 'City');
-    })
+    });
 
     it('field path two elements, can iterate threw elements', () => {
         // ARRANGE
@@ -64,7 +64,7 @@ describe('fieldPathDecomposed tests', () => {
         const pathAndElements = new Array<{ path: string, pathElement: string }>();
 
         // ACT
-        for (let pathAndElement of fieldPathDecomposed) {
+        for (const pathAndElement of fieldPathDecomposed) {
             pathAndElements.push(pathAndElement);
         }
 
@@ -73,7 +73,7 @@ describe('fieldPathDecomposed tests', () => {
 
         expectPathAndElementToEqual(pathAndElements[0], 'address', 'address');
         expectPathAndElementToEqual(pathAndElements[1], 'address.city', 'city');
-    })
+    });
 
     it('field path two elements, to array, returns array with both path elements', () => {
         // ARRANGE
@@ -86,10 +86,10 @@ describe('fieldPathDecomposed tests', () => {
         expect(fieldPathsArray.length).toEqual(2);
         expectPathAndElementToEqual(fieldPathsArray[0], 'address', 'address');
         expectPathAndElementToEqual(fieldPathsArray[1], 'address.city', 'city');
-    })
+    });
 
     function expectPathAndElementToEqual(pathAndElement: pathAndPathElement, path: string, pathElement: string) {
         expect(path).toEqual(pathAndElement.path);
         expect(pathElement).toEqual(pathAndElement.pathElement);
     }
-})
+});

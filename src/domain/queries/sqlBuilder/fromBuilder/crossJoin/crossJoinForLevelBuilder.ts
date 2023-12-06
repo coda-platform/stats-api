@@ -10,14 +10,14 @@ export default class CrossJoinForLevelBuilder {
         const uniqueFieldPaths = new Map<string, string>();
 
         if (field) {
-            uniqueFieldPaths.set(field.path, field.path)
+            uniqueFieldPaths.set(field.path, field.label);
         }
 
         flattenConditionToFilters(selector.condition).forEach(filter =>
             uniqueFieldPaths.set(filter.path, filter.path));
 
         this.fieldLevelBuilders = new Array<CrossJoinFieldLevelBuilder>();
-        for (let field of uniqueFieldPaths) {
+        for (const field of uniqueFieldPaths) {
             const fieldLevelBuilder = new CrossJoinFieldLevelBuilder(field);
             this.fieldLevelBuilders.push(fieldLevelBuilder);
         }
@@ -32,7 +32,7 @@ export default class CrossJoinForLevelBuilder {
         const fieldsInCrossJoinDistinct = new Set<string>(fieldLevelBuildersForLevel.map(flb => flb.buildCurrentLevel()));
 
         const fieldInCrossJoinArray = new Array<string>();
-        for (let fieldInCrossJoin of fieldsInCrossJoinDistinct.values()) {
+        for (const fieldInCrossJoin of fieldsInCrossJoinDistinct.values()) {
             fieldInCrossJoinArray.push(fieldInCrossJoin);
         }
 

@@ -10,7 +10,6 @@ function getQuery(selector: Selector, field: Field, filterFieldTypes: Map<Filter
         .countField(field, selector)
         .from()
         .resourceTable()
-        .crossJoinForArrayFilters(field)
         .possibleJoin(fieldTypes);
 
     if (!selector.condition || selector.condition.conditions.length === 0) {
@@ -28,4 +27,4 @@ function getQuery(selector: Selector, field: Field, filterFieldTypes: Map<Filter
 
 export default {
     getQuery
-}
+};

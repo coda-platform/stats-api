@@ -15,7 +15,7 @@ describe('joinInnerBuilder tests', () => {
     const stringFieldInfo = fieldInfoObjectMother.get('string');
 
     const filterMaps = getFiltersMap([femaleGenderFilter], [stringFieldInfo]);
-    const fieldMaps = getFieldsMap([], [])
+    const fieldMaps = getFieldsMap([], []);
 
 
     it('gets query with resource from', () => {
@@ -33,8 +33,8 @@ describe('joinInnerBuilder tests', () => {
             .from()
             .resourceTable()
             .possibleJoin(fieldMaps)
-            .build(parentSelector, filterMaps))
-    })
+            .build(parentSelector, filterMaps));
+    });
 
     it('gets query with resource from with inner join', () => {
         // ARRANGE
@@ -51,8 +51,8 @@ describe('joinInnerBuilder tests', () => {
             .from()
             .resourceTable()
             .possibleJoin(fieldMaps)
-            .build(selector, filterMaps))
-    })
+            .build(selector, filterMaps));
+    });
 
     it('gets query with filters applied', () => {
         // ARRANGE
@@ -69,8 +69,8 @@ describe('joinInnerBuilder tests', () => {
             .from()
             .resourceTable()
             .possibleJoin(fieldMaps)
-            .build(parentSelector, filterMaps))
-    })
+            .build(parentSelector, filterMaps));
+    });
 
     it('escapes resource to avoid sql injections', () => {
         // ARRANGE
@@ -80,8 +80,8 @@ describe('joinInnerBuilder tests', () => {
         const query = joinInnerQueryBuilder.build(selector, filterMaps, fieldMaps);
 
         // ASSERT
-        expect(query).toEqual("SELECT id FROM Patient patient_table ") // Space is for potential inner join
-    })
+        expect(query).toEqual("SELECT id FROM Patient patient_table "); // Space is for potential inner join
+    });
 
     it('gets query with cross join and filters applied when one field is array type', () => {
         // ARRANGE
@@ -100,13 +100,13 @@ describe('joinInnerBuilder tests', () => {
             .from()
             .resourceTable()
             .possibleJoin(fieldMaps)
-            .build(parentSelector, filterMaps))
-    })
+            .build(parentSelector, filterMaps));
+    });
 
     function getFiltersMap(filters: Filter[], fieldInfo: FieldInfo[]) {
         const fieldsMap = new Map<Filter, FieldInfo>();
 
-        for (var fieldIndex = 0; fieldIndex < filters.length; fieldIndex++) {
+        for (let fieldIndex = 0; fieldIndex < filters.length; fieldIndex++) {
             fieldsMap.set(filters[fieldIndex], fieldInfo[fieldIndex]);
         }
 
@@ -115,10 +115,10 @@ describe('joinInnerBuilder tests', () => {
     function getFieldsMap(fields: Field[], fieldInfo: FieldInfo[]) {
         const fieldsMap = new Map<Field, FieldInfo>();
 
-        for (var fieldIndex = 0; fieldIndex < fields.length; fieldIndex++) {
+        for (let fieldIndex = 0; fieldIndex < fields.length; fieldIndex++) {
             fieldsMap.set(fields[fieldIndex], fieldInfo[fieldIndex]);
         }
 
         return fieldsMap;
     }
-})
+});

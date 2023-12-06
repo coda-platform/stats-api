@@ -2,8 +2,8 @@ import CategoricalMesure from "../../models/categoricalMeasure";
 import ContinuousMesure from "../../models/continuousMeasure";
 import Field from "../../models/request/field";
 import Selector from "../../models/request/selector";
-import queryAndResult from "../../models/response/queryAndResult";
 
+type queryAndResult = { query: string, result: any };
 export default class QueryDataResults {
     selectorResults: Map<Selector, queryAndResult>;
     breakdownResults: Map<Selector, queryAndResult>;
@@ -70,7 +70,7 @@ export default class QueryDataResults {
         const fieldQueryAndResults = new Array<queryAndResult>();
         fieldResults.forEach((value) => {
             fieldQueryAndResults.push(value);
-        })
+        });
 
         return fieldQueryAndResults;
     }

@@ -26,7 +26,7 @@ describe('whereSqlBuilder tests', () => {
 
         // ASSERT
         expect(sqlQuery).toEqual("WHERE");
-    })
+    });
 
     it('can add fieldFilter to WHERE', () => {
         // ARRANGE
@@ -40,7 +40,7 @@ describe('whereSqlBuilder tests', () => {
 
         // ASSERT
         expect(sqlQuery).toEqual("WHERE (resource->>'gender')::string = 'female'");
-    })
+    });
 
     it('can add fieldFilter with possible computed field WHERE', () => {
         // ARRANGE
@@ -55,7 +55,7 @@ describe('whereSqlBuilder tests', () => {
 
         // ASSERT
         expect(sqlQuery).toEqual("WHERE resource->>'birthDate' != 'null' AND (resource->>'gender')::string = 'female'");
-    })
+    });
 
     it('can add subqueryFilter to WHERE', () => {
         // ARRANGE
@@ -69,7 +69,7 @@ describe('whereSqlBuilder tests', () => {
 
         // ASSERT
         expect(sqlQuery).toEqual("WHERE SQ.gender = 'female'");
-    })
+    });
 
     it('can add groupBy to WHERE', () => {
         // ARRANGE
@@ -85,15 +85,15 @@ describe('whereSqlBuilder tests', () => {
 
         // ASSERT
         expect(sqlQuery).toEqual("WHERE (resource->>'gender')::string = 'female' GROUP BY resource->>'gender'");
-    })
+    });
 
     function getFieldsMap(fields: Filter[], fieldInfo: FieldInfo[]) {
         const fieldsMap = new Map<Filter, FieldInfo>();
 
-        for (var fieldIndex = 0; fieldIndex < fields.length; fieldIndex++) {
+        for (let fieldIndex = 0; fieldIndex < fields.length; fieldIndex++) {
             fieldsMap.set(fields[fieldIndex], fieldInfo[fieldIndex]);
         }
 
         return fieldsMap;
     }
-})
+});

@@ -4,4 +4,4 @@ function build(compiledFieldName: string) {
 
 export default {
     build
-}
+};

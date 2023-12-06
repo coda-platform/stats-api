@@ -8,14 +8,14 @@ import QueryDataResults from "../../queries/queryDataResults";
 function calculate(selector: Selector,
     queryDataResults: QueryDataResults,
     field: Field,
-    measure: ContinuousMesure | CategoricalMesure): string | String {
+    measure: ContinuousMesure | CategoricalMesure): string | string {
 
     const countResults = queryDataResults.getResult(selector, field, measure);
     if(countResults instanceof Error){
-        return countResults.message
+        return countResults.message;
     }
     else if(countResults.result instanceof Error){
-        return countResults.result.message
+        return countResults.result.message;
     }
     const fieldPathNormalized = fieldPathFormatter.formatPath(field.path);
 
@@ -33,11 +33,11 @@ function calculate(selector: Selector,
 
         mode = key;
         modeTotal = value;
-    })
+    });
 
     return mode;
 }
 
 export default {
     calculate
-}
+};

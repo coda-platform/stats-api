@@ -18,7 +18,7 @@ describe('whereSubqueryFilterBuilder tests', () => {
 
         // ACT/ASSERT
         expect(() => whereSubqueryFilter.build(selector, filterFields, 'SQ')).toThrowError();
-    })
+    });
 
     it('with one filter, string field, filter with subquery name is set', () => {
         // ARRANGE
@@ -32,7 +32,7 @@ describe('whereSubqueryFilterBuilder tests', () => {
 
         // ASSERT
         expect(query).toEqual("SQ.name = 'John'");
-    })
+    });
 
     it('with one filter, lower filter operator, < sql operand is used', () => {
         // ARRANGE
@@ -46,7 +46,7 @@ describe('whereSubqueryFilterBuilder tests', () => {
 
         // ASSERT
         expect(query).toEqual("SQ.name < 'John'");
-    })
+    });
 
     it('with one filter, filter path is composed, string field, filter path is normalized', () => {
         // ARRANGE
@@ -60,7 +60,7 @@ describe('whereSubqueryFilterBuilder tests', () => {
 
         // ASSERT
         expect(query).toEqual("SQ.address_city = 'Mexico'");
-    })
+    });
 
     it('with two filters, filters are concatenated with AND', () => {
         // ARRANGE
@@ -75,15 +75,15 @@ describe('whereSubqueryFilterBuilder tests', () => {
 
         // ASSERT
         expect(query).toEqual("SQ.name = 'John' AND SQ.gender = 'male'");
-    })
+    });
 
     function getFieldsMap(fields: Filter[], fieldInfo: FieldInfo[]) {
         const fieldsMap = new Map<Filter, FieldInfo>();
 
-        for (var fieldIndex = 0; fieldIndex < fields.length; fieldIndex++) {
+        for (let fieldIndex = 0; fieldIndex < fields.length; fieldIndex++) {
             fieldsMap.set(fields[fieldIndex], fieldInfo[fieldIndex]);
         }
 
         return fieldsMap;
     }
-})
+});

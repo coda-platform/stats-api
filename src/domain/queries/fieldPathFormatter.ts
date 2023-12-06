@@ -7,4 +7,4 @@ function formatPath(fieldPath: string) {
 
 export default {
     formatPath
-}
+};

@@ -12,6 +12,8 @@ const values = [
     "interpretation.coding",
     "bodySite.coding",
     "value.CodeableConcept.coding",
+    "category",
+    "category.coding",
 
     /* Encounter */
     "location",
@@ -27,8 +29,8 @@ const values = [
     "medication.CodeableConcept.coding",
     "contained.code.coding",
 
-]
+];
 
 export default {
     values
-}
+};

@@ -7,4 +7,4 @@ function formatLabel(fieldLabel: string) {
 
 export default {
     formatLabel
-}
+};

@@ -18,12 +18,12 @@ function flattenConditionToFilters(condition: Condition): Filter[] {
             result.push(next);
         }
         else {
-            result = result.concat(flattenConditionToFilters(next))
+            result = result.concat(flattenConditionToFilters(next));
         }
-        return result
-    }, [])
+        return result;
+    }, []);
 }
 
 export {
     instanceOfCondition, flattenConditionToFilters
-}
+};

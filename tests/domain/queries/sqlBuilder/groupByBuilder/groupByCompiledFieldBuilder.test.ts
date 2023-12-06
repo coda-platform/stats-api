@@ -10,5 +10,5 @@ describe('groupByCompiledFieldBuilder tests', () => {
 
         // ASSERT
         expect(result).toEqual(compiledName);
-    })
-})
+    });
+});

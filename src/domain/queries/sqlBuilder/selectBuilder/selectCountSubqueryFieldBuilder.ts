@@ -9,4 +9,4 @@ function build(field: Field, subqueryName: string) {
 
 export default {
     build
-}
+};

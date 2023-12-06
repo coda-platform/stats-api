@@ -40,7 +40,7 @@ async function getStats(summarizeRequest: SummarizeRequestBody) {
 
         if (filterRequestErrors.length > 0) return filterRequestErrors;
         const filterFieldsNoErrors = new Map<Filter, FieldInfo>(filterFields as any);
-        
+
         const { fieldRequestErrors, fields } = await getFieldTypeAndErrors(summarizeRequest, filterFieldsNoErrors);
 
         if (fieldRequestErrors.length > 0) return fieldRequestErrors;
@@ -51,10 +51,10 @@ async function getStats(summarizeRequest: SummarizeRequestBody) {
         return response;
     }
     catch(error){
-        console.log(error)
-        throw error
+        console.log(error);
+        throw error;
     }
-    
+
 }
 
 async function getBreakdown(summarizeRequest: SummarizeRequestBody) {
@@ -62,7 +62,7 @@ async function getBreakdown(summarizeRequest: SummarizeRequestBody) {
 
     if (filterRequestErrors.length > 0) return filterRequestErrors;
     const filterFieldsNoErrors = new Map<Filter, FieldInfo>(filterFields as any);
-    
+
     const { fieldRequestErrors, fields } = await getFieldTypeAndErrors(summarizeRequest, filterFieldsNoErrors);
 
     if (fieldRequestErrors.length > 0) return fieldRequestErrors;
@@ -76,4 +76,4 @@ async function getBreakdown(summarizeRequest: SummarizeRequestBody) {
 
 export default {
     getStats, getBreakdown
-}
+};

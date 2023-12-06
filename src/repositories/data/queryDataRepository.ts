@@ -43,4 +43,4 @@ async function executeBreakdownQueries(summarizeRequest: SummerizeRequestBody,
 
 export default {
     executeQueries, executeBreakdownQueries
-}
+};

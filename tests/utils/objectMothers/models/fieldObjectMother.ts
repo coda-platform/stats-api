@@ -5,9 +5,9 @@ function get(path: string, label:string, type?:string): Field {
         path,
         label,
         type
-    }
+    };
 }
 
 export default {
     get
-}
+};

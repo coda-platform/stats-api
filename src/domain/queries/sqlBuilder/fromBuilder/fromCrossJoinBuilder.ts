@@ -16,4 +16,4 @@ function build(selector: Selector, field?: Field) {
 
 export default {
     build
-}
+};

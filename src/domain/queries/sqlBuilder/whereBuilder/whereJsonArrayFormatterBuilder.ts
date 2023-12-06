@@ -14,7 +14,7 @@ export default class WhereJsonArrayFormatterBuilder {
     constructor(fieldPath: string, selectorLabel:string) {
         this.pathEscaped = queryStringEscaper.escape(fieldPath);
         this.pathDecomposed = new FieldPathDecomposed(this.pathEscaped);
-        this.selectorLabel = queryStringEscaper.escape(selectorLabel)
+        this.selectorLabel = queryStringEscaper.escape(selectorLabel);
     }
 
     getElementsToLastArray() {
@@ -38,7 +38,7 @@ export default class WhereJsonArrayFormatterBuilder {
     getPathFromElements() {
         let pathFromElements = '';
 
-        for (let pathElement of this.pathDecomposed) {
+        for (const pathElement of this.pathDecomposed) {
 
             if (this.pathDecomposed.length === 0) {
                 pathFromElements += `->>'${pathElement.pathElement}'`;
@@ -52,24 +52,10 @@ export default class WhereJsonArrayFormatterBuilder {
     }
 
     build() {
-        let jsonPath = '';
-
         const isArrayField = arrayFieldDetector.isArrayField(this.pathEscaped);
-        const isIndexArrayField = indexArrayFieldDetector.isIndexArrayField(this.pathEscaped)
-        if (!isArrayField || isIndexArrayField) {
-            return jsonFieldValuePathCompiler.getPathCompiled(this.pathEscaped, this.selectorLabel);
+        if (isArrayField) {
+            return jsonFieldValuePathCompiler.getPathCompiled(this.pathEscaped, this.selectorLabel, true);
         }
-
-        const elementsUntilArray = this.getElementsToLastArray();
-        jsonPath = elementsUntilArray.map(eua => eua.pathElement).join('_').toLowerCase();
-        for (let pathElement of elementsUntilArray) {
-            this.pathDecomposed.next(); // Clear elements that are considered to be used in array portion.
-        }
-        
-        jsonPath += isIndexArrayField
-            ? ""
-            : this.getPathFromElements();
-
-        return jsonPath;
+        return  jsonFieldValuePathCompiler.getPathCompiled(this.pathEscaped, this.selectorLabel, true);
     }
 }

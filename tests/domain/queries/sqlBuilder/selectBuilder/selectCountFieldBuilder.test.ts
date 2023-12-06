@@ -7,7 +7,7 @@ import selectorObjectMother from "../../../../utils/objectMothers/models/selecto
 describe('selectCountFieldBuilder tests', () => {
     beforeEach(() => {
         resourceArrayFields.values = []; // Ignore convention array fields to simplify tests.
-    })
+    });
 
     it('counts json field with fields path . replaced with _ and subquery name', () => {
         // ARRANGE
@@ -18,8 +18,8 @@ describe('selectCountFieldBuilder tests', () => {
         const result = selectCountFieldBuilder.build(field, patientSelector);
 
         // ASSERT
-        expect(result).toEqual("count(resource->'address'->'country'->>'name')")
-    })
+        expect(result).toEqual("count(resource->'address'->'country'->>'name')");
+    });
 
     it('with array field, counts json field array formatted with fields label . replaced with _ and subquery name', () => {
         // ARRANGE
@@ -32,6 +32,6 @@ describe('selectCountFieldBuilder tests', () => {
         const result = selectCountFieldBuilder.build(field, patientSelector);
 
         // ASSERT
-        expect(result).toEqual("count(country_name)")
-    })
-})
+        expect(result).toEqual("count(country_name)");
+    });
+});

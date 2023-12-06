@@ -14,4 +14,4 @@ function get(metric: ContinuousMesure | CategoricalMesure,
 
 export default {
     get
-}
+};

@@ -8,7 +8,7 @@ import { instanceOfCondition } from "../../../../models/request/condition";
 
 function getFilterNormalized(filter: Filter, filterFields: Map<Filter, FieldInfo>, subqueryName: string) {
     const fieldInfo = filterFields.get(filter);
-    if (!fieldInfo) throw new Error('No matching field for filter.')
+    if (!fieldInfo) throw new Error('No matching field for filter.');
 
     const filterPathNormalized = `${subqueryName}.${fieldPathFormatter.formatPath(filter.path)}`;
     const filterValue = jsonQueryValueFormatter.formatValueForSql(filter, fieldInfo);
@@ -18,20 +18,20 @@ function getFilterNormalized(filter: Filter, filterFields: Map<Filter, FieldInfo
 }
 
 function build(selector: Selector, filterFields: Map<Filter, FieldInfo>, subqueryName: string) {
-    const filtersNormalized: string[] = []
-    const conditions = selector.condition ? selector.condition.conditions : []
+    const filtersNormalized: string[] = [];
+    const conditions = selector.condition ? selector.condition.conditions : [];
     conditions.forEach(f => {
         if (instanceOfCondition(f)) {
-            filtersNormalized.push(`(${build(selector, filterFields, subqueryName)})`)
+            filtersNormalized.push(`(${build(selector, filterFields, subqueryName)})`);
         }
         else {
-            filtersNormalized.push(getFilterNormalized(f, filterFields, subqueryName))
+            filtersNormalized.push(getFilterNormalized(f, filterFields, subqueryName));
         }
-    })
-    if (filtersNormalized.length === 0) return ''
-    return filtersNormalized.join(` ${selector.condition?.conditionOperator ?? 'AND'} `)
+    });
+    if (filtersNormalized.length === 0) return '';
+    return filtersNormalized.join(` ${selector.condition?.conditionOperator ?? 'AND'} `);
 }
 
 export default {
     build
-}
+};

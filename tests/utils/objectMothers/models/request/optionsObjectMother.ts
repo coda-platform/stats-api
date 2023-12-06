@@ -6,9 +6,9 @@ function get(measures?: Measures): Options {
     measures = measures ?? measuresObjectMother.get();
     return {
         measures
-    }
+    };
 }
 
 export default {
     get
-}
+};

@@ -4,9 +4,9 @@ import fieldLabelFormatter from "../../fieldLabelFormatter";
 
 function build(selector: Selector) {
     let selectorFields = selector.fields
-        .map(field => getFieldSelectQuery.getQuery(field))
-    selectorFields = selectorFields.concat(getAllJoinFields(selector) as string[])
-    return selectorFields.join(", ")
+        .map(field => getFieldSelectQuery.getQuery(field));
+    selectorFields = selectorFields.concat(getAllJoinFields(selector) as string[]);
+    return selectorFields.join(", ");
 }
 
 function getAllJoinFields(selector: Selector) : string[]{//get all fields from nested joins
@@ -16,9 +16,9 @@ function getAllJoinFields(selector: Selector) : string[]{//get all fields from n
     else{//recursive step
        return selector.joins.fields
         .map(f => fieldLabelFormatter.formatLabel(f.label))
-        .concat(getAllJoinFields(selector.joins) as string[])
+        .concat(getAllJoinFields(selector.joins) as string[]);
     }
 }
 export default {
     build
-}
+};

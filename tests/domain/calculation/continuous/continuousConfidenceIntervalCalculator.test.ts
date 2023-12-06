@@ -3,7 +3,7 @@ import continuousMeanCalculator from "../../../../src/domain/calculation/continu
 import CategoricalMesure from "../../../../src/models/categoricalMeasure";
 import { ConditionOperator } from "../../../../src/models/request/conditionOperator";
 import queryDataResultsObjectMother from "../../../utils/objectMothers/domain/queryDataResultsObjectMother";
-import fieldObjectMother from "../../../utils/objectMothers/models/fieldObjectMother"
+import fieldObjectMother from "../../../utils/objectMothers/models/fieldObjectMother";
 import selectorObjectMother from "../../../utils/objectMothers/models/selectorObjectMother";
 
 describe('continuousConfidenceIntervalCalculator tests', () => {
@@ -23,12 +23,12 @@ describe('continuousConfidenceIntervalCalculator tests', () => {
 
         // ASSERT
         expect(meanResponse).toEqual([15, 18]);
-    })
+    });
 
     function getQueryAndResult(result: any) {
         return {
             query: "SELECT SUM(*) FROM Patient",
             result
-        }
+        };
     }
-})
+});

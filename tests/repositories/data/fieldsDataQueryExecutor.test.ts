@@ -6,7 +6,7 @@ import fieldsDataQueryExecutor from "../../../src/repositories/data/fieldsDataQu
 import fieldsMeasureDataQueryExecutor from "../../../src/repositories/data/fieldsMeasureDataQueryExecutor";
 import queryDataResultsObjectMother from "../../utils/objectMothers/domain/queryDataResultsObjectMother";
 import aidboxFieldResponseObjectMother from "../../utils/objectMothers/models/fieldInfoObjectMother";
-import fieldObjectMother from "../../utils/objectMothers/models/fieldObjectMother"
+import fieldObjectMother from "../../utils/objectMothers/models/fieldObjectMother";
 import measuresObjectMother from "../../utils/objectMothers/models/request/measuresObjectMother";
 import selectorObjectMother from "../../utils/objectMothers/models/selectorObjectMother";
 import Filter from "../../../src/models/request/filter";
@@ -25,7 +25,7 @@ describe('fieldsDataQueryExecutor tests', () => {
 
     beforeEach(() => {
         fieldsMeasureDataQueryExecutor.executeQuery = jest.fn();
-    })
+    });
 
 
     it('integer field, all measures chosen, all continuous measures calculated', async () => {
@@ -40,7 +40,7 @@ describe('fieldsDataQueryExecutor tests', () => {
 
         // ASSERT
         expect(fieldsMeasureDataQueryExecutor.executeQuery).toHaveBeenCalledWith(queryDataResults, field, allOptionsMeasures, fieldsMap, filterMaps, selector);
-    })
+    });
 
     it('decimal field, all measures chosen, all continuous measures calculated', async () => {
         // ARRANGE
@@ -54,13 +54,13 @@ describe('fieldsDataQueryExecutor tests', () => {
 
         // ASSERT
         expect(fieldsMeasureDataQueryExecutor.executeQuery).toHaveBeenCalledWith(queryDataResults, field, allOptionsMeasures, fieldsMap, filterMaps, selector);
-    })
+    });
 
     it('integer field, two continuous measures chosen, both measures calculated', async () => {
         // ARRANGE
         const fieldsMap = getFieldsMap([field], [numberFieldType]);
         const selector = selectorObjectMother.get('Patient', 'patient', [field], {conditionOperator:ConditionOperator.and, conditions:[]});
-        const measures = measuresObjectMother.get([], [ContinuousMesure.mean, ContinuousMesure.ci95])
+        const measures = measuresObjectMother.get([], [ContinuousMesure.mean, ContinuousMesure.ci95]);
 
         const queryDataResults = queryDataResultsObjectMother.get();
 
@@ -69,7 +69,7 @@ describe('fieldsDataQueryExecutor tests', () => {
 
         // ASSERT
         expect(fieldsMeasureDataQueryExecutor.executeQuery).toHaveBeenCalledWith(queryDataResults, field, measures, fieldsMap, filterMaps, selector);
-    })
+    });
 
     it('text field, all measures chosen, all categorical measures calculated', async () => {
         // ARRANGE
@@ -83,13 +83,13 @@ describe('fieldsDataQueryExecutor tests', () => {
 
         // ASSERT
         expect(fieldsMeasureDataQueryExecutor.executeQuery).toHaveBeenCalledWith(queryDataResults, field, allOptionsMeasures, fieldsMap, filterMaps, selector);
-    })
+    });
 
     it('text field, two measures chosen, both categorical measures calculated', async () => {
         // ARRANGE
         const fieldsMap = getFieldsMap([field], [textFieldType]);
         const selector = selectorObjectMother.get('Patient', 'patient', [field], {conditionOperator:ConditionOperator.and, conditions:[]});
-        const measures = measuresObjectMother.get([CategoricalMesure.count, CategoricalMesure.marginals])
+        const measures = measuresObjectMother.get([CategoricalMesure.count, CategoricalMesure.marginals]);
 
         const queryDataResults = queryDataResultsObjectMother.get();
 
@@ -98,15 +98,15 @@ describe('fieldsDataQueryExecutor tests', () => {
 
         // ASSERT
         expect(fieldsMeasureDataQueryExecutor.executeQuery).toHaveBeenCalledWith(queryDataResults, field, measures, fieldsMap, filterMaps, selector);
-    })
+    });
 
     function getFieldsMap(fields: Field[], aidboxFields: FieldInfo[]) {
         const fieldsMap = new Map<Field, FieldInfo>();
 
-        for (var fieldIndex = 0; fieldIndex < fields.length; fieldIndex++) {
+        for (let fieldIndex = 0; fieldIndex < fields.length; fieldIndex++) {
             fieldsMap.set(fields[fieldIndex], aidboxFields[fieldIndex]);
         }
 
         return fieldsMap;
     }
-})
+});

@@ -7,14 +7,14 @@ import QueryDataResults from "../../queries/queryDataResults";
 function calculate(selector: Selector,
     queryDataResults: QueryDataResults,
     field: Field,
-    measure: ContinuousMesure | CategoricalMesure): number[] | String {
+    measure: ContinuousMesure | CategoricalMesure): number[] | string {
 
     const ciResults = queryDataResults.getResult(selector, field, measure);
     if(ciResults instanceof Error){
-        return ciResults.message
+        return ciResults.message;
     }
     else if(ciResults.result instanceof Error){
-        return ciResults.result.message
+        return ciResults.result.message;
     }
     return [
         ciResults.result[0].ci_low,
@@ -24,4 +24,4 @@ function calculate(selector: Selector,
 
 export default {
     calculate
-}
+};

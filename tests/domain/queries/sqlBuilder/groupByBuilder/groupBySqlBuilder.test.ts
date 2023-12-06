@@ -2,7 +2,7 @@ import FieldInfo from "../../../../../src/models/fieldInfo";
 import { ConditionOperator } from "../../../../../src/models/request/conditionOperator";
 import Filter from "../../../../../src/models/request/filter";
 import groupBySqlBuilderObjectMother from "../../../../utils/objectMothers/domain/queries/sqlBuilder/groupByBuilder/groupBySqlBuilderObjectMother";
-import conditionObjectMother from "../../../../utils/objectMothers/models/conditionObjectMother";
+import ConditionObjectMother from "../../../../utils/objectMothers/models/ConditionObjectMother";
 import fieldObjectMother from "../../../../utils/objectMothers/models/fieldObjectMother";
 import filterObjectMother from "../../../../utils/objectMothers/models/filterObjectMother";
 import selectorObjectMother from "../../../../utils/objectMothers/models/selectorObjectMother";
@@ -12,10 +12,11 @@ describe('groupBySqlBuilder tests', () => {
     const addressCityField = fieldObjectMother.get('address.city', 'city', 'string');
 
     const femaleGenderFilter = filterObjectMother.get('gender', 'is', 'female', 'string');
-    const condition = conditionObjectMother.get(ConditionOperator.and, [femaleGenderFilter])
     const filterTypes = new Map<Filter, FieldInfo>();
 
-    const patientSelector = selectorObjectMother.get('Patient', 'patient', [genderField, addressCityField], condition);
+    const femaleGenderCondition = ConditionObjectMother.get(ConditionOperator.and, [femaleGenderFilter]);
+
+    const patientSelector = selectorObjectMother.get('Patient', 'patient', [genderField, addressCityField], femaleGenderCondition);
 
     it('initialy has WHERE command', () => {
         // ARRANGE
@@ -26,7 +27,7 @@ describe('groupBySqlBuilder tests', () => {
 
         // ASSERT
         expect(sqlQuery).toEqual("GROUP BY");
-    })
+    });
 
     it('can add groupBy field', () => {
         // ARRANGE
@@ -39,8 +40,8 @@ describe('groupBySqlBuilder tests', () => {
             .build(patientSelector, filterTypes);
 
         // ASSERT
-        expect(sqlQuery).toEqual("GROUP BY resource->>'gender'")
-    })
+        expect(sqlQuery).toEqual("GROUP BY resource->>'gender'");
+    });
 
     it('can add groupByCompiledField', () => {
         // ARRANGE
@@ -54,5 +55,5 @@ describe('groupBySqlBuilder tests', () => {
 
         // ASSERT
         expect(sqlQuery).toEqual('GROUP BY period_start');
-    })
-})
+    });
+});
