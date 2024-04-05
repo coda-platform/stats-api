@@ -9,9 +9,9 @@ function build(field: Field, selector: Selector) {
     const fieldPath = field.path;
     const fieldLabelFormatted = fieldLabelFormatter.formatLabel(field.label);
     const isJoinField = !selector.fields.some(f => f.label === field.label);
-    const isArrayField = arrayFieldDetector.isArrayField(fieldPath);
+    const isArrayField = arrayFieldDetector.isArrayField(fieldPath, selector);
 
-    const calculatedField = calculatedFields.calculatedFields.get(fieldPath);
+    const calculatedField = calculatedFields.get(selector, fieldPath);
     if (calculatedField) {
         if(isJoinField){
             return `count(${fieldLabelFormatted})`;
@@ -19,7 +19,7 @@ function build(field: Field, selector: Selector) {
         return `count(${calculatedField})`;
     }
 
-    const jsonFieldPathCompiled = jsonFieldValuePathCompiler.getPathCompiled(fieldPath);
+    const jsonFieldPathCompiled = jsonFieldValuePathCompiler.getFieldPathCompiled(fieldPath, selector);
 
     if(isJoinField || isArrayField){
         return `count(${fieldLabelFormatted})`;

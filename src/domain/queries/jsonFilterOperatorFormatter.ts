@@ -1,21 +1,25 @@
 import Filter from "../../models/request/filter";
+import { ResponseError } from "../../utils/responseError";
+import filterOperatorHelper from "./filters/filterOperatorHelper";
 
-function formatOperatorForSql(filter: Filter) {
-    const filterOperator = filter.operator.replace(/_/g, '').toLowerCase();
-    const value = String(filter.value);
+type EqualOperator = "is" | "is not" | "is NULL" | "is not NULL" | "=" | "!=" | ">" | ">=" | "<" | "<=" | "LIKE";
+
+function formatOperatorForSql(filter: Filter): EqualOperator {
+    const filterOperator = filterOperatorHelper.normalize(filter);
+
+    if(['isnull'].some(op => op === filterOperator)) {
+        return 'is NULL';
+    }
+    if(['isnotnull'].some(op => op === filterOperator)) {
+        return 'is not NULL';
+    }
     if (['is', 'equals', 'on', 'equal'].some(op => op === filterOperator)) {
-        if(value.toLowerCase() === 'null') {
-            return 'is';
-        }
-
+        if(filterOperatorHelper.isNullValue(filter)) return 'is';
         return '=';
     }
 
-    if (['not', 'isnot', 'notequals', 'noton', 'not_equal', 'notequal'].some(op => op === filterOperator)) {
-        if(value.toLowerCase() === 'null') {
-            return 'is not';
-        }
-
+    if (['not', 'isnot', 'notequals', 'noton', 'notequal'].some(op => op === filterOperator)) {
+        if(filterOperatorHelper.isNullValue(filter)) return 'is not';
         return '!=';
     }
 
@@ -23,7 +27,7 @@ function formatOperatorForSql(filter: Filter) {
         return '>';
     }
 
-    if (['afteroron', 'moreorequalthan', 'greater_or_equal', 'greaterorequal'].some(op => op === filterOperator)) {
+    if (['afteroron', 'moreorequalthan', 'greaterorequal'].some(op => op === filterOperator)) {
         return '>=';
     }
 
@@ -31,7 +35,7 @@ function formatOperatorForSql(filter: Filter) {
         return '<';
     }
 
-    if (['beforeoron', 'lessorequalthan', 'less_or_equal', 'lessorequal'].some(op => op === filterOperator)) {
+    if (['beforeoron', 'lessorequalthan', 'lessorequal'].some(op => op === filterOperator)) {
         return '<=';
     }
 
@@ -43,7 +47,9 @@ function formatOperatorForSql(filter: Filter) {
         return '>';
     }
 
-    throw new Error(`${filterOperator} is not supported`);
+    const error = new Error(`Operator '${filterOperator}' is not supported`) as ResponseError;
+    error.status = 400;
+    throw error;
 }
 
 export default {

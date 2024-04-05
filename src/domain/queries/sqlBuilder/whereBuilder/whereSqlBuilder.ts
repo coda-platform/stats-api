@@ -16,9 +16,9 @@ export default class WhereSqlBuilder {
         this.sqlBuilder.requestBuilders.push(whereBuilder.build);
     }
 
-    fieldFilter(possibleComputedField?: Field) {
+    fieldFilter() {
         const builderFunction = (selector: Selector, filterFields: Map<Filter, FieldInfo>) => {
-            return whereFieldFilterBuilder.build(selector, filterFields, possibleComputedField);
+            return whereFieldFilterBuilder.build(selector, filterFields);
         };
 
         this.sqlBuilder.requestBuilders.push(builderFunction);

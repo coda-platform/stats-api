@@ -16,19 +16,19 @@ export default class GroupBySqlBuilder {
         this.sqlBuilder.requestBuilders.push(groupByBuilder.build);
     }
 
-    field(field: Field) {
-        const builderFunction = () => groupByFieldBuilder.build(field);
+    field(field: Field, selector: Selector): GroupBySqlBuilder {
+        const builderFunction = (): string => groupByFieldBuilder.build(field, selector);
         this.sqlBuilder.requestBuilders.push(builderFunction);
 
         return this;
     }
 
-    build(selector: Selector, filterFieldTypes: Map<Filter, FieldInfo>) {
+    build(selector: Selector, filterFieldTypes: Map<Filter, FieldInfo>): string {
         return this.sqlBuilder.build(selector, filterFieldTypes);
     }
 
-    compiledField(compiledFieldName: string) {
-        const builderFunction = () => groupByCompiledFieldBuilder.build(compiledFieldName);
+    compiledField(compiledFieldName: string): GroupBySqlBuilder {
+        const builderFunction = (): string => groupByCompiledFieldBuilder.build(compiledFieldName);
         this.sqlBuilder.requestBuilders.push(builderFunction);
 
         return this;

@@ -1,11 +1,10 @@
-import fieldPathFormatter from "../../domain/queries/fieldPathFormatter";
-import aidboxProxy from "../../infrastructure/aidbox/aidboxProxy";
 import FieldInfo from "../../models/fieldInfo";
 import Filter from "../../models/request/filter";
 import Selector from "../../models/request/selector";
-import SummarizeRequestBody from "../../models/request/summarizeRequestBody";
-import { flattenConditionToFilters, instanceOfCondition } from "../../models/request/condition";
-import getFilterFieldTypesQuery from "../../domain/queries/filters/getFilterFieldTypesQuery";
+import summarizeRequestBody from "../../models/request/summarizeRequestBody";
+import fieldPathFormatter from "../../domain/queries/fieldPathFormatter";
+import { flattenConditionToFilters } from "../../models/request/condition";
+import { FlatAttributesByResourceType } from "../../../fhir-types";
 
 const computedFields = new Map<string, string>();
 
@@ -14,18 +13,16 @@ computedFields.set('number', 'FLOAT');
 computedFields.set('integer', 'FLOAT');
 computedFields.set('double precision', 'FLOAT');
 computedFields.set('boolean', 'BOOLEAN');
-computedFields.set('dateTime', 'DATE');
+computedFields.set('dateTime', 'timestamp');
 
-function setFilterFieldTypes(condition: Filter[], response: any[], fieldsAndFieldReponses: Map<Filter, FieldInfo | Error>) {
+function setFilterFieldTypes(condition: Filter[], response: any[], fieldsAndFieldReponses: Map<Filter, FieldInfo | Error>): void {
     for (const filter of condition) {
-        if (response instanceof Error)
-            fieldsAndFieldReponses.set(filter, response);
+        if (response instanceof Error) fieldsAndFieldReponses.set(filter, response);
         else {
             const fieldPathNormalized = fieldPathFormatter.formatPath(filter.path);
-            let fieldType = response.map(r => r[fieldPathNormalized]).filter(v => v !== null && v)[0] as string;
+            let fieldType = response.map(r => r[fieldPathNormalized]).filter(v => v !== undefined && v !== null)[0] as string;
             const computedField = computedFields.get(fieldType);
-            if (computedField)
-                fieldType = computedField;
+            if (computedField) fieldType = computedField;
 
             const fieldInfo: FieldInfo = {
                 name: filter.path,
@@ -36,44 +33,40 @@ function setFilterFieldTypes(condition: Filter[], response: any[], fieldsAndFiel
     }
 }
 
-async function getSelectorFieldInfos(selector: Selector, filterType: Map<Filter, FieldInfo | Error>) {
-    try {
-        if (selector.condition.conditions.length > 0) {
-            let filterTypesInSelector: boolean = true;
-            const filters = flattenConditionToFilters(selector.condition);
-            filters.filter(filter => {
-                if (!filter.type)
-                    filterTypesInSelector = false;
-            });
-            if (filterTypesInSelector) {
-                const selectorFilterTypes: any[] = [];
-                filters.forEach(filter => {
-                        const fieldPathNormalized = fieldPathFormatter.formatPath(filter.path);
-                        selectorFilterTypes.push({ [fieldPathNormalized]: filter.type });
-                });
-
-                setFilterFieldTypes(filters, selectorFilterTypes, filterType);
-            }
-            else {
-                const query = getFilterFieldTypesQuery.getQuery(selector);
-                const selectorFilterTypes = await aidboxProxy.executeQuery(query);
-                setFilterFieldTypes(filters, selectorFilterTypes, filterType);
-            }
-        }
-
-        const joinSelector = selector.joins;
-        if (!joinSelector) return;
-
-        await getSelectorFieldInfos(joinSelector, filterType);
+function getFilterTypeFromFhirTypes(selector: Selector, filter: Filter): string {
+    const selectorName = selector.resource;
+    const filterName = filter.path;
+    FlatAttributesByResourceType;
+    const selectorFilters = FlatAttributesByResourceType[selectorName as keyof typeof FlatAttributesByResourceType];
+    if (selectorFilters) {
+        const foundFilter = selectorFilters.find(filter => filter.name === filterName);
+        if (foundFilter)
+            return foundFilter.type;
     }
-    catch (error) {
-        for (const filter of flattenConditionToFilters(selector.condition)) {
-            filterType.set(filter, error as any);
-        }
-    }
+    throw new Error(`no type found for Filter '${filterName}' for resource '${selector.resource}' as '${selector.label}'`);
 }
 
-async function getFieldsDataFromRequest(summarizeRequest: SummarizeRequestBody): Promise<Map<Filter, FieldInfo | Error>> {
+async function getSelectorFieldInfos(selector: Selector, filterType: Map<Filter, FieldInfo | Error>): Promise<void> {
+    if (selector?.condition && selector.condition?.conditions && selector.condition.conditions.length > 0) {
+        const filters = flattenConditionToFilters(selector.condition);
+        const selectorFilterTypes: any[] = [];
+        filters.forEach(filter => {
+            if (!filter.type) {
+                filter.type = getFilterTypeFromFhirTypes(selector, filter);
+            }
+            const fieldPathNormalized = fieldPathFormatter.formatPath(filter.path);
+            selectorFilterTypes.push({ [fieldPathNormalized]: filter.type });
+        });
+        setFilterFieldTypes(filters, selectorFilterTypes, filterType);
+    }
+
+    const joinSelector = selector.joins;
+    if (!joinSelector) return;
+
+    await getSelectorFieldInfos(joinSelector, filterType);
+}
+
+async function getFieldsDataFromRequest(summarizeRequest: summarizeRequestBody): Promise<Map<Filter, FieldInfo | Error>> {
     const fieldsAndFieldReponses = new Map<Filter, FieldInfo | Error>();
 
     for (let selectorIndex = 0; selectorIndex < summarizeRequest.selectors.length; selectorIndex++) {

@@ -26,6 +26,7 @@ import selectNamedCountAllBuilder from "./selectNamedCountAllBuilder";
 import selectSubqueryFieldBuilder from "./selectSubqueryFieldBuilder";
 import selectCastedFieldsBuilder from "./selectCastedFieldsBuilder";
 import selectBreakdownContinuousBuilder from "./selectBreakdownContinuousBuilder";
+import selectFieldAliasBuilder from "./selectFieldAliasBuilder";
 
 export default class SelectSqlBuilder {
     sqlBuilder: SqlBuilder;
@@ -79,8 +80,15 @@ export default class SelectSqlBuilder {
         return this;
     }
 
-    field(field: Field) {
-        const builderFunction = () => selectFieldBuilder.build(field);
+    field(field: Field, selector: Selector) {
+        const builderFunction = () => selectFieldBuilder.build(field, selector);
+        this.sqlBuilder.requestBuilders.push(builderFunction);
+
+        return this;
+    }
+
+    fieldAlias(field: Field) {
+        const builderFunction = () => selectFieldAliasBuilder.build(field);
         this.sqlBuilder.requestBuilders.push(builderFunction);
 
         return this;

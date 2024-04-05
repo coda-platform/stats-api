@@ -1,0 +1,3 @@
+[submodule "fhir-types"]
+	path = fhir-types
+	url = https://github.com/coda-platform/fhir-types

@@ -5,9 +5,11 @@ import CrossJoinFieldLevelBuilder from "./crossJoinFieldLevelBuilder";
 
 export default class CrossJoinForLevelBuilder {
     fieldLevelBuilders: CrossJoinFieldLevelBuilder[];
+    selector: Selector;
 
     constructor(selector: Selector, field?: Field) {
         const uniqueFieldPaths = new Map<string, string>();
+        this.selector = selector;
 
         if (field) {
             uniqueFieldPaths.set(field.path, field.label);
@@ -18,16 +20,16 @@ export default class CrossJoinForLevelBuilder {
 
         this.fieldLevelBuilders = new Array<CrossJoinFieldLevelBuilder>();
         for (const field of uniqueFieldPaths) {
-            const fieldLevelBuilder = new CrossJoinFieldLevelBuilder(field);
+            const fieldLevelBuilder = new CrossJoinFieldLevelBuilder(field, this.selector);
             this.fieldLevelBuilders.push(fieldLevelBuilder);
         }
     }
 
-    hasRemainingPathToBuild() {
+    hasRemainingPathToBuild(): boolean {
         return this.fieldLevelBuilders.some(flb => flb.hasRemainingPathToBuild());
     }
 
-    buildCurrentLevel() {
+    buildCurrentLevel(): string {
         const fieldLevelBuildersForLevel = this.fieldLevelBuilders.filter(flb => flb.hasRemainingPathToBuild());
         const fieldsInCrossJoinDistinct = new Set<string>(fieldLevelBuildersForLevel.map(flb => flb.buildCurrentLevel()));
 

@@ -5,6 +5,7 @@ import Filter from "../../../../models/request/filter";
 import Measures from "../../../../models/request/measures";
 import Selector from "../../../../models/request/selector";
 import calculatedFields from "../../../calculatedFields";
+import arrayFieldDetector from "../../fields/arrayFieldDetector";
 import SelectSqlBuilder from "../../sqlBuilder/selectBuilder/selectSqlBuilder";
 import SqlBuilder from "../../sqlBuilder/sqlBuilder";
 
@@ -26,18 +27,29 @@ function getQuery(selector: Selector, field: Field, filterFieldTypes: Map<Filter
 
     const queryToFromPart = selectQuery
         .from()
-        .resourceTable()
-        .possibleJoin(fieldTypes);
+        .resourceTable();
 
-    if ((!selector.condition || selector.condition.conditions.length === 0) && !calculatedFields.calculatedFields.has(field.path)) {
+    if (!selector.condition || selector.condition.conditions.length === 0) {
         return queryToFromPart
+            .possibleJoin(fieldTypes)
             .build(selector, filterFieldTypes);
     }
 
-    return queryToFromPart
-        .where()
-        .fieldFilter(field)
-        .build(selector, filterFieldTypes);
+    const hasArrayComparisonFilters = arrayFieldDetector.hasArrayComparisonFilters(selector);
+
+    const builderWithFilter = hasArrayComparisonFilters ?
+        queryToFromPart
+            .crossJoinForArrayFilters()
+            .possibleJoin(fieldTypes)
+            .where()
+            .fieldFilter()
+        : queryToFromPart
+            .crossJoinForArrayFilters()
+            .possibleJoin(fieldTypes)
+            .where()
+            .fieldFilter()
+
+    return builderWithFilter.build(selector, filterFieldTypes);
 }
 
 function selectFromMeasure(query: SelectSqlBuilder, selector: Selector, field: Field, fieldTypes: Map<Field, FieldInfo>, measure: ContinuousMesure) {

@@ -4,7 +4,7 @@ import fieldLabelFormatter from "../../fieldLabelFormatter";
 
 function build(selector: Selector) {
     let selectorFields = selector.fields
-        .map(field => getFieldSelectQuery.getJsonQuery(field));
+        .map(field => getFieldSelectQuery.getJsonQuery(field, selector));
     selectorFields = selectorFields.concat(getAllJoinFields(selector) as string[]);
     return selectorFields.join(", ");
 }

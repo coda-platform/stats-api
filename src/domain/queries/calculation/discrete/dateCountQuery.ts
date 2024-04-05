@@ -5,24 +5,16 @@ import Selector from "../../../../models/request/selector";
 import SqlBuilder from "../../sqlBuilder/sqlBuilder";
 
 function getQuery(selector: Selector, field: Field, filterFieldTypes: Map<Filter, FieldInfo>, fieldTypes: Map<Field, FieldInfo>): string {
+
     const queryToFromPart = new SqlBuilder()
         .select()
         .countField(field, selector)
         .from()
-        .resourceTable()
-        .possibleJoin(fieldTypes);
+        .subquery(fieldTypes)
+        .groupBy()
+        .compiledField(field.label)
 
-    if (!selector.condition || selector.condition.conditions.length === 0) {
-        return queryToFromPart
-            .groupBy()
-            .field(field)
-            .build(selector, filterFieldTypes);
-    }
-
-    return queryToFromPart
-        .where()
-        .fieldFilter()
-        .build(selector, filterFieldTypes);
+    return queryToFromPart.build(selector, filterFieldTypes);
 }
 
 export default {

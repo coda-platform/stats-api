@@ -11,7 +11,7 @@ function build(field: Field, fieldTypes: Map<Field, FieldInfo>,selector: Selecto
     const fieldType = fieldTypes.get(field);
     const isJoinField = !selector.fields.some(f => f.label === field.label);
 
-    const calculatedField = calculatedFields.calculatedFields.get(fieldPath);
+    const calculatedField = calculatedFields.get(selector, fieldPath);
     if (calculatedField) {
         if(isJoinField){
             return fieldType ?
@@ -21,7 +21,7 @@ function build(field: Field, fieldTypes: Map<Field, FieldInfo>,selector: Selecto
         `percentile_disc(0.05) within group (order by (${calculatedField})::${fieldType.type}) AS ci_low` : `percentile_disc(0.05) within group (order by ${calculatedField}) AS ci_low`;
     }
 
-    const jsonFieldPathCompiled = jsonFieldValuePathCompiler.getPathCompiled(fieldPath);
+    const jsonFieldPathCompiled = jsonFieldValuePathCompiler.getFieldPathCompiled(fieldPath, selector);
 
     if(isJoinField){
         return fieldType ?

@@ -2,21 +2,26 @@ import FieldInfo from "../../../../../models/fieldInfo";
 import Field from "../../../../../models/request/field";
 import Filter from "../../../../../models/request/filter";
 import Selector from "../../../../../models/request/selector";
+import arrayFieldDetector from "../../../fields/arrayFieldDetector";
 import SqlBuilder from "../../sqlBuilder";
 
-function build(joinSelector: Selector, filterTypes: Map<Filter, FieldInfo>, fieldTypes: Map<Field, FieldInfo>) {
-    const sqlBuilder = new SqlBuilder()
-        .select();
+function build(joinSelector: Selector, filterTypes: Map<Filter, FieldInfo>, fieldTypes: Map<Field, FieldInfo>): string {
+    const sqlBuilder = new SqlBuilder().select();
 
     if (hasFields(joinSelector)) {
-        sqlBuilder.fields().comma();
+        sqlBuilder.fieldsJson().comma();
     }
 
-    if (!joinSelector.condition || joinSelector.condition.conditions.length === 0) {
+    if (!joinSelector?.condition ||
+        !joinSelector.condition?.conditions ||
+        joinSelector.condition?.conditions?.length === 0)
         return sqlBuilder.joinId().from().resourceTable().possibleJoin(fieldTypes).build(joinSelector, filterTypes);
-    }
 
-    const builderWithFilter = sqlBuilder.joinId().from().resourceTable().possibleJoin(fieldTypes).where().fieldFilter();
+    const hasArrayComparisonFilters = arrayFieldDetector.hasArrayComparisonFilters(joinSelector);
+
+    const builderWithFilter = hasArrayComparisonFilters ?
+        sqlBuilder.joinId().from().resourceTable().crossJoinForArrayFilters().possibleJoin(fieldTypes).where().fieldFilter()
+        : sqlBuilder.joinId().from().resourceTable().possibleJoin(fieldTypes).where().fieldFilter();
 
     return builderWithFilter.build(joinSelector, filterTypes);
 }

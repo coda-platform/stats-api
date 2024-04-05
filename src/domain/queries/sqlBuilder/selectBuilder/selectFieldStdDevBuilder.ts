@@ -11,7 +11,7 @@ function build(field: Field, fieldTypes: Map<Field, FieldInfo>, selector:Selecto
     const fieldType = fieldTypes.get(field);
     const isJoinField = !selector.fields.some(f => f.label === field.label);
 
-    const calculatedField = calculatedFields.calculatedFields.get(fieldPath);
+    const calculatedField = calculatedFields.get(selector, fieldPath);
     if (calculatedField) {
         if(isJoinField){
             return fieldType ?
@@ -21,7 +21,7 @@ function build(field: Field, fieldTypes: Map<Field, FieldInfo>, selector:Selecto
             `STDDEV((${calculatedField})::${fieldType.type}) AS stddev`: `STDDEV(${calculatedField}) AS stddev`;
     }
 
-    const jsonFieldPathCompiled = jsonFieldValuePathCompiler.getPathCompiled(fieldPath);
+    const jsonFieldPathCompiled = jsonFieldValuePathCompiler.getFieldPathCompiled(fieldPath, selector);
 
     if(isJoinField){
         return fieldType ?

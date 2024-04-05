@@ -1,9 +1,14 @@
 import { Queue } from "queue-typescript";
 import { pathAndPathElement } from "./pathAndPathElement";
 
+type nextPathAndPathElement = {
+    value: pathAndPathElement;
+    done: boolean;
+};
+
 export default class FieldPathDecomposed implements IterableIterator<pathAndPathElement> {
     pathAndPathElements: Queue<pathAndPathElement>;
-    get length() {
+    get length(): number {
         return this.pathAndPathElements.length;
     }
 
@@ -25,17 +30,16 @@ export default class FieldPathDecomposed implements IterableIterator<pathAndPath
         }
     }
 
-    next() {
+    next(): nextPathAndPathElement {
         const currentItemCount = this.pathAndPathElements.length;
-
         return { value: this.pathAndPathElements.dequeue(), done: currentItemCount === 0 };
     }
 
-    [Symbol.iterator]() {
+    [Symbol.iterator](): FieldPathDecomposed {
         return this;
     }
 
-    toArray() {
+    toArray(): pathAndPathElement[] {
         return this.pathAndPathElements.toArray();
     }
 }

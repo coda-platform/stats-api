@@ -1,3 +1,4 @@
+import Selector from "../../../../../models/request/selector";
 import resourceArrayFields from "../../../../resourceArrayFields";
 import FieldPathDecomposed from "../../../fieldPathDecomposed";
 import queryStringEscaper from "../../../queryStringEscaper";
@@ -5,21 +6,23 @@ import queryStringEscaper from "../../../queryStringEscaper";
 export default class FieldPathForLevelBuilder {
     pathDecomposed: FieldPathDecomposed;
     currentlyBuiltPath: string;
+    selector: Selector;
 
-    constructor(fieldPath: string) {
+    constructor(fieldPath: string, selector: Selector) {
         const pathEscaped = queryStringEscaper.escape(fieldPath);
 
         this.pathDecomposed = new FieldPathDecomposed(pathEscaped);
+        this.selector = selector;
         this.currentlyBuiltPath = '';
     }
 
     hasRemainingPathToBuild(): any {
         const remainingPathElementsArray = this.pathDecomposed.toArray();
-        const hasRemainingArrays = resourceArrayFields.values.some(af => remainingPathElementsArray.some(pe => pe.path === af));
+        const hasRemainingArrays = resourceArrayFields.get(this.selector).some(af => remainingPathElementsArray.some((pe: { path: string; }) => pe.path === af));
         return hasRemainingArrays;
     }
 
-    buildCurrentLevel() {
+    buildCurrentLevel(): string {
         let currentPortionOfPath = '';
 
         while (this.pathDecomposed.length > 0) {
@@ -30,7 +33,7 @@ export default class FieldPathForLevelBuilder {
                 ? [currentPortionOfPath, currentPathElement].join('_')
                 : currentPathElement;
 
-            if (resourceArrayFields.values.some(af => af === currentElement.path)) {
+            if (resourceArrayFields.get(this.selector).some(af => af === currentElement.path)) {
                 break;
             }
         }

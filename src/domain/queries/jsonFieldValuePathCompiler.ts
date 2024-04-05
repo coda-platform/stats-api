@@ -1,57 +1,78 @@
+import Filter from "../../models/request/filter";
+import Selector from "../../models/request/selector";
 import calculatedFields from "../calculatedFields";
+import resourceArrayFields from "../resourceArrayFields";
 import FieldPathDecomposed from "./fieldPathDecomposed";
 import arrayFieldDetector from "./fields/arrayFieldDetector";
+import filterOperatorHelper from "./filters/filterOperatorHelper";
 import queryStringEscaper from "./queryStringEscaper";
 
-function getFieldPathCompiled(fieldPathEscaped: string): string {
+function getPathCompiled(fieldPathEscaped: string, selector: Selector, isField: boolean): string {
     const pathDecomposed = new FieldPathDecomposed(fieldPathEscaped);
+
+    if (fieldPathEscaped === 'id'){ // 'id' field is not in resource
+        return 'id';
+    }
 
     let pathCompiled = 'resource';
 
-
     while (pathDecomposed.length > 0) {
         const currentPathElement = pathDecomposed.next().value;
-        const isArrayPathElement = arrayFieldDetector.isArrayPathElement(currentPathElement.path); //case when building path for FIELD (no selector)
+        const isArray = arrayFieldDetector.isArrayPathElement(currentPathElement.path, selector);
 
-        if (pathDecomposed.length === 0 && !isArrayPathElement) {
+        if (pathDecomposed.length === 0 && !isArray) {
             pathCompiled += `->>'${currentPathElement.pathElement}'`;
         } else {
             pathCompiled += `->'${currentPathElement.pathElement}'`;
         }
 
-        if (isArrayPathElement) {
+        if (isArray && isField) {
             pathCompiled = `jsonb_array_elements(${pathCompiled})`;
         }
     }
-
     return pathCompiled;
 }
 
-function getPathCompiled(path: string, selectorLabel?: string, filterPath?: boolean): string {
-    const fieldPathEscaped = queryStringEscaper.escape(path);
-    const isArrayField = arrayFieldDetector.isArrayField(path);
-
-    if(isArrayField && selectorLabel && filterPath){
-        return getArrayPathCompiled(path, selectorLabel);
+function getFilterPathCompiled(filter: Filter, selector: Selector): string {
+    const fieldPathEscaped = queryStringEscaper.escape(filter.path);
+    const isArrayField = arrayFieldDetector.isArrayField(fieldPathEscaped, selector);
+    const selectorLabel = queryStringEscaper.escape(selector.label.toLowerCase());
+    if(isArrayField && selectorLabel && filterOperatorHelper.isEqualsOperator(filter)){
+        return getIndexPathCompiled(filter.path, selector);
+    }
+    else if(isArrayField && selectorLabel && filterOperatorHelper.isComparisonOperator(filter)){
+        return getCrossJoinPathCompiled(filter.path, selector);
     }
 
-    const calculatedField = calculatedFields.calculatedFields.get(path);
+    const calculatedField = calculatedFields.get(selector, filter.path);
     if (calculatedField) {
         return calculatedField;
     }
-    return getFieldPathCompiled(fieldPathEscaped);
+    return getPathCompiled(fieldPathEscaped, selector, false);
 }
 
-function getJsonPathCompiled(path: string): string {
+function getFieldPathCompiled(path: string, selector: Selector): string {
+    const fieldPathEscaped = queryStringEscaper.escape(path);
+    const calculatedField = calculatedFields.get(selector, path);
+    if (calculatedField) {
+        return calculatedField;
+    }
+    return getPathCompiled(fieldPathEscaped, selector, true);
+}
+
+function getJsonPathCompiled(path: string, selector: Selector): string {
     const fieldPathEscaped = queryStringEscaper.escape(path);
     const pathDecomposed = new FieldPathDecomposed(fieldPathEscaped);
 
-    let pathCompiled = 'resource';
+    if (fieldPathEscaped === 'id') { // 'id' field is not in resource
+        return 'id';
+    }
 
+    let pathCompiled = 'resource';
 
     while (pathDecomposed.length > 0) {
         const currentPathElement = pathDecomposed.next().value;
-        const isArrayPathElement = arrayFieldDetector.isArrayPathElement(currentPathElement.path);
+        const isArrayPathElement = resourceArrayFields.get(selector).some(v => v === currentPathElement.path);
 
         pathCompiled += `->'${currentPathElement.pathElement}'`;
 
@@ -59,12 +80,12 @@ function getJsonPathCompiled(path: string): string {
             pathCompiled = `jsonb_array_elements(${pathCompiled})`;
         }
     }
-
     return pathCompiled;
 }
 
-function getArrayPathCompiled(path: string, selectorLabel:string): string {
+function getIndexPathCompiled(path: string, selector:Selector): string {
     const fieldPathEscaped = queryStringEscaper.escape(path);
+    const selectorLabel = queryStringEscaper.escape(selector.label.toLowerCase());
     const pathDecomposed = new FieldPathDecomposed(fieldPathEscaped);
 
     let pathCompiled = `${selectorLabel}_table.resource`;
@@ -74,13 +95,42 @@ function getArrayPathCompiled(path: string, selectorLabel:string): string {
         const currentPathElement = pathDecomposed.next().value;
 
         pathCompiled += `->'${currentPathElement.pathElement}'`;
-        if(arrayFieldDetector.isArrayField(currentPathElement.path)){
+        if(arrayFieldDetector.isArrayField(currentPathElement.path, selector)){
+            break; //stop at first array field
+        }
+    }
+    return pathCompiled;
+}
+
+function getCrossJoinPathCompiled(path: string, selector: Selector): string {
+    const fieldPathEscaped = queryStringEscaper.escape(path);
+    const selectorLabel = queryStringEscaper.escape(selector.label.toLowerCase());
+    const pathDecomposed = new FieldPathDecomposed(fieldPathEscaped);
+
+    let pathCompiled = `${selectorLabel}`;
+
+
+    while (pathDecomposed.length > 1) {
+        const currentPathElement = pathDecomposed.next().value;
+
+        pathCompiled += `_${currentPathElement.pathElement}`;
+        if(arrayFieldDetector.isArrayField(currentPathElement.path, selector)){
             break; //stop at first array field
         }
     }
 
+    while (pathDecomposed.length > 0) {
+        const currentPathElement = pathDecomposed.next().value;
+
+        if (pathDecomposed.length === 0) {
+            pathCompiled += `->>'${currentPathElement.pathElement}'`;
+        } else {
+            pathCompiled += `->'${currentPathElement.pathElement}'`;
+        }
+    }
     return pathCompiled;
 }
+
 export default {
-    getPathCompiled, getJsonPathCompiled, getArrayPathCompiled
+    getFieldPathCompiled, getJsonPathCompiled, getIndexPathCompiled, getFilterPathCompiled
 };

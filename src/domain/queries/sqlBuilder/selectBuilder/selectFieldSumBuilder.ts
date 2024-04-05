@@ -11,7 +11,7 @@ function build(field: Field, fieldTypes: Map<Field, FieldInfo>, selector: Select
     const fieldLabelFormatted = fieldLabelFormatter.formatLabel(field.label);
     const isJoinField = !selector.fields.some(f => f.label === field.label);
 
-    const calculatedField = calculatedFields.calculatedFields.get(fieldPath);
+    const calculatedField = calculatedFields.get(selector, fieldPath);
     if (calculatedField) {
         if(isJoinField){
             return `SUM(${fieldLabelFormatted}) AS sum`;
@@ -19,7 +19,7 @@ function build(field: Field, fieldTypes: Map<Field, FieldInfo>, selector: Select
         return `SUM(${calculatedField}) AS sum`;
     }
 
-    const jsonFieldPathCompiled = jsonFieldValuePathCompiler.getPathCompiled(fieldPath);
+    const jsonFieldPathCompiled = jsonFieldValuePathCompiler.getFieldPathCompiled(fieldPath, selector);
 
     if(isJoinField){
         return  cast ? `SUM((${fieldLabelFormatted})::${cast}) AS sum` : `SUM(${fieldLabelFormatted}) AS sum`;

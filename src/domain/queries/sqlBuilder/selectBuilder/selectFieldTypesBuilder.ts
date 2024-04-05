@@ -4,7 +4,7 @@ import fieldLabelFormatter from "../../fieldLabelFormatter";
 
 function build(selector: Selector) {
     let selectorFieldTypes = selector.fields
-        .map(field => getFieldTypeSelectQuery.getQuery(field));
+        .map(field => getFieldTypeSelectQuery.getQuery(field, selector));
         selectorFieldTypes = selectorFieldTypes.concat(getAllJoinFields(selector) as string[]);
         return selectorFieldTypes.join(", ");
 }
@@ -15,7 +15,7 @@ function getAllJoinFields(selector: Selector) : string[]{//get all fields from n
         }
         else{//recursive step
            return selector.joins.fields
-            .map(f => getFieldTypeSelectQuery.getQueryfromLabel(f))
+            .map(f => getFieldTypeSelectQuery.getQueryfromLabel(selector, f))
             .concat(getAllJoinFields(selector.joins) as string[]);
         }
     }

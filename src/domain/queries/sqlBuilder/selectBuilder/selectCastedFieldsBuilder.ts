@@ -6,7 +6,7 @@ import FieldInfo from "../../../../models/fieldInfo";
 
 function build(selector: Selector, fieldTypes: Map<Field, FieldInfo>) {
     let selectorFields = selector.fields
-        .map(field => getCastedField(field, fieldTypes));
+        .map(field => getCastedField(field, fieldTypes, selector));
     selectorFields = selectorFields.concat(getAllJoinFields(selector, fieldTypes) as string[]);
     return selectorFields.join(", ");
 }
@@ -22,9 +22,9 @@ function getAllJoinFields(selector: Selector, fieldTypes: Map<Field, FieldInfo>)
     }
 }
 
-function getCastedField(field: Field, fieldTypes: Map<Field, FieldInfo>): string{
+function getCastedField(field: Field, fieldTypes: Map<Field, FieldInfo>, selector: Selector): string{
     const cast = fieldTypes.get(field)?.type;
-    const fieldSelect = cast ? getFieldSelectQuery.getCastedQuery(field, cast): getFieldSelectQuery.getQuery(field);
+    const fieldSelect = cast ? getFieldSelectQuery.getCastedQuery(field, cast, selector): getFieldSelectQuery.getQuery(field, selector);
     return fieldSelect;
 }
 

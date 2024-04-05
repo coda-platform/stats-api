@@ -4,7 +4,7 @@ import getFilterTypeSelectQuery from "../../fields/getFilterTypeSelectQuery";
 
 function build(selector: Selector) {
     return flattenConditionToFilters(selector.condition)
-        .map(f => getFilterTypeSelectQuery.getQuery(f.path))
+        .map(f => getFilterTypeSelectQuery.getQuery(f.path, selector))
         .join(', ');
 }
 
