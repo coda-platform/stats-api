@@ -3,9 +3,6 @@ import fieldObjectMother from "../../utils/objectMothers/models/fieldObjectMothe
 import resourceArrayFields from "../../../src/domain/resourceArrayFields";
 
 describe('fieldPathFormatter tests', () => {
-    beforeEach(() => {
-        resourceArrayFields.values = [];
-    });
 
     it('with no sub path, returns field path', () => {
         // ARRANGE

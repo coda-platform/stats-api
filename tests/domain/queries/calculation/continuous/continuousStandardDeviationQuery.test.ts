@@ -11,6 +11,7 @@ import Field from "../../../../../src/models/request/field";
 import ContinuousMesure from "../../../../../src/models/continuousMeasure";
 import Measures from "../../../../../src/models/request/measures";
 import { ConditionOperator } from "../../../../../src/models/request/conditionOperator";
+import { when } from "jest-when";
 
 describe('continuousStandardDeviationQuery tests', () => {
     const ageField = fieldObjectMother.get('age', 'age', 'integer');
@@ -28,7 +29,9 @@ describe('continuousStandardDeviationQuery tests', () => {
     };
 
     beforeEach(() => {
-        resourceArrayFields.values = []; // Simplify tests by not unwrapping json arrays.
+        resourceArrayFields.get = jest.fn();
+        when(resourceArrayFields.get as any)
+            .mockReturnValue([]);
     });
 
     it('With field and no filter, groups by field', () => {
@@ -64,8 +67,6 @@ describe('continuousStandardDeviationQuery tests', () => {
             .from()
             .resourceTable()
             .possibleJoin(fieldTypes)
-            .where()
-            .fieldFilter(ageField)
             .build(selector, filterMaps));
     });
 

@@ -1,13 +1,18 @@
 import arrayFieldDetector from "../../../../src/domain/queries/fields/arrayFieldDetector";
-import resourceArrayFields from "../../../../src/domain/resourceArrayFields";
+import { ConditionOperator } from "../../../../src/models/request/conditionOperator";
+import ConditionObjectMother from "../../../utils/objectMothers/models/ConditionObjectMother";
+import selectorObjectMother from "../../../utils/objectMothers/models/selectorObjectMother";
 
 describe('arrayFieldDetector tests', () => {
+
+    const emptyCondition = ConditionObjectMother.get(ConditionOperator.and, []);
+
     it('With all elements in path not an array elements, field is not array type', () => {
         // ARRANGE
-        resourceArrayFields.values = ['fieldA', 'fieldB'];
+        const selector = selectorObjectMother.get('Patient', 'patient', [], emptyCondition);
 
         // ACT
-        const isArray = arrayFieldDetector.isArrayField('fieldC.fieldD');
+        const isArray = arrayFieldDetector.isArrayField('birthdate.notanarray', selector);
 
         // ASSERT
         expect(isArray).toBeFalsy();
@@ -15,10 +20,10 @@ describe('arrayFieldDetector tests', () => {
 
     it('With first element in path as array element, field is array type', () => {
         // ARRANGE
-        resourceArrayFields.values = ['fieldA', 'fieldB'];
+        const selector = selectorObjectMother.get('Patient', 'patient', [], emptyCondition);
 
         // ACT
-        const isArray = arrayFieldDetector.isArrayField('fieldA.fieldD');
+        const isArray = arrayFieldDetector.isArrayField('name.isArray', selector);
 
         // ASSERT
         expect(isArray).toBeTruthy();
@@ -26,10 +31,10 @@ describe('arrayFieldDetector tests', () => {
 
     it('With second element in path as array element, field is array type', () => {
         // ARRANGE
-        resourceArrayFields.values = ['fieldA', 'fieldC.fieldB'];
+        const selector = selectorObjectMother.get('Observation', 'observation', [], emptyCondition);
 
         // ACT
-        const isArray = arrayFieldDetector.isArrayField('fieldC.fieldB');
+        const isArray = arrayFieldDetector.isArrayField('code.coding', selector);
 
         // ASSERT
         expect(isArray).toBeTruthy();
@@ -37,10 +42,10 @@ describe('arrayFieldDetector tests', () => {
 
     it('With multiple elements in path as array element, field is array type', () => {
         // ARRANGE
-        resourceArrayFields.values = ['fieldA', 'fieldA.fieldB'];
+        const selector = selectorObjectMother.get('Patient', 'patient', [], emptyCondition);
 
         // ACT
-        const isArray = arrayFieldDetector.isArrayField('fieldA.fieldB');
+        const isArray = arrayFieldDetector.isArrayField('name.given', selector);
 
         // ASSERT
         expect(isArray).toBeTruthy();

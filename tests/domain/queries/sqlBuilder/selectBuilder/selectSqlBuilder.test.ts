@@ -113,7 +113,7 @@ describe('SelectSqlBuilder tests', () => {
 
         // ACT
         const sqlQuery = selectSqlBuilder
-            .field(field)
+            .field(field, patientSelector)
             .build(patientSelector, filterTypes);
 
         // ASSERT

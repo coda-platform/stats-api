@@ -77,7 +77,7 @@ describe('jsonQueryValueFormatter tests', () => {
         const value = jsonQueryValueFormatter.formatValueForSql(filter, fieldInfo);
 
         // ASSERT
-        expect(value).toEqual("'null'");
+        expect(value).toEqual("null");
     });
 
     it("With NULL value, not a equal operator, value is padded with '", () => {
@@ -89,6 +89,6 @@ describe('jsonQueryValueFormatter tests', () => {
         const value = jsonQueryValueFormatter.formatValueForSql(filter, fieldInfo);
 
         // ASSERT
-        expect(value).toEqual("'NULL'");
+        expect(value).toEqual("NULL");
     });
 });

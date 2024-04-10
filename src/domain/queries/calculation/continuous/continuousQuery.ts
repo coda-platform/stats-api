@@ -44,7 +44,6 @@ function getQuery(selector: Selector, field: Field, filterFieldTypes: Map<Filter
             .where()
             .fieldFilter()
         : queryToFromPart
-            .crossJoinForArrayFilters()
             .possibleJoin(fieldTypes)
             .where()
             .fieldFilter()

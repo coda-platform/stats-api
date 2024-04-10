@@ -5,9 +5,6 @@ import fieldObjectMother from "../../../../utils/objectMothers/models/fieldObjec
 import selectorObjectMother from "../../../../utils/objectMothers/models/selectorObjectMother";
 
 describe('selectCountFieldBuilder tests', () => {
-    beforeEach(() => {
-        resourceArrayFields.values = []; // Ignore convention array fields to simplify tests.
-    });
 
     it('counts json field with fields path . replaced with _ and subquery name', () => {
         // ARRANGE
@@ -18,20 +15,19 @@ describe('selectCountFieldBuilder tests', () => {
         const result = selectCountFieldBuilder.build(field, patientSelector);
 
         // ASSERT
-        expect(result).toEqual("count(resource->'address'->'country'->>'name')");
+        expect(result).toEqual("count(country)");
     });
 
     it('with array field, counts json field array formatted with fields label . replaced with _ and subquery name', () => {
         // ARRANGE
-        const field = fieldObjectMother.get('address.country.name', 'country.name', 'string');
-        const patientSelector = selectorObjectMother.get('Patient', 'patient', [field], {conditionOperator:ConditionOperator.and, conditions:[]});
+        const field = fieldObjectMother.get('code.coding.code', 'code.coding', 'string');
+        const observationSelector = selectorObjectMother.get('Observation', 'obs', [field], {conditionOperator:ConditionOperator.and, conditions:[]});
 
-        resourceArrayFields.values = ['address.country'];
 
         // ACT
-        const result = selectCountFieldBuilder.build(field, patientSelector);
+        const result = selectCountFieldBuilder.build(field, observationSelector);
 
         // ASSERT
-        expect(result).toEqual("count(country_name)");
+        expect(result).toEqual("count(code_coding)");
     });
 });

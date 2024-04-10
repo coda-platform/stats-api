@@ -1,3 +1,4 @@
+import { when } from "jest-when";
 import timeBreakdownQuery from "../../../../src/domain/queries/breakdown/timeBreakdownQuery";
 import countResourceQuery from "../../../../src/domain/queries/countResourceQuery";
 import fieldLabelFormatter from "../../../../src/domain/queries/fieldLabelFormatter";
@@ -25,11 +26,6 @@ describe('timeBreakdownQuery tests', () => {
     const filterMaps = getFiltersMap([femaleGenderFilter], [stringFieldInfo]);
 
     const fieldMap = getFieldsMap([deceasedDateField], [dateTimeFieldInfo]);
-
-    beforeEach(() => {
-        resourceArrayFields.values = [];
-
-    });
 
 
     it('gets query with resource from', () => {
@@ -76,7 +72,10 @@ describe('timeBreakdownQuery tests', () => {
         // ARRANGE
         const selector = selectorObjectMother.get('Patient', 'patient', [deceasedDateField], { conditionOperator: ConditionOperator.and, conditions: [femaleGenderFilter] });
 
-        resourceArrayFields.values = ['gender'];
+        resourceArrayFields.get = jest.fn();
+        when(resourceArrayFields.get as any)
+            .calledWith(selector)
+            .mockReturnValue(['gender']);
 
         // ACT
         const query = timeBreakdownQuery.getQuery(selector, filterMaps, fieldMap, deceasedDateBreakdown);

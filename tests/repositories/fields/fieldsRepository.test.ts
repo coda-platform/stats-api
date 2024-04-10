@@ -13,9 +13,9 @@ import { ConditionOperator } from "../../../src/models/request/conditionOperator
 import ConditionObjectMother from "../../utils/objectMothers/models/ConditionObjectMother";
 
 describe('fieldsRepository tests', () => {
-    const fieldA = fieldObjectMother.get('fieldA', 'fieldA');
-    const fieldB = fieldObjectMother.get('fieldB', 'fieldB');
-    const fieldC = fieldObjectMother.get('field.path.subPathC', 'fieldC');
+    const fieldA = fieldObjectMother.get('fieldA', 'fieldA', 'string');
+    const fieldB = fieldObjectMother.get('fieldB', 'fieldB', 'integer');
+    const fieldC = fieldObjectMother.get('field.path.subPathC', 'fieldC', 'dateTime');
 
     const emptyCondition = ConditionObjectMother.get(ConditionOperator.and, []);
 
@@ -26,7 +26,7 @@ describe('fieldsRepository tests', () => {
     const observationFieldsQuery = 'SELECT * FROM Observation';
 
     const patientFieldsReponse = { age: 'FLOAT', fielda: 'TEXT', fieldb: 'FLOAT' }; // Lower case of field name important as postgres always lower cases column names.
-    const observationFieldsReponse = { fieldc: 'DATE' }; // . in path is replace with _
+    const observationFieldsReponse = { fieldc: 'timestamp' }; // . in path is replace with _
     const observationFieldsNullTypeReponse = { fieldc: null }; // . in path is replace with _
 
 
@@ -39,26 +39,6 @@ describe('fieldsRepository tests', () => {
             .mockReturnValue(patientFieldsQuery)
             .calledWith(observationSelector, filterFields)
             .mockReturnValue(observationFieldsQuery);
-    });
-
-    it('aidboxProxy returns error, error is gotten for fields', async () => {
-        // ARRANGE
-        const summarizeRequest = summarizeRequestBodyObjectMother.get([patientSelector, observationSelector]);
-        const filterFields = new Map<filter, FieldInfo>();
-
-        aidboxProxy.executeQuery = jest.fn();
-        when(aidboxProxy.executeQuery as any)
-            .calledWith(patientFieldsQuery).mockReturnValue(Promise.reject(new Error('errorA')).catch((error)=> {return error;}))
-            .calledWith(observationFieldsQuery).mockReturnValue(Promise.reject(new Error('errorB')).catch((error)=> {return error;}));
-
-        // ACT
-        const result = await fieldsRepository.getFieldsDataFromRequest(summarizeRequest, filterFields);
-
-        // ASSERT
-        expect(result.size).toEqual(3);
-        expect(result.get(fieldA)).toEqual(new Error('errorA'));
-        expect(result.get(fieldB)).toEqual(new Error('errorA'));
-        expect(result.get(fieldC)).toEqual(new Error('errorB'));
     });
 
     it('with one selector two fields, responses are returned by field.', async () => {

@@ -1,3 +1,4 @@
+import { when } from "jest-when";
 import joinInnerQueryBuilder from "../../../../../../src/domain/queries/sqlBuilder/fromBuilder/join/joinInnerQueryBuilder";
 import resourceArrayFields from "../../../../../../src/domain/resourceArrayFields";
 import FieldInfo from "../../../../../../src/models/fieldInfo";
@@ -88,7 +89,10 @@ describe('joinInnerBuilder tests', () => {
         const selector = selectorObjectMother.get('Patient', 'patient', [], {conditionOperator:ConditionOperator.and, conditions:[femaleGenderFilter]});
         parentSelector.joins = selector;
 
-        resourceArrayFields.values = ['gender'];
+        resourceArrayFields.get = jest.fn();
+        when(resourceArrayFields.get as any)
+            .calledWith(selector)
+            .mockReturnValue(['gender']);
 
         // ACT
         const query = joinInnerQueryBuilder.build(parentSelector, filterMaps, fieldMaps);

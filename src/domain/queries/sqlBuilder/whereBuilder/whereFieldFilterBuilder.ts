@@ -11,17 +11,11 @@ import filterOperatorHelper from "../../filters/filterOperatorHelper";
 import Condition, { instanceOfCondition } from "../../../../models/request/condition";
 import queryStringEscaper from "../../queryStringEscaper";
 
-function getFilterNormalized(filter: Filter, filterFields: Map<Filter, FieldInfo>, selector: Selector, possibleComputedField?: Field): string {
+function getFilterNormalized(filter: Filter, filterFields: Map<Filter, FieldInfo>, selector: Selector): string {
 
     const filterValue = queryStringEscaper.escape(String(filter.value));
     const fieldInfo = filterFields.get(filter);
     if (!fieldInfo) throw new Error('No matching field for filter.');
-
-    if (possibleComputedField) {
-        const addedFieldFilter = possibleComputedFilters.possibleComputedFilters.get(possibleComputedField.path);
-        if (addedFieldFilter)
-            return (addedFieldFilter);
-    }
 
     const isArrayField = arrayFieldDetector.isArrayField(filter.path, selector);
     const jsonFieldValuePathCompiled = jsonFieldValuePathCompiler.getFilterPathCompiled(filter, selector);
@@ -39,12 +33,19 @@ function getFilterNormalized(filter: Filter, filterFields: Map<Filter, FieldInfo
         : `(${jsonFieldValuePathCompiled})::${cast} ${sqlOperand} ${formattedFilterValue}`;
 }
 
-function build(selector: Selector, filterFieldTypes: Map<Filter, FieldInfo>): string {
-    return buildFilterGrouping(selector.condition, selector, filterFieldTypes);
+function build(selector: Selector, filterFieldTypes: Map<Filter, FieldInfo>, field?: Field): string {
+    return buildFilterGrouping(selector.condition, selector, filterFieldTypes, field);
 }
 
-function buildFilterGrouping(condition: Condition, selector: Selector, filterFieldTypes: Map<Filter, FieldInfo>): string {
+function buildFilterGrouping(condition: Condition, selector: Selector, filterFieldTypes: Map<Filter, FieldInfo>, possibleComputedField?: Field): string {
     const filtersNormalized: string[] = [];
+
+    if (possibleComputedField) {
+        const addedFieldFilter = possibleComputedFilters.possibleComputedFilters.get(possibleComputedField.path);
+        if (addedFieldFilter)
+            filtersNormalized.push(addedFieldFilter);
+    }
+
     condition.conditions.forEach(f => {
         if (instanceOfCondition(f)) {
             filtersNormalized.push(`(${buildFilterGrouping(f, selector, filterFieldTypes)})`);

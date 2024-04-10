@@ -8,6 +8,7 @@ import selectorObjectMother from "../../utils/objectMothers/models/selectorObjec
 import resourceArrayFields from "../../../src/domain/resourceArrayFields";
 import Field from "../../../src/models/request/field";
 import { ConditionOperator } from "../../../src/models/request/conditionOperator";
+import { when } from "jest-when";
 
 describe('countResourceQuery tests', () => {
 
@@ -72,7 +73,10 @@ describe('countResourceQuery tests', () => {
         // ARRANGE
         const selector = selectorObjectMother.get('Patient', 'patient', [], {conditionOperator:ConditionOperator.and, conditions:[femaleGenderFilter]}, joinSelector);
 
-        resourceArrayFields.values = ['gender'];
+        resourceArrayFields.get = jest.fn();
+        when(resourceArrayFields.get as any)
+            .calledWith(selector)
+            .mockReturnValue(['gender']);
 
         // ACT
         const query = countResourceQuery.getQuery(selector, filterMaps, fieldMap);

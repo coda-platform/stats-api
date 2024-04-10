@@ -8,6 +8,7 @@ import selectorObjectMother from "../../../../utils/objectMothers/models/selecto
 import resourceArrayFields from "../../../../../src/domain/resourceArrayFields";
 import Field from "../../../../../src/models/request/field";
 import { ConditionOperator } from "../../../../../src/models/request/conditionOperator";
+import { when } from "jest-when";
 
 describe('fromSqlBuilder tests', () => {
     const stringFieldInfo = fieldInfoObjectMother.get('string');
@@ -61,57 +62,63 @@ describe('fromSqlBuilder tests', () => {
         expect(sqlQuery).toEqual("FROM Patient patient_table WHERE");
     });
 
-    // it('can add crossJoin to FROM', () => {
-    //     // ARRANGE
-    //     const selector = selectorObjectMother.get('Patient', 'patient', [genderField, addressCityField], {conditionOperator:ConditionOperator.and, conditions:[genderFilter, cityFilter]})
-    //     const filterTypes = getFiltersMap([genderFilter, cityFilter], [stringFieldInfo, stringFieldInfo]);
-    //     const fromSqlBuilder = fromSqlBuilderObjectMother.get();
-
-    //     resourceArrayFields.values = ["address.city"];
-
-    //     // ACT
-    //     const sqlQuery = fromSqlBuilder
-    //         .resourceTable()
-    //         .build(selector, filterTypes);
-
-    //     // ASSERT
-    //     expect(sqlQuery).toEqual("FROM Patient patient_table CROSS JOIN LATERAL jsonb_array_elements(resource->'address'->'city') AS address_city");
-    // })
-
-    // it('can add crossJoin with field to FROM', () => {
-    //     // ARRANGE
-    //     const selector = selectorObjectMother.get('Patient', 'patient', [genderField, addressCityField], {conditionOperator:ConditionOperator.and, conditions:[genderFilter]})
-    //     const filterTypes = getFiltersMap([genderFilter, cityFilter], [stringFieldInfo, stringFieldInfo]);
-    //     const fromSqlBuilder = fromSqlBuilderObjectMother.get();
-
-    //     resourceArrayFields.values = ["address.city"];
-
-    //     // ACT
-    //     const sqlQuery = fromSqlBuilder
-    //         .resourceTable()
-    //         .build(selector, filterTypes);
-
-    //     // ASSERT
-    //     expect(sqlQuery).toEqual("FROM Patient patient_table CROSS JOIN LATERAL jsonb_array_elements(resource->'address'->'city') AS address_city");
-    // })
-
-    it('can add subquery to FROM', () => {
+    it('can add crossJoin to FROM', () => {
         // ARRANGE
-        const selector = selectorObjectMother.get('Patient', 'patient', [genderField], {conditionOperator:ConditionOperator.and, conditions:[]});
+        const selector = selectorObjectMother.get('Patient', 'patient', [genderField, addressCityField], {conditionOperator:ConditionOperator.and, conditions:[genderFilter, cityFilter]})
         const filterTypes = getFiltersMap([genderFilter, cityFilter], [stringFieldInfo, stringFieldInfo]);
-        const fieldTypes = getFieldMap([genderField], [stringFieldInfo]);
         const fromSqlBuilder = fromSqlBuilderObjectMother.get();
 
-        resourceArrayFields.values = ["address.city"];
+        resourceArrayFields.get = jest.fn();
+        when(resourceArrayFields.get as any)
+            .calledWith(selector)
+            .mockReturnValue(['address.city']);
 
         // ACT
         const sqlQuery = fromSqlBuilder
-            .subquery(fieldTypes)
+            .resourceTable()
+            .crossJoinForArrayFilters()
             .build(selector, filterTypes);
 
         // ASSERT
-        expect(sqlQuery).toEqual("FROM (SELECT (resource->>'gender')::string AS gender FROM Patient patient_table ) as subQuery");
-    });
+        expect(sqlQuery).toEqual("FROM Patient patient_table CROSS JOIN LATERAL jsonb_array_elements(resource->'address'->'city') AS patient_address_city");
+    })
+
+    it('can add crossJoin with field to FROM', () => {
+        // ARRANGE
+        const selector = selectorObjectMother.get('Patient', 'patient', [genderField, addressCityField], {conditionOperator:ConditionOperator.and, conditions:[genderFilter]})
+        const filterTypes = getFiltersMap([genderFilter, cityFilter], [stringFieldInfo, stringFieldInfo]);
+        const fromSqlBuilder = fromSqlBuilderObjectMother.get();
+
+        resourceArrayFields.get = jest.fn();
+        when(resourceArrayFields.get as any)
+            .calledWith(selector)
+            .mockReturnValue(['address.city']);
+
+        // ACT
+        const sqlQuery = fromSqlBuilder
+            .resourceTable()
+            .crossJoinForArrayFilters(addressCityField)
+            .build(selector, filterTypes);
+
+        // ASSERT
+        expect(sqlQuery).toEqual("FROM Patient patient_table CROSS JOIN LATERAL jsonb_array_elements(resource->'address'->'city') AS patient_address_city");
+    })
+
+    // it('can add subquery to FROM', () => {
+    //     // ARRANGE
+    //     const selector = selectorObjectMother.get('Patient', 'patient', [genderField], {conditionOperator:ConditionOperator.and, conditions:[]});
+    //     const filterTypes = getFiltersMap([genderFilter, cityFilter], [stringFieldInfo, stringFieldInfo]);
+    //     const fieldTypes = getFieldMap([genderField], [stringFieldInfo]);
+    //     const fromSqlBuilder = fromSqlBuilderObjectMother.get();
+
+    //     // ACT
+    //     const sqlQuery = fromSqlBuilder
+    //         .subquery(fieldTypes)
+    //         .build(selector, filterTypes);
+
+    //     // ASSERT
+    //     expect(sqlQuery).toEqual("FROM (SELECT (resource->>'gender')::string AS gender FROM Patient patient_table ) as subQuery");
+    // });
 
     it('can add GROUP BY statement builder', () => {
         // ARRANGE

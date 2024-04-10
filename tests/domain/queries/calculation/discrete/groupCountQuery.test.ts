@@ -9,6 +9,7 @@ import selectorObjectMother from "../../../../utils/objectMothers/models/selecto
 import resourceArrayFields from "../../../../../src/domain/resourceArrayFields";
 import Field from "../../../../../src/models/request/field";
 import { ConditionOperator } from "../../../../../src/models/request/conditionOperator";
+import { when } from "jest-when";
 
 describe('groupCountQuery tests', () => {
     const genderField = fieldObjectMother.get('gender', 'gender', 'string');
@@ -20,7 +21,9 @@ describe('groupCountQuery tests', () => {
     const fieldMaps = getFieldsMap([genderField], [stringFieldInfo]);
 
     beforeEach(() => {
-        resourceArrayFields.values = []; // Simplify tests by not unwrapping json arrays.
+        resourceArrayFields.get = jest.fn();
+        when(resourceArrayFields.get as any)
+            .mockReturnValue([]);
     });
 
     it('With field and no filter, groups by field', () => {
@@ -33,14 +36,13 @@ describe('groupCountQuery tests', () => {
         // ASSERT
         expect(query).toEqual(sqlBuilderObjectMother.get()
             .select()
-            .field(genderField)
+            .fieldAlias(genderField)
             .comma()
             .countField(genderField, selector)
             .from()
-            .resourceTable()
-            .possibleJoin(fieldMaps)
+            .subquery(fieldMaps)
             .groupBy()
-            .field(genderField)
+            .compiledField(genderField.label)
             .build(selector, filterMaps));
     });
 
@@ -54,16 +56,13 @@ describe('groupCountQuery tests', () => {
         // ASSERT
         expect(query).toEqual(sqlBuilderObjectMother.get()
             .select()
-            .field(genderField)
+            .fieldAlias(genderField)
             .comma()
             .countField(genderField, selector)
             .from()
-            .resourceTable()
-            .possibleJoin(fieldMaps)
-            .where()
-            .fieldFilter()
+            .subquery(fieldMaps)
             .groupBy()
-            .field(genderField)
+            .compiledField(genderField.label)
             .build(selector, filterMaps));
     });
 

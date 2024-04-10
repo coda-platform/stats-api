@@ -22,9 +22,6 @@ describe('selectBreakdownPeriodStartBuilder tests', () => {
         // ARRANGE
         const breakdown = breakdownObjectMother.get('Encounter', 'location.period.start', 1209600, 'dateTime');
 
-        resourceArrayFields.values = ['location'];
-
-
         // ACT
         const result = selectBreakdownPeriodStartBuilder.build(breakdown.slices.step, 'breakdownLabel');
 

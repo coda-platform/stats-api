@@ -12,9 +12,8 @@ describe('groupBySqlBuilder tests', () => {
     const addressCityField = fieldObjectMother.get('address.city', 'city', 'string');
 
     const femaleGenderFilter = filterObjectMother.get('gender', 'is', 'female', 'string');
-    const filterTypes = new Map<Filter, FieldInfo>();
-
     const femaleGenderCondition = ConditionObjectMother.get(ConditionOperator.and, [femaleGenderFilter]);
+    const filterTypes = new Map<Filter, FieldInfo>();
 
     const patientSelector = selectorObjectMother.get('Patient', 'patient', [genderField, addressCityField], femaleGenderCondition);
 
@@ -36,7 +35,7 @@ describe('groupBySqlBuilder tests', () => {
 
         // ACT
         const sqlQuery = groupByBuilder
-            .field(field)
+            .field(field, patientSelector)
             .build(patientSelector, filterTypes);
 
         // ASSERT

@@ -80,7 +80,7 @@ describe('whereSqlBuilder tests', () => {
         const sqlQuery = whereSqlBuilder
             .fieldFilter()
             .groupBy()
-            .field(genderField)
+            .field(genderField, patientSelector)
             .build(patientSelector, filterTypes);
 
         // ASSERT

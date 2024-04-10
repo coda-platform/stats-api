@@ -8,6 +8,7 @@ import FieldInfo from "../../../../../src/models/fieldInfo";
 import fieldInfoObjectMother from "../../../../utils/objectMothers/models/fieldInfoObjectMother";
 import Filter from "../../../../../src/models/request/filter";
 import { ConditionOperator } from "../../../../../src/models/request/conditionOperator";
+import { when } from "jest-when";
 
 describe('fromSubqueryBuilder tests', () => {
     const genderField = fieldObjectMother.get('gender', 'gender', 'string');
@@ -26,7 +27,9 @@ describe('fromSubqueryBuilder tests', () => {
     //const filtersMap = getFiltersMap([fieldAFilter], [stringFieldInfo]);
 
     beforeEach(() => {
-        resourceArrayFields.values = [];
+        resourceArrayFields.get = jest.fn();
+        when(resourceArrayFields.get as any)
+            .mockReturnValue([]);
     });
 
     it('with field, no filter, no array field is selected with good nomenclature', () => {
@@ -45,9 +48,12 @@ describe('fromSubqueryBuilder tests', () => {
     it('with array field, no filter, field is unrolled and selected with good nomenclature', () => {
         // ARRANGE
         const selector = selectorObjectMother.get('Patient', 'patient', [cityAddressField], {conditionOperator:ConditionOperator.and, conditions:[]});
-        resourceArrayFields.values = ['address'];
         const cityFieldMap = getFieldsMap([cityAddressField], [stringFieldInfo]);
         const filtersMap = getFiltersMap([], []);
+
+        when(resourceArrayFields.get as any)
+            .calledWith(selector)
+            .mockReturnValue(['address']);
 
         // ACT
         const result = fromSubqueryBuilder.build(selector, filtersMap, cityFieldMap);
@@ -59,9 +65,12 @@ describe('fromSubqueryBuilder tests', () => {
     it('with array field and filter, field and filter are unrolled and selected with good nomenclature', () => {
         // ARRANGE
         const selector = selectorObjectMother.get('Patient', 'patient', [genderField], {conditionOperator:ConditionOperator.and, conditions:[quebecCityFilter]});
-        resourceArrayFields.values = ['address'];
         const genderFieldMap = getFieldsMap([genderField], [stringFieldInfo]);
         const filtersMap = getFiltersMap([quebecCityFilter], [stringFieldInfo]);
+
+        when(resourceArrayFields.get as any)
+            .calledWith(selector)
+            .mockReturnValue(['address']);
 
         // ACT
         const result = fromSubqueryBuilder.build(selector, filtersMap, genderFieldMap);
